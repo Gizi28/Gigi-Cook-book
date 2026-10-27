@@ -111,6 +111,10 @@ textarea{min-height:110px;resize:vertical}
     <div class="photos" id="photos"></div>
     <input type="file" id="file" accept="image/*" multiple class="hidden">
     <button class="btn ghost" type="button" id="addphoto">Add photos</button>
+    <label>Videos</label>
+    <div id="vlist"></div>
+    <input type="file" id="vfile" accept="video/*" multiple class="hidden">
+    <button class="btn ghost" type="button" id="addvid">Add videos</button>
     <label>Ingredients (start with the quantity, e.g. 200g pasta)</label>
     <div id="ings"></div>
     <button class="btn ghost" type="button" id="adding">Add ingredient</button>
@@ -151,7 +155,7 @@ function load(){try{var r=localStorage.getItem(KEY);recipes=r?JSON.parse(r):[]}c
   if(!Array.isArray(recipes))recipes=[];
   var seeded=false;try{seeded=localStorage.getItem(SEED)}catch(e){}
   if(false){recipes.unshift(CARBONARA);try{localStorage.setItem(SEED,'1')}catch(e){}persist()}}
-function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes,function(k,v){return (k==='_imgs'||k==='_pend'||k==='_oldFiles')?undefined:v}));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
+function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes,function(k,v){return (k==='_imgs'||k==='_pend'||k==='_oldFiles'||k==='_vpend'||k==='_oldVids')?undefined:v}));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});window.scrollTo(0,0)}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
@@ -183,19 +187,24 @@ function openRecipe(id){
    (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b>'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+
    '<ul class="ing">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div></div>'+
    (r.steps?'<div class="panel"><h3 class="sec">Preparation</h3>'+r.steps.split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
+   ((r._vids&&r._vids.length)?'<div class="panel"><h3 class="sec">Videos</h3>'+r._vids.map(function(v,i){return '<div class="vid"><button class="btn ghost vbtn" data-i="'+i+'">▶ '+esc(v.name)+'</button></div>'}).join('')+'</div>':'')+
    (r.tip?'<div class="tip"><b>Tips and notes</b><br>'+esc(r.tip)+'</div>':'')+
    '<div class="actions'+(canWrite?'':' hidden')+'"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
   show('view');
+  $('view').querySelectorAll('.vbtn').forEach(function(b){b.onclick=function(){var v=r._vids[+b.dataset.i];b.textContent='Loading…';b.disabled=true;
+    api('https://www.googleapis.com/drive/v3/files/'+v.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(function(bl){
+      var el=document.createElement('video');el.controls=true;el.autoplay=true;el.playsInline=true;el.style.cssText='width:100%;border-radius:10px;margin-top:6px';el.src=URL.createObjectURL(bl);b.parentNode.replaceChild(el,b)})
+    .catch(function(){b.disabled=false;b.textContent='▶ '+v.name+' (could not load, tap to retry)'})}});
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
-  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).forEach(function(f){driveTrash(f.id,true)})}persist();renderList();show('list')}};
+  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}persist();renderList();show('list')}};
   if($('minus')){$('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);openRecipe(id)}};$('plus').onclick=function(){factor+=1/base;openRecipe(id)}}
   var g=$('view').querySelector('.gal');
   if(g)g.onclick=function(e){if(e.target.tagName==='IMG')$('hero').src=e.target.src};
   $('view').querySelectorAll('.ing input').forEach(function(cb){cb.onchange=function(){cb.parentNode.classList.toggle('done',cb.checked)}});
 }
 
-var photos=[],srcFid={};
+var photos=[],srcFid={},vids=[];
 function ingRow(v){
   var d=document.createElement('div');d.className='row';
   d.innerHTML='<input type="text" placeholder="e.g. 200g spaghetti" value="'+esc(v||'')+'" aria-label="Ingredient"><button type="button" class="btn ghost x" aria-label="Remove ingredient">✕</button>';
@@ -229,7 +238,7 @@ function openForm(r){
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
   $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';
-  photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();
+  photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
   show('form');
@@ -242,7 +251,7 @@ $('save').onclick=function(){
   var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
   var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
     diff:$('diff').value,cost:$('cost').value,ings:ings,photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim()};
-  rec._imgs=photos.slice();rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname}var old=recipes.slice();
+  rec._vpend=vids.map(function(v){return {f:v.f||null,file:v.file||null}});rec._vids=vids.filter(function(v){return v.f}).map(function(v){return v.f});rec._oldVids=(cur&&cur._vids)||[];rec._imgs=photos.slice();rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname}var old=recipes.slice();
   if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
   persist();driveSave(rec);
   factor=1;renderList();openRecipe(rec.id);
@@ -289,7 +298,9 @@ function refresh(){
     var map={};
     [].concat.apply([],groups).sort(function(a,b){return (a._multi?0:1)-(b._multi?0:1)}).forEach(function(x){map[x.id]=x});
     recipes=Object.keys(map).map(function(k){return map[k]});
-    persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');loadImages();
+    persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');
+    recipes.forEach(function(r){if(r._fid&&!r._multi&&r._fname){var nm=safeName(r.name,r.id)+'.json';if(r._fname!==nm)renameFile(r._fid,nm).then(function(){r._fname=nm}).catch(function(){})}});
+    loadImages();loadVideos();
   }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
 var imgCache={};
 function imgs(r){return (r._imgs||[]).concat(r.photos||[])}
@@ -321,6 +332,25 @@ function upload(method,fid,meta,ctype,data){
   var body=new Blob(['--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+bd+'\r\nContent-Type: '+ctype+'\r\n\r\n',data,'\r\n--'+bd+'--']);
   return api('https://www.googleapis.com/upload/drive/v3/files'+(fid?'/'+fid:'')+'?uploadType=multipart&supportsAllDrives=true&fields=id,name',{method:method,headers:{'Content-Type':'multipart/related; boundary='+bd},body:body}).then(function(r){return r.json()})}
 function renameFile(fid,name){return api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true&fields=id,name',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name})}).then(function(r){return r.json()})}
+function loadVideos(){
+  var q="'"+cfgv().folder+"' in parents and trashed=false and mimeType contains 'video/'";
+  api('https://www.googleapis.com/drive/v3/files?pageSize=200&fields='+encodeURIComponent('files(id,name)')+'&supportsAllDrives=true&includeItemsFromAllDrives=true&q='+encodeURIComponent(q))
+  .then(function(r){return r.json()}).then(function(d){
+    var per={};
+    (d.files||[]).forEach(function(f){
+      var base=f.name.replace(/\.[^.]+$/,'').trim(),m=base.match(/^(.*)_(\d+)$/),cand=[[base.toLowerCase(),0]];
+      if(m)cand.push([m[1].toLowerCase().trim(),+m[2]]);
+      for(var i=0;i<cand.length;i++){var k=cand[i][0];
+        var t=recipes.filter(function(r){return r.name.toLowerCase().trim()===k||String(r.id).toLowerCase()===k});
+        if(t.length){t.forEach(function(r){(per[r.id]=per[r.id]||{r:r,list:[]}).list.push({f:f,n:cand[i][1]})});break}}
+    });
+    Object.keys(per).forEach(function(id){var e=per[id];e.list.sort(function(a,b){return a.n-b.n});
+      e.r._vids=e.list.map(function(g){return {id:g.f.id,name:g.f.name}})});
+  }).catch(function(){})}
+function renderVids(){$('vlist').innerHTML=vids.map(function(v,i){return '<div class="row" style="align-items:center"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🎬 '+esc(v.f?v.f.name:v.file.name)+'</span><button type="button" class="btn ghost x" data-i="'+i+'" aria-label="Remove video">✕</button></div>'}).join('')}
+$('vlist').onclick=function(e){var b=e.target.closest('button');if(b){vids.splice(+b.dataset.i,1);renderVids()}};
+$('addvid').onclick=function(){$('vfile').click()};
+$('vfile').onchange=function(){Array.prototype.forEach.call($('vfile').files,function(f){if(f.size>200*1048576&&!confirm(f.name+' is larger than 200 MB and may fail to upload. Add it anyway?'))return;vids.push({file:f})});$('vfile').value='';renderVids()};
 function driveSave(rec){
   if(!TOKEN)return;
   status('Saving…');
@@ -340,7 +370,17 @@ function driveSave(rec){
     })).then(function(files){
       old.forEach(function(f){if(!keep[f.id])driveTrash(f.id,true)});
       rec._imgFiles=files.map(function(f){return {id:f.id,name:f.name}});rec._pend=null;rec._oldFiles=null;persist()})}
-  Promise.all([pj,pi]).then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
+  var pv=Promise.resolve();
+  if(rec._vpend){
+    var vp=rec._vpend,vn=vp.length,vkeep={},vold=rec._oldVids||[];
+    if(vp.some(function(p){return p.file}))status('Uploading video(s), please keep this page open…');
+    pv=Promise.all(vp.map(function(p,i){var suf=vn>1?'_'+(i+1):'';
+      if(p.f){vkeep[p.f.id]=1;var ext=(p.f.name.match(/\.[^.]+$/)||['.mp4'])[0],nm=base+suf+ext;return p.f.name===nm?{id:p.f.id,name:nm}:renameFile(p.f.id,nm)}
+      var ext2=(p.file.name.match(/\.[^.]+$/)||['.mp4'])[0].toLowerCase(),ty=p.file.type||'video/mp4';
+      return upload('POST',null,{name:base+suf+ext2,parents:[cfgv().folder],mimeType:ty},ty,p.file)
+    })).then(function(files){vold.forEach(function(f){if(!vkeep[f.id])driveTrash(f.id,true)});
+      rec._vids=files.map(function(f){return {id:f.id,name:f.name}});rec._vpend=null;rec._oldVids=null;persist()})}
+  Promise.all([pj,pi,pv]).then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
 function driveTrash(fid,q){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){if(!q)status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
 $('set').onclick=function(){var p=document.querySelector('#sheet .sheet');
