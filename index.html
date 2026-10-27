@@ -151,7 +151,7 @@ function load(){try{var r=localStorage.getItem(KEY);recipes=r?JSON.parse(r):[]}c
   if(!Array.isArray(recipes))recipes=[];
   var seeded=false;try{seeded=localStorage.getItem(SEED)}catch(e){}
   if(false){recipes.unshift(CARBONARA);try{localStorage.setItem(SEED,'1')}catch(e){}persist()}}
-function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes,function(k,v){return k==='_img'?undefined:v}));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
+function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes,function(k,v){return (k==='_imgs'||k==='_pend'||k==='_oldFiles')?undefined:v}));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});window.scrollTo(0,0)}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
@@ -188,14 +188,14 @@ function openRecipe(id){
   show('view');
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
-  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi)driveTrash(r._fid);persist();renderList();show('list')}};
+  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).forEach(function(f){driveTrash(f.id,true)})}persist();renderList();show('list')}};
   if($('minus')){$('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);openRecipe(id)}};$('plus').onclick=function(){factor+=1/base;openRecipe(id)}}
   var g=$('view').querySelector('.gal');
   if(g)g.onclick=function(e){if(e.target.tagName==='IMG')$('hero').src=e.target.src};
   $('view').querySelectorAll('.ing input').forEach(function(cb){cb.onchange=function(){cb.parentNode.classList.toggle('done',cb.checked)}});
 }
 
-var photos=[];
+var photos=[],srcFid={};
 function ingRow(v){
   var d=document.createElement('div');d.className='row';
   d.innerHTML='<input type="text" placeholder="e.g. 200g spaghetti" value="'+esc(v||'')+'" aria-label="Ingredient"><button type="button" class="btn ghost x" aria-label="Remove ingredient">✕</button>';
@@ -229,7 +229,7 @@ function openForm(r){
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
   $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';
-  photos=r?(r.photos||[]).slice():[];renderPhotos();
+  photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
   show('form');
@@ -241,8 +241,8 @@ $('save').onclick=function(){
   if(!name){alert('Give your recipe a name.');$('name').focus();return}
   var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
   var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
-    diff:$('diff').value,cost:$('cost').value,ings:ings,photos:photos.slice(),steps:$('steps').value.trim(),tip:$('tip').value.trim()};
-  if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi}var old=recipes.slice();
+    diff:$('diff').value,cost:$('cost').value,ings:ings,photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim()};
+  rec._imgs=photos.slice();rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname}var old=recipes.slice();
   if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
   persist();driveSave(rec);
   factor=1;renderList();openRecipe(rec.id);
@@ -283,7 +283,7 @@ function refresh(){
     return Promise.all((d.files||[]).map(function(f){
       return api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true')
         .then(function(r){return r.text()}).then(function(t){
-          try{var l=parseList(t,f.id);return l.map(function(x){x._fid=f.id;x._multi=l.length>1;return x})}catch(e){return []}})
+          try{var l=parseList(t,f.id);return l.map(function(x){x._fid=f.id;x._fname=f.name;x._multi=l.length>1;return x})}catch(e){return []}})
         .catch(function(){return []})}))
   }).then(function(groups){
     var map={};
@@ -292,7 +292,7 @@ function refresh(){
     persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');loadImages();
   }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
 var imgCache={};
-function imgs(r){return r._img?[r._img].concat(r.photos||[]):(r.photos||[])}
+function imgs(r){return (r._imgs||[]).concat(r.photos||[])}
 function toSmall(blob){return new Promise(function(res,rej){var u=URL.createObjectURL(blob),im=new Image();
   im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
     c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.8))};
@@ -301,25 +301,47 @@ function loadImages(){
   var q="'"+cfgv().folder+"' in parents and trashed=false and mimeType contains 'image/'";
   api('https://www.googleapis.com/drive/v3/files?pageSize=200&fields='+encodeURIComponent('files(id,name)')+'&supportsAllDrives=true&includeItemsFromAllDrives=true&q='+encodeURIComponent(q))
   .then(function(r){return r.json()}).then(function(d){
+    var per={};
     (d.files||[]).forEach(function(f){
-      var base=f.name.replace(/\.[^.]+$/,'').toLowerCase().trim();
-      var targets=recipes.filter(function(r){return r.name.toLowerCase().trim()===base||String(r.id).toLowerCase()===base});
-      if(!targets.length)return;
-      var p=imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(r){return r.blob()}).then(toSmall));
-      p.then(function(url){targets.forEach(function(r){r._img=url});renderList()}).catch(function(){delete imgCache[f.id]})})
+      var base=f.name.replace(/\.[^.]+$/,'').trim(),m=base.match(/^(.*)_(\d+)$/),cand=[[base.toLowerCase(),0]];
+      if(m)cand.push([m[1].toLowerCase().trim(),+m[2]]);
+      for(var i=0;i<cand.length;i++){var k=cand[i][0];
+        var t=recipes.filter(function(r){return r.name.toLowerCase().trim()===k||String(r.id).toLowerCase()===k});
+        if(t.length){t.forEach(function(r){(per[r.id]=per[r.id]||{r:r,list:[]}).list.push({f:f,n:cand[i][1]})});break}}
+    });
+    Object.keys(per).forEach(function(id){var e=per[id],r=e.r;
+      e.list.sort(function(a,b){return a.n-b.n});
+      Promise.all(e.list.map(function(g){var f=g.f;return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSmall))}))
+      .then(function(urls){r._imgs=urls;r._imgFiles=e.list.map(function(g){return {id:g.f.id,name:g.f.name}});renderList()})
+      .catch(function(){e.list.forEach(function(g){delete imgCache[g.f.id]})})})
   }).catch(function(){})}
+function safeName(t,id){var x=String(t).replace(/[\\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim();return x||String(id).replace(/[^\w-]/g,'_')}
+function upload(method,fid,meta,ctype,data){
+  var bd='rb'+Date.now()+Math.random().toString(36).slice(2,6);
+  var body=new Blob(['--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+bd+'\r\nContent-Type: '+ctype+'\r\n\r\n',data,'\r\n--'+bd+'--']);
+  return api('https://www.googleapis.com/upload/drive/v3/files'+(fid?'/'+fid:'')+'?uploadType=multipart&supportsAllDrives=true&fields=id,name',{method:method,headers:{'Content-Type':'multipart/related; boundary='+bd},body:body}).then(function(r){return r.json()})}
+function renameFile(fid,name){return api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true&fields=id,name',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name})}).then(function(r){return r.json()})}
 function driveSave(rec){
   if(!TOKEN)return;
-  var body=JSON.stringify(strip(rec),null,2),p;status('Saving…');
-  if(rec._fid&&!rec._multi){
-    p=api('https://www.googleapis.com/upload/drive/v3/files/'+rec._fid+'?uploadType=media&supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:body})}
-  else{
-    var meta={name:String(rec.id).replace(/[^\w-]/g,'_')+'.json',parents:[cfgv().folder],mimeType:'application/json'},bd='rb'+Date.now();
-    var mp='--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--';
-    p=api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},body:mp})
-      .then(function(r){return r.json()}).then(function(d){rec._fid=d.id;rec._multi=false;persist()})}
-  p.then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
-function driveTrash(fid){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
+  status('Saving…');
+  var base=safeName(rec.name,rec.id),jname=base+'.json',json=JSON.stringify(strip(rec),null,2),pj;
+  if(rec._fid&&!rec._multi)pj=upload('PATCH',rec._fid,{name:jname},'application/json',json);
+  else pj=upload('POST',null,{name:jname,parents:[cfgv().folder],mimeType:'application/json'},'application/json',json);
+  pj=pj.then(function(d){rec._fid=d.id;rec._multi=false;rec._fname=jname;persist()});
+  var pi=Promise.resolve();
+  if(rec._pend){
+    var pend=rec._pend,n=pend.length,keep={},old=rec._oldFiles||[];
+    pi=Promise.all(pend.map(function(p,i){
+      var suf=n>1?'_'+(i+1):'';
+      if(p.f){keep[p.f.id]=1;var ext=(p.f.name.match(/\.[^.]+$/)||['.jpg'])[0],nm=base+suf+ext;
+        return p.f.name===nm?{id:p.f.id,name:nm}:renameFile(p.f.id,nm)}
+      var nm2=base+suf+'.jpg';
+      return fetch(p.u).then(function(r){return r.blob()}).then(function(b){return upload('POST',null,{name:nm2,parents:[cfgv().folder],mimeType:'image/jpeg'},'image/jpeg',b)})
+    })).then(function(files){
+      old.forEach(function(f){if(!keep[f.id])driveTrash(f.id,true)});
+      rec._imgFiles=files.map(function(f){return {id:f.id,name:f.name}});rec._pend=null;rec._oldFiles=null;persist()})}
+  Promise.all([pj,pi]).then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
+function driveTrash(fid,q){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){if(!q)status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
 $('set').onclick=function(){var p=document.querySelector('#sheet .sheet');
   if(window.matchMedia('(min-width:700px)').matches){var r=$('set').getBoundingClientRect();p.style.top=(r.bottom+8)+'px';p.style.right=Math.max(8,window.innerWidth-r.right)+'px'}
