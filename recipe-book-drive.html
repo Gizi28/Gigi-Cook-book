@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Recipe Book (Google Drive)</title>
+<style>
+:root{--bg:#f4f4f4;--surface:#fff;--ink:#2b2b2b;--muted:#767676;--line:#e4e4e4;--accent:#7b2d8e;--accent-ink:#fff;--soft:#f3e9f6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161616;--surface:#222;--ink:#f0f0f0;--muted:#a0a0a0;--line:#383838;--accent:#c38ad3;--accent-ink:#161616;--soft:#33263a}}
+:root[data-theme="dark"]{--bg:#161616;--surface:#222;--ink:#f0f0f0;--muted:#a0a0a0;--line:#383838;--accent:#c38ad3;--accent-ink:#161616;--soft:#33263a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+.top{background:var(--accent);color:var(--accent-ink);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.top h1{margin:0;font-size:20px}
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 80px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:700}
+.top .btn{background:var(--accent-ink);color:var(--accent)}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#search{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;text-align:left;padding:0}
+.card .ph{aspect-ratio:4/3;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:40px}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .t{padding:10px 12px 12px}
+.card h3{margin:0;font-size:16px}
+.card p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.empty{text-align:center;color:var(--muted);padding:48px 12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.hero{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;display:block}
+.hero.none{background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:64px}
+.gal{display:flex;gap:8px;overflow-x:auto;margin:8px 0 14px}
+.gal img{height:64px;border-radius:8px;cursor:pointer}
+h2.name{font-size:26px;line-height:1.2;margin:12px 0 4px}
+.tags{color:var(--muted);font-size:14px;margin-bottom:12px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.meta div{background:var(--surface);padding:10px 12px}
+.meta small{display:block;color:var(--muted);font-size:12px}
+.meta b{font-size:16px}
+h3.sec{margin:0 0 10px;font-size:20px;color:var(--accent)}
+.srv{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.srv button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-size:20px;cursor:pointer;line-height:1}
+ul.ing{padding:0;margin:0;list-style:none}
+ul.ing li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+ul.ing li:last-child{border:0}
+ul.ing input{width:20px;height:20px;accent-color:var(--accent)}
+ul.ing li.done span{text-decoration:line-through;color:var(--muted)}
+.step{margin-bottom:16px}
+.step b{color:var(--accent);display:block;margin-bottom:2px}
+.tip{background:var(--soft);border-radius:10px;padding:12px 14px}
+label{display:block;font-weight:700;margin:14px 0 6px;font-size:14px}
+input[type=text],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+textarea{min-height:110px;resize:vertical}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.row input{flex:1}
+.row .x{flex:none;width:42px;padding:0}
+.photos{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.photos .p{position:relative;width:96px;height:96px}
+.photos img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.photos .p button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
+.actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="exp">Export JSON</button><button class="btn" id="imp">Import</button><button class="btn" id="sign">Sign in with Google</button><button class="btn" id="cfg">Settings</button><button class="btn" id="add">Add recipe</button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="wrap">
+  <div id="list">
+    <div id="status" style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
+    <input id="search" type="text" placeholder="Search recipes or ingredients" aria-label="Search recipes">
+    <div id="grid" class="grid"></div>
+  </div>
+  <div id="view" class="hidden"></div>
+  <div id="json" class="hidden panel">
+    <h3 class="sec">Recipes as JSON</h3>
+    <p style="color:var(--muted);margin-top:0">This is all your data. You can edit it here and apply it, or copy it as a backup.</p>
+    <textarea id="jtext" style="min-height:320px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace" spellcheck="false"></textarea>
+    <div class="actions"><button class="btn" id="japply">Apply changes</button><button class="btn ghost" id="jback">Close</button></div>
+  </div>
+  <form id="form" class="hidden panel" onsubmit="return false">
+    <h3 class="sec" id="ftitle">New recipe</h3>
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Spaghetti carbonara">
+    <div class="cols">
+      <div><label for="serv">Servings</label><input type="number" id="serv" min="1" placeholder="2"></div>
+      <div><label for="diff">Difficulty</label><select id="diff"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+      <div><label for="prep">Prep (min)</label><input type="number" id="prep" min="0"></div>
+      <div><label for="cook">Cooking (min)</label><input type="number" id="cook" min="0"></div>
+      <div><label for="rest">Rest (min)</label><input type="number" id="rest" min="0"></div>
+      <div><label for="cost">Cost</label><select id="cost"><option>Cheap</option><option>Average</option><option>Expensive</option></select></div>
+    </div>
+    <label>Photos</label>
+    <div class="photos" id="photos"></div>
+    <input type="file" id="file" accept="image/*" multiple class="hidden">
+    <button class="btn ghost" type="button" id="addphoto">Add photos</button>
+    <label>Ingredients (start with the quantity, e.g. 200g pasta)</label>
+    <div id="ings"></div>
+    <button class="btn ghost" type="button" id="adding">Add ingredient</button>
+    <label for="steps">Steps (one per line)</label>
+    <textarea id="steps" placeholder="Boil the pasta&#10;Fry the bacon"></textarea>
+    <label for="tip">Tips and notes</label>
+    <textarea id="tip" style="min-height:70px"></textarea>
+    <div class="actions">
+      <button class="btn" type="button" id="save">Save recipe</button>
+      <button class="btn ghost" type="button" id="cancel">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script>
+var KEY='recipe-book-drive-cache', SEED='recipe-book-seed-carbonara', recipes=[], cur=null, factor=1, DB=null, ASSETS=null, canWrite=true;
+var $=function(i){return document.getElementById(i)};
+var CARBONARA={"id": "carbonara", "ts": 1, "name": "Carbonara", "serv": 2, "prep": 10, "cook": 15, "rest": 0, "diff": "Easy", "cost": "Cheap", "ings": ["200g pasta", "250g bacon", "150g pecorino", "6 egg yolks", "Black pepper", "Pot of water for the pasta", "Pot for the eggs"], "photos": ["data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'><rect width='800' height='500' fill='%23efe3cf'/><ellipse cx='400' cy='300' rx='330' ry='170' fill='%23ffffff'/><ellipse cx='400' cy='295' rx='265' ry='135' fill='%23ececec'/><ellipse cx='400' cy='280' rx='205' ry='98' fill='%23f4d884'/><g fill='none' stroke='%23e2b64f' stroke-width='9' stroke-linecap='round'><path d='M235 280C300 205 500 205 565 280'/><path d='M260 300C330 235 470 235 540 300'/><path d='M290 260C350 225 450 225 510 260'/><path d='M300 315C360 275 440 275 500 315'/></g><g fill='%238a3b2b'><rect x='330' y='235' width='34' height='14' rx='4' transform='rotate(-20 347 242)'/><rect x='430' y='250' width='36' height='14' rx='4' transform='rotate(25 448 257)'/><rect x='380' y='290' width='32' height='14' rx='4' transform='rotate(10 396 297)'/><rect x='470' y='295' width='30' height='13' rx='4' transform='rotate(-30 485 301)'/><rect x='300' y='290' width='30' height='13' rx='4' transform='rotate(35 315 296)'/></g><g fill='%23333'><circle cx='360' cy='270' r='3'/><circle cx='410' cy='240' r='3'/><circle cx='450' cy='285' r='3'/><circle cx='340' cy='305' r='3'/><circle cx='500' cy='265' r='3'/><circle cx='395' cy='318' r='3'/><circle cx='430' cy='225' r='3'/></g></svg>"], "steps": "Cook the bacon.\nGrate the pecorino.\nTake the yolks and mix them with the pecorino in a bowl.\nAdd the bacon fat to the egg mixture.\nAdd some pasta water to the egg mixture (keep it thick).\nAdd pepper.\nAdd the bacon.\nAdd the pasta and mix well.", "tip": "My own recipe. You need two pots: one with water for the pasta and one for the eggs."};
+function load(){try{var r=localStorage.getItem(KEY);recipes=r?JSON.parse(r):[]}catch(e){recipes=[]}
+  if(!Array.isArray(recipes))recipes=[];
+  var seeded=false;try{seeded=localStorage.getItem(SEED)}catch(e){}
+  if(false){recipes.unshift(CARBONARA);try{localStorage.setItem(SEED,'1')}catch(e){}persist()}}
+function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});window.scrollTo(0,0)}
+function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
+function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
+
+function renderList(){
+  var q=$('search').value.toLowerCase().trim();
+  var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return !q||(r.name+' '+r.ings.join(' ')).toLowerCase().indexOf(q)>-1});
+  if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
+  $('grid').innerHTML=items.map(function(r){
+    var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
+    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(r.photos[0]?'<img src="'+r.photos[0]+'" alt="">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
+}
+$('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
+$('search').oninput=renderList;
+
+function openRecipe(id){
+  var r=recipes.find(function(x){return x.id===id});if(!r)return;
+  var ph=r.photos||[], base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
+  var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
+  $('view').innerHTML='<p style="margin:0 0 10px"><button class="btn ghost" id="back">Back</button></p>'+
+   '<div class="panel" style="padding:0;overflow:hidden">'+
+   (ph[0]?'<img class="hero" id="hero" src="'+ph[0]+'" alt="">':'<div class="hero none">🍝</div>')+
+   '<div style="padding:14px 16px">'+
+   (ph.length>1?'<div class="gal">'+ph.map(function(p){return '<img src="'+p+'" alt="">'}).join('')+'</div>':'')+
+   '<h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(r.diff||'Easy')+' · '+esc(r.cost||'Cheap')+'</div>'+
+   '<div class="meta"><div><small>Prep</small><b>'+fmt(r.prep)+'</b></div><div><small>Cooking</small><b>'+fmt(r.cook)+'</b></div><div><small>Rest</small><b>'+fmt(r.rest)+'</b></div><div><small>Total</small><b>'+fmt(total)+'</b></div></div>'+
+   '<h3 class="sec">Ingredients</h3>'+
+   (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b>'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+
+   '<ul class="ing">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div></div>'+
+   (r.steps?'<div class="panel"><h3 class="sec">Preparation</h3>'+r.steps.split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
+   (r.tip?'<div class="tip"><b>Tips and notes</b><br>'+esc(r.tip)+'</div>':'')+
+   '<div class="actions'+(canWrite?'':' hidden')+'"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
+  show('view');
+  $('back').onclick=function(){show('list')};
+  $('edit').onclick=function(){openForm(r)};
+  $('del').onclick=function(){if(!TOKEN){alert('Sign in with Google first.');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi)driveTrash(r._fid);persist();renderList();show('list')}};
+  if($('minus')){$('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);openRecipe(id)}};$('plus').onclick=function(){factor+=1/base;openRecipe(id)}}
+  var g=$('view').querySelector('.gal');
+  if(g)g.onclick=function(e){if(e.target.tagName==='IMG')$('hero').src=e.target.src};
+  $('view').querySelectorAll('.ing input').forEach(function(cb){cb.onchange=function(){cb.parentNode.classList.toggle('done',cb.checked)}});
+}
+
+var photos=[];
+function ingRow(v){
+  var d=document.createElement('div');d.className='row';
+  d.innerHTML='<input type="text" placeholder="e.g. 200g spaghetti" value="'+esc(v||'')+'" aria-label="Ingredient"><button type="button" class="btn ghost x" aria-label="Remove ingredient">✕</button>';
+  d.querySelector('.x').onclick=function(){d.remove()};
+  $('ings').appendChild(d);return d;
+}
+function renderPhotos(){
+  $('photos').innerHTML=photos.map(function(p,i){return '<div class="p"><img src="'+p+'" alt=""><button type="button" data-i="'+i+'" aria-label="Remove photo">✕</button></div>'}).join('');
+}
+$('photos').onclick=function(e){var b=e.target.closest('button');if(b){photos.splice(+b.dataset.i,1);renderPhotos()}};
+$('addphoto').onclick=function(){$('file').click()};
+$('file').onchange=function(){
+  Array.prototype.forEach.call($('file').files,function(f){
+    var rd=new FileReader();
+    rd.onload=function(){var im=new Image();
+      im.onload=function(){var m=DB&&!ASSETS?480:800,s=Math.min(1,m/Math.max(im.width,im.height));
+        var c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+        c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+        if(ASSETS){c.toBlob(function(b){ASSETS.upload(b).then(function(a){photos.push(a.url);renderPhotos()},function(){photos.push(c.toDataURL('image/jpeg',.6));renderPhotos()})},'image/jpeg',.75)}else{photos.push(c.toDataURL('image/jpeg',DB?.55:.72));renderPhotos()}};
+      im.src=rd.result};
+    rd.readAsDataURL(f)});
+  $('file').value='';
+};
+$('adding').onclick=function(){ingRow('').querySelector('input').focus()};
+
+function openForm(r){
+  if(!TOKEN){alert('Sign in with Google first so your changes are saved to Drive.');return}
+  cur=r||null;
+  $('ftitle').textContent=r?'Edit recipe':'New recipe';
+  $('name').value=r?r.name:'';$('serv').value=r&&r.serv?r.serv:'';
+  $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
+  $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
+  $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';
+  photos=r?(r.photos||[]).slice():[];renderPhotos();
+  $('ings').innerHTML='';
+  (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
+  show('form');
+}
+$('add').onclick=function(){openForm(null)};
+$('cancel').onclick=function(){cur?openRecipe(cur.id):show('list')};
+$('save').onclick=function(){
+  var name=$('name').value.trim();
+  if(!name){alert('Give your recipe a name.');$('name').focus();return}
+  var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
+  var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
+    diff:$('diff').value,cost:$('cost').value,ings:ings,photos:photos.slice(),steps:$('steps').value.trim(),tip:$('tip').value.trim()};
+  if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi}var old=recipes.slice();
+  if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
+  persist();driveSave(rec);
+  factor=1;renderList();openRecipe(rec.id);
+};
+
+function download(name,text){var b=new Blob([text],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),tip:String(r.tip||'')}:null}
+function parseList(t,fb){var d=JSON.parse(t);if(!Array.isArray(d)){if(d&&Array.isArray(d.recipes))d=d.recipes;else if(d&&d.name)d=[d];else throw new Error('x')}return d.map(function(x,i){return clean(x,fb?fb+'-'+i:null)}).filter(Boolean)}
+$('exp').onclick=function(){download('recipes.json',JSON.stringify(recipes.map(strip),null,2))};
+$('imp').onclick=function(){$('impfile').click()};
+
+var FOLDER_DEFAULT='1Yb4bCOm2NJFB8SjoeTqls0bKT8vC5kLY', TOKEN=null;
+function lsGet(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function cfgv(){return {cid:lsGet('rb-cid',''),folder:lsGet('rb-folder',FOLDER_DEFAULT)}}
+function status(t){$('status').textContent=t}
+function strip(r){var o={};for(var k in r)if(k[0]!=='_')o[k]=r[k];return o}
+function api(url,opt){opt=opt||{};opt.headers=Object.assign({Authorization:'Bearer '+TOKEN},opt.headers||{});
+  return fetch(url,opt).then(function(r){
+    if(r.status===401){TOKEN=null;$('sign').textContent='Sign in with Google';status('Session expired. Sign in again.');throw new Error('auth')}
+    if(!r.ok)return r.text().then(function(t){throw new Error(r.status+' '+t)});return r})}
+function loadGsi(cb){if(window.google&&google.accounts){cb();return}
+  var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=cb;
+  s.onerror=function(){alert('Could not load Google sign-in. Check your connection.')};document.head.appendChild(s)}
+function signIn(){
+  var c=cfgv();
+  if(!c.cid){var v=prompt('Paste your Google OAuth Client ID (see the setup steps):');if(!v)return;lsSet('rb-cid',v.trim());c=cfgv()}
+  loadGsi(function(){
+    var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
+      callback:function(r){if(r.error){alert('Sign-in failed: '+r.error);return}
+        TOKEN=r.access_token;$('sign').textContent='Refresh';refresh()}});
+    tc.requestAccessToken({prompt:''})})}
+function refresh(){
+  var q="'"+cfgv().folder+"' in parents and trashed=false and name contains '.json'";
+  status('Loading from Drive…');
+  api('https://www.googleapis.com/drive/v3/files?pageSize=200&fields='+encodeURIComponent('files(id,name)')+'&supportsAllDrives=true&includeItemsFromAllDrives=true&q='+encodeURIComponent(q))
+  .then(function(r){return r.json()}).then(function(d){
+    return Promise.all((d.files||[]).map(function(f){
+      return api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true')
+        .then(function(r){return r.text()}).then(function(t){
+          try{var l=parseList(t,f.id);return l.map(function(x){x._fid=f.id;x._multi=l.length>1;return x})}catch(e){return []}})
+        .catch(function(){return []})}))
+  }).then(function(groups){
+    var map={};
+    [].concat.apply([],groups).sort(function(a,b){return (a._multi?0:1)-(b._multi?0:1)}).forEach(function(x){map[x.id]=x});
+    recipes=Object.keys(map).map(function(k){return map[k]});
+    persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');
+  }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
+function driveSave(rec){
+  if(!TOKEN)return;
+  var body=JSON.stringify(strip(rec),null,2),p;status('Saving…');
+  if(rec._fid&&!rec._multi){
+    p=api('https://www.googleapis.com/upload/drive/v3/files/'+rec._fid+'?uploadType=media&supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:body})}
+  else{
+    var meta={name:String(rec.id).replace(/[^\w-]/g,'_')+'.json',parents:[cfgv().folder],mimeType:'application/json'},bd='rb'+Date.now();
+    var mp='--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--';
+    p=api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},body:mp})
+      .then(function(r){return r.json()}).then(function(d){rec._fid=d.id;rec._multi=false;persist()})}
+  p.then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
+function driveTrash(fid){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
+$('sign').onclick=function(){TOKEN?refresh():signIn()};
+$('cfg').onclick=function(){var c=cfgv(),a=prompt('Google OAuth Client ID:',c.cid);if(a!==null)lsSet('rb-cid',a.trim());
+  var b=prompt('Drive folder link or id:',c.folder);if(b){var m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);lsSet('rb-folder',m?m[1]:b.trim())}};
+$('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){var list;try{list=parseList(rd.result)}catch(e){alert('This file is not a valid recipes JSON file.');return}
+    if(!TOKEN){alert('Sign in with Google first.');return}
+    list.forEach(function(r){var i=recipes.findIndex(function(x){return x.id===r.id});if(i>-1){r._fid=recipes[i]._fid;r._multi=recipes[i]._multi;recipes[i]=r}else recipes.push(r);driveSave(r)});
+    persist();renderList()};
+  rd.readAsText(f);$('impfile').value=''};
+load();renderList();
+</script>
+</body>
+</html>
