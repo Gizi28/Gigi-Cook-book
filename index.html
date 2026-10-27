@@ -64,6 +64,19 @@ textarea{min-height:110px;resize:vertical}
 .photos img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .photos .p button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.car{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+.car::-webkit-scrollbar{display:none}
+.car>*{flex:0 0 100%;aspect-ratio:16/10;object-fit:cover;scroll-snap-align:center;border-radius:10px;display:block;background:var(--soft)}
+.car.p{gap:0}
+.car.p>*{border-radius:0}
+.car.v>*{flex:0 0 min(100%,320px);aspect-ratio:16/9}
+.vslide{position:relative;background:#000;overflow:hidden}
+.vslide video{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+.vslide .vbtn{width:100%;height:100%;border:0;background:#1b1b1b;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:8px;font-size:28px}
+.vslide .vbtn small{font-size:12px;opacity:.8;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dots{display:flex;justify-content:center;gap:6px;margin:8px 0 2px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent-text)}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
 .overlay.bottom{align-items:flex-end;padding:0}
 .sheet{position:relative;width:100%;max-width:480px;background:var(--surface);border-radius:16px 16px 0 0;padding:56px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;animation:slideUp .22s ease-out}
@@ -172,35 +185,36 @@ function renderList(){
 $('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
 $('search').oninput=renderList;
 
+function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;
   var ph=imgs(r), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
   var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
   $('view').innerHTML='<p style="margin:0 0 10px"><button class="btn ghost" id="back">Back</button></p>'+
    '<div class="panel" style="padding:0;overflow:hidden">'+
-   (ph[0]?'<img class="hero" id="hero" src="'+ph[0]+'" alt="">':'<div class="hero none">🍝</div>')+
+   (ph[0]?'<div class="car p">'+ph.map(function(p){return '<img src="'+p+'" alt="">'}).join('')+'</div>'+dotsHtml(ph.length):'<div class="hero none">🍝</div>')+
    '<div style="padding:14px 16px">'+
-   (ph.length>1?'<div class="gal">'+ph.map(function(p){return '<img src="'+p+'" alt="">'}).join('')+'</div>':'')+
    '<h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(r.diff||'Easy')+' · '+esc(r.cost||'Cheap')+'</div>'+
    '<div class="meta"><div><small>Prep</small><b>'+fmt(r.prep)+'</b></div><div><small>Cooking</small><b>'+fmt(r.cook)+'</b></div><div><small>Rest</small><b>'+fmt(r.rest)+'</b></div><div><small>Total</small><b>'+fmt(total)+'</b></div></div>'+
    '<h3 class="sec">Ingredients</h3>'+
    (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b>'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+
    '<ul class="ing">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div></div>'+
    (r.steps?'<div class="panel"><h3 class="sec">Preparation</h3>'+r.steps.split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
-   ((r._vids&&r._vids.length)?'<div class="panel"><h3 class="sec">Videos</h3>'+r._vids.map(function(v,i){return '<div class="vid"><button class="btn ghost vbtn" data-i="'+i+'">▶ '+esc(v.name)+'</button></div>'}).join('')+'</div>':'')+
    (r.tip?'<div class="tip"><b>Tips and notes</b><br>'+esc(r.tip)+'</div>':'')+
+   ((r._vids&&r._vids.length)?'<div class="panel" style="margin-top:14px"><h3 class="sec">Videos</h3><div class="car v">'+r._vids.map(function(v,i){return '<div class="vslide"><button class="vbtn" data-i="'+i+'">▶<small>'+esc(v.name)+'</small></button></div>'}).join('')+'</div>'+dotsHtml(r._vids.length)+'</div>':'')+
    '<div class="actions'+(canWrite?'':' hidden')+'"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
   show('view');
-  $('view').querySelectorAll('.vbtn').forEach(function(b){b.onclick=function(){var v=r._vids[+b.dataset.i];b.textContent='Loading…';b.disabled=true;
+  $('view').querySelectorAll('.vbtn').forEach(function(b){b.onclick=function(){var v=r._vids[+b.dataset.i];b.innerHTML='Loading…';b.disabled=true;
     api('https://www.googleapis.com/drive/v3/files/'+v.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(function(bl){
-      var el=document.createElement('video');el.controls=true;el.autoplay=true;el.playsInline=true;el.style.cssText='width:100%;border-radius:10px;margin-top:6px';el.src=URL.createObjectURL(bl);b.parentNode.replaceChild(el,b)})
-    .catch(function(){b.disabled=false;b.textContent='▶ '+v.name+' (could not load, tap to retry)'})}});
+      var el=document.createElement('video');el.controls=true;el.autoplay=true;el.playsInline=true;el.src=URL.createObjectURL(bl);b.parentNode.replaceChild(el,b)})
+    .catch(function(){b.disabled=false;b.innerHTML='▶<small>Could not load, tap to retry</small>'})}});
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
   $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}persist();renderList();show('list')}};
   if($('minus')){$('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);openRecipe(id)}};$('plus').onclick=function(){factor+=1/base;openRecipe(id)}}
-  var g=$('view').querySelector('.gal');
-  if(g)g.onclick=function(e){if(e.target.tagName==='IMG')$('hero').src=e.target.src};
+  $('view').querySelectorAll('.car').forEach(function(c){var d=c.nextElementSibling;if(!d||!d.classList.contains('dots'))return;
+    c.addEventListener('scroll',function(){var w=c.firstElementChild.getBoundingClientRect().width+(c.classList.contains('p')?0:10),i=Math.round(c.scrollLeft/w);
+      d.querySelectorAll('i').forEach(function(x,k){x.classList.toggle('on',k===i)})})});
   $('view').querySelectorAll('.ing input').forEach(function(cb){cb.onchange=function(){cb.parentNode.classList.toggle('done',cb.checked)}});
 }
 
