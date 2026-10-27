@@ -120,7 +120,7 @@ function load(){try{var r=localStorage.getItem(KEY);recipes=r?JSON.parse(r):[]}c
   if(!Array.isArray(recipes))recipes=[];
   var seeded=false;try{seeded=localStorage.getItem(SEED)}catch(e){}
   if(false){recipes.unshift(CARBONARA);try{localStorage.setItem(SEED,'1')}catch(e){}persist()}}
-function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
+function persist(){if(DB)return true;try{localStorage.setItem(KEY,JSON.stringify(recipes,function(k,v){return k==='_img'?undefined:v}));return true}catch(e){alert('Could not save. Browser storage is full or unavailable. Try removing some photos.');return false}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});window.scrollTo(0,0)}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
@@ -132,14 +132,14 @@ function renderList(){
   if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
-    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(r.photos[0]?'<img src="'+r.photos[0]+'" alt="">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
+    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+imgs(r)[0]+'" alt="">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
 }
 $('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
 $('search').oninput=renderList;
 
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;
-  var ph=r.photos||[], base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
+  var ph=imgs(r), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
   var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
   $('view').innerHTML='<p style="margin:0 0 10px"><button class="btn ghost" id="back">Back</button></p>'+
    '<div class="panel" style="padding:0;overflow:hidden">'+
@@ -258,8 +258,25 @@ function refresh(){
     var map={};
     [].concat.apply([],groups).sort(function(a,b){return (a._multi?0:1)-(b._multi?0:1)}).forEach(function(x){map[x.id]=x});
     recipes=Object.keys(map).map(function(k){return map[k]});
-    persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');
+    persist();renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');loadImages();
   }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
+var imgCache={};
+function imgs(r){return r._img?[r._img].concat(r.photos||[]):(r.photos||[])}
+function toSmall(blob){return new Promise(function(res,rej){var u=URL.createObjectURL(blob),im=new Image();
+  im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.8))};
+  im.onerror=rej;im.src=u})}
+function loadImages(){
+  var q="'"+cfgv().folder+"' in parents and trashed=false and mimeType contains 'image/'";
+  api('https://www.googleapis.com/drive/v3/files?pageSize=200&fields='+encodeURIComponent('files(id,name)')+'&supportsAllDrives=true&includeItemsFromAllDrives=true&q='+encodeURIComponent(q))
+  .then(function(r){return r.json()}).then(function(d){
+    (d.files||[]).forEach(function(f){
+      var base=f.name.replace(/\.[^.]+$/,'').toLowerCase().trim();
+      var targets=recipes.filter(function(r){return r.name.toLowerCase().trim()===base||String(r.id).toLowerCase()===base});
+      if(!targets.length)return;
+      var p=imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(r){return r.blob()}).then(toSmall));
+      p.then(function(url){targets.forEach(function(r){r._img=url});renderList()}).catch(function(){delete imgCache[f.id]})})
+  }).catch(function(){})}
 function driveSave(rec){
   if(!TOKEN)return;
   var body=JSON.stringify(strip(rec),null,2),p;status('Saving…');
