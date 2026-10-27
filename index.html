@@ -66,7 +66,16 @@ textarea{min-height:110px;resize:vertical}
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
 .overlay.bottom{align-items:flex-end;padding:0}
-.sheet{width:100%;max-width:480px;background:var(--surface);border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.sheet{position:relative;width:100%;max-width:480px;background:var(--surface);border-radius:16px 16px 0 0;padding:56px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;animation:slideUp .22s ease-out}
+.xbtn{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.xbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes slideDown{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+@media (min-width:700px){
+  #sheet{background:transparent;align-items:flex-start;justify-content:flex-start;padding:0}
+  .sheet{position:fixed;width:260px;border-radius:12px;padding:16px 16px 60px;box-shadow:0 8px 28px rgba(0,0,0,.28);border:1px solid var(--line);animation:slideDown .2s ease-out}
+  .xbtn{top:auto;right:auto;bottom:12px;left:12px}
+}
 .dlg{width:100%;max-width:380px;background:var(--surface);border-radius:14px;padding:18px}
 .hidden{display:none}
 </style>
@@ -117,11 +126,11 @@ textarea{min-height:110px;resize:vertical}
 </div>
 
 <div id="sheet" class="overlay bottom hidden"><div class="sheet">
+  <button class="xbtn" id="sclose" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <button class="btn ghost" id="sign">Sign in with Google</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <button class="btn ghost" id="sclose">Close</button>
-</div></div>
+  </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
   <label for="cid">Google OAuth Client ID</label><input type="text" id="cid">
@@ -312,8 +321,12 @@ function driveSave(rec){
   p.then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
 function driveTrash(fid){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
-$('set').onclick=function(){$('sheet').classList.remove('hidden')};
-$('sheet').onclick=function(e){if(e.target===$('sheet')||e.target.tagName==='BUTTON')$('sheet').classList.add('hidden')};
+$('set').onclick=function(){var p=document.querySelector('#sheet .sheet');
+  if(window.matchMedia('(min-width:700px)').matches){var r=$('set').getBoundingClientRect();p.style.top=(r.bottom+8)+'px';p.style.right=Math.max(8,window.innerWidth-r.right)+'px'}
+  else{p.style.top='';p.style.right=''}
+  $('sheet').classList.remove('hidden')};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('sheet').classList.add('hidden')});
+$('sheet').onclick=function(e){if(e.target===$('sheet')||e.target.closest('button'))$('sheet').classList.add('hidden')};
 $('lock').onclick=function(){var c=cfgv();$('cid').value=c.cid;$('fold').value=c.folder;$('lockm').classList.remove('hidden')};
 $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
 $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
