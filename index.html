@@ -64,11 +64,15 @@ textarea{min-height:110px;resize:vertical}
 .photos img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .photos .p button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.overlay.bottom{align-items:flex-end;padding:0}
+.sheet{width:100%;max-width:480px;background:var(--surface);border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.dlg{width:100%;max-width:380px;background:var(--surface);border-radius:14px;padding:18px}
 .hidden{display:none}
 </style>
 </head>
 <body>
-<div class="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="exp">Export JSON</button><button class="btn" id="imp">Import</button><button class="btn" id="sign">Sign in with Google</button><button class="btn" id="cfg">Settings</button><button class="btn" id="add">Add recipe</button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="set">Settings</button><button class="btn" id="lock" aria-label="Google connection settings" style="display:inline-flex;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add">Add recipe</button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div class="wrap">
   <div id="list">
     <div id="status" style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
@@ -112,6 +116,24 @@ textarea{min-height:110px;resize:vertical}
   </form>
 </div>
 
+<div id="sheet" class="overlay bottom hidden"><div class="sheet">
+  <button class="btn ghost" id="sign">Sign in with Google</button>
+  <button class="btn ghost" id="exp">Export JSON</button>
+  <button class="btn ghost" id="imp">Import</button>
+  <button class="btn ghost" id="sclose">Close</button>
+</div></div>
+<div id="lockm" class="overlay hidden"><div class="dlg">
+  <h3 class="sec">Google connection</h3>
+  <label for="cid">Google OAuth Client ID</label><input type="text" id="cid">
+  <label for="fold">Drive folder link</label><input type="text" id="fold">
+  <div class="actions"><button class="btn" id="lsave">Save</button><button class="btn ghost" id="lclose">Cancel</button></div>
+</div></div>
+<div id="signm" class="overlay hidden"><div class="dlg" style="text-align:center">
+  <h3 class="sec">Sign in</h3>
+  <p style="margin-top:0">Sign in with Google to open and edit the shared recipes.</p>
+  <button class="btn" id="signbtn">Sign in with Google</button>
+  <div class="actions" style="justify-content:center"><button class="btn ghost" id="sklip">Not now</button></div>
+</div></div>
 <script>
 var KEY='recipe-book-drive-cache', SEED='recipe-book-seed-carbonara', recipes=[], cur=null, factor=1, DB=null, ASSETS=null, canWrite=true;
 var $=function(i){return document.getElementById(i)};
@@ -157,7 +179,7 @@ function openRecipe(id){
   show('view');
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
-  $('del').onclick=function(){if(!TOKEN){alert('Sign in with Google first.');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi)driveTrash(r._fid);persist();renderList();show('list')}};
+  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN&&r._fid&&!r._multi)driveTrash(r._fid);persist();renderList();show('list')}};
   if($('minus')){$('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);openRecipe(id)}};$('plus').onclick=function(){factor+=1/base;openRecipe(id)}}
   var g=$('view').querySelector('.gal');
   if(g)g.onclick=function(e){if(e.target.tagName==='IMG')$('hero').src=e.target.src};
@@ -191,7 +213,7 @@ $('file').onchange=function(){
 $('adding').onclick=function(){ingRow('').querySelector('input').focus()};
 
 function openForm(r){
-  if(!TOKEN){alert('Sign in with Google first so your changes are saved to Drive.');return}
+  if(!TOKEN){$('signm').classList.remove('hidden');return}
   cur=r||null;
   $('ftitle').textContent=r?'Edit recipe':'New recipe';
   $('name').value=r?r.name:'';$('serv').value=r&&r.serv?r.serv:'';
@@ -223,26 +245,26 @@ function parseList(t,fb){var d=JSON.parse(t);if(!Array.isArray(d)){if(d&&Array.i
 $('exp').onclick=function(){download('recipes.json',JSON.stringify(recipes.map(strip),null,2))};
 $('imp').onclick=function(){$('impfile').click()};
 
-var FOLDER_DEFAULT='1Yb4bCOm2NJFB8SjoeTqls0bKT8vC5kLY', TOKEN=null;
+var FOLDER_DEFAULT='1Yb4bCOm2NJFB8SjoeTqls0bKT8vC5kLY', CID_DEFAULT='787763644687-sld6h07oh3lmkd42qo3619gco09k9j15.apps.googleusercontent.com', TOKEN=null;
 function lsGet(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function cfgv(){return {cid:lsGet('rb-cid',''),folder:lsGet('rb-folder',FOLDER_DEFAULT)}}
+function cfgv(){return {cid:lsGet('rb-cid',CID_DEFAULT),folder:lsGet('rb-folder',FOLDER_DEFAULT)}}
 function status(t){$('status').textContent=t}
 function strip(r){var o={};for(var k in r)if(k[0]!=='_')o[k]=r[k];return o}
 function api(url,opt){opt=opt||{};opt.headers=Object.assign({Authorization:'Bearer '+TOKEN},opt.headers||{});
   return fetch(url,opt).then(function(r){
-    if(r.status===401){TOKEN=null;$('sign').textContent='Sign in with Google';status('Session expired. Sign in again.');throw new Error('auth')}
+    if(r.status===401){TOKEN=null;$('sign').textContent='Sign in with Google';status('Session expired. Sign in again.');$('signm').classList.remove('hidden');throw new Error('auth')}
     if(!r.ok)return r.text().then(function(t){throw new Error(r.status+' '+t)});return r})}
 function loadGsi(cb){if(window.google&&google.accounts){cb();return}
   var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=cb;
   s.onerror=function(){alert('Could not load Google sign-in. Check your connection.')};document.head.appendChild(s)}
 function signIn(){
   var c=cfgv();
-  if(!c.cid){var v=prompt('Paste your Google OAuth Client ID (see the setup steps):');if(!v)return;lsSet('rb-cid',v.trim());c=cfgv()}
+  if(!c.cid){$('lockm').classList.remove('hidden');return}
   loadGsi(function(){
     var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
       callback:function(r){if(r.error){alert('Sign-in failed: '+r.error);return}
-        TOKEN=r.access_token;$('sign').textContent='Refresh';refresh()}});
+        TOKEN=r.access_token;$('sign').textContent='Refresh from Drive';refresh()}});
     tc.requestAccessToken({prompt:''})})}
 function refresh(){
   var q="'"+cfgv().folder+"' in parents and trashed=false and name contains '.json'";
@@ -290,15 +312,22 @@ function driveSave(rec){
   p.then(function(){status('Saved to Drive')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
 function driveTrash(fid){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
-$('cfg').onclick=function(){var c=cfgv(),a=prompt('Google OAuth Client ID:',c.cid);if(a!==null)lsSet('rb-cid',a.trim());
-  var b=prompt('Drive folder link or id:',c.folder);if(b){var m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);lsSet('rb-folder',m?m[1]:b.trim())}};
+$('set').onclick=function(){$('sheet').classList.remove('hidden')};
+$('sheet').onclick=function(e){if(e.target===$('sheet')||e.target.tagName==='BUTTON')$('sheet').classList.add('hidden')};
+$('lock').onclick=function(){var c=cfgv();$('cid').value=c.cid;$('fold').value=c.folder;$('lockm').classList.remove('hidden')};
+$('lclose').onclick=function(){$('lockm').classList.add('hidden')};
+$('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
+  if(a)lsSet('rb-cid',a);if(b)lsSet('rb-folder',m?m[1]:b);$('lockm').classList.add('hidden');
+  if(TOKEN){TOKEN=null;$('sign').textContent='Sign in with Google';status('Connection changed. Sign in again.');$('signm').classList.remove('hidden')}};
+$('signbtn').onclick=function(){$('signm').classList.add('hidden');signIn()};
+$('sklip').onclick=function(){$('signm').classList.add('hidden')};
 $('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd=new FileReader();
   rd.onload=function(){var list;try{list=parseList(rd.result)}catch(e){alert('This file is not a valid recipes JSON file.');return}
     if(!TOKEN){alert('Sign in with Google first.');return}
     list.forEach(function(r){var i=recipes.findIndex(function(x){return x.id===r.id});if(i>-1){r._fid=recipes[i]._fid;r._multi=recipes[i]._multi;recipes[i]=r}else recipes.push(r);driveSave(r)});
     persist();renderList()};
   rd.readAsText(f);$('impfile').value=''};
-load();renderList();
+load();renderList();$('signm').classList.remove('hidden');
 </script>
 </body>
 </html>
