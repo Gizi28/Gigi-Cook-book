@@ -25,12 +25,14 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:700}
 .top .btn{background:var(--accent-ink);color:var(--accent)}
 .top .sm{display:none}
+.top .langsel{-webkit-appearance:none;appearance:none;width:auto;border:0;border-radius:999px;padding:10px 12px;font-weight:700;cursor:pointer;text-align:center;text-align-last:center}
+.langsel option{color:#2b2b2b;background:#fff}
 #lock{display:inline-flex;align-items:center}
 #lock.hidden{display:none}
 .ltools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .top h1{cursor:pointer}
 .top #theme{padding:10px 12px;line-height:1}
-@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -294,88 +296,88 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="theme" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" aria-label="Meal plan"><span class="lg">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add"><span class="lg">Add recipe</span><span class="sm">+ Add</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><h1 data-t="My Recipe Book">My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div class="rhero lhero none" id="lhero"></div>
 <div class="wrap">
   <div id="list">
-    <div id="status" style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
-    <input id="search" type="text" placeholder="Search recipes or ingredients" aria-label="Search recipes">
+    <div id="status" data-t="Not signed in. Tap “Sign in with Google”." style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
+    <input id="search" type="text" data-tp="Search recipes or ingredients" data-ta="Search recipes or ingredients" placeholder="Search recipes or ingredients" aria-label="Search recipes">
     <div id="grid" class="grid"></div>
   </div>
   <div id="view" class="hidden"></div>
   <div id="plan" class="hidden"></div>
   <div id="json" class="hidden panel">
-    <h3 class="sec">Recipes as JSON</h3>
-    <p style="color:var(--muted);margin-top:0">This is all your data. You can edit it here and apply it, or copy it as a backup.</p>
+    <h3 class="sec" data-t="Recipes as JSON">Recipes as JSON</h3>
+    <p style="color:var(--muted);margin-top:0" data-t="This is all your data. You can edit it here and apply it, or copy it as a backup.">This is all your data. You can edit it here and apply it, or copy it as a backup.</p>
     <textarea id="jtext" style="min-height:320px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace" spellcheck="false"></textarea>
-    <div class="actions"><button class="btn" id="japply">Apply changes</button><button class="btn ghost" id="jback">Close</button></div>
+    <div class="actions"><button class="btn" id="japply" data-t="Apply changes">Apply changes</button><button class="btn ghost" id="jback" data-t="Close">Close</button></div>
   </div>
   <form id="form" class="hidden panel" onsubmit="return false">
     <h3 class="sec" id="ftitle">New recipe</h3>
-    <label for="name">Name</label>
+    <label for="name" data-t="Name">Name</label>
     <input type="text" id="name" placeholder="Spaghetti carbonara">
     <div class="cols">
-      <div><label for="serv">Servings</label><input type="number" id="serv" min="1" placeholder="2"></div>
-      <div><label for="diff">Difficulty</label><select id="diff"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
-      <div><label for="prep">Prep (min)</label><input type="number" id="prep" min="0"></div>
-      <div><label for="cook">Cooking (min)</label><input type="number" id="cook" min="0"></div>
-      <div><label for="rest">Rest (min)</label><input type="number" id="rest" min="0"></div>
-      <div><label for="cost">Cost</label><select id="cost"><option>Cheap</option><option>Average</option><option>Expensive</option></select></div>
-      <div><label for="kcalin">Calories (whole dish)</label><input type="number" id="kcalin" min="0" placeholder="Leave empty to estimate"></div>
+      <div><label for="serv" data-t="Servings">Servings</label><input type="number" id="serv" min="1" placeholder="2"></div>
+      <div><label for="diff" data-t="Difficulty">Difficulty</label><select id="diff"><option value="Easy" data-t="Easy">Easy</option><option value="Medium" data-t="Medium">Medium</option><option value="Hard" data-t="Hard">Hard</option></select></div>
+      <div><label for="prep" data-t="Prep (min)">Prep (min)</label><input type="number" id="prep" min="0"></div>
+      <div><label for="cook" data-t="Cooking (min)">Cooking (min)</label><input type="number" id="cook" min="0"></div>
+      <div><label for="rest" data-t="Rest (min)">Rest (min)</label><input type="number" id="rest" min="0"></div>
+      <div><label for="cost" data-t="Cost">Cost</label><select id="cost"><option value="Cheap" data-t="Cheap">Cheap</option><option value="Average" data-t="Average">Average</option><option value="Expensive" data-t="Expensive">Expensive</option></select></div>
+      <div><label for="kcalin" data-t="Calories (whole dish)">Calories (whole dish)</label><input type="number" id="kcalin" min="0" data-tp="Leave empty to estimate" placeholder="Leave empty to estimate"></div>
     </div>
-    <label>Categories</label>
+    <label data-t="Categories">Categories</label>
     <div class="catpick" id="catpick"></div>
-    <div class="row"><input type="text" id="newcat" placeholder="New category (e.g. Vegan)"><button type="button" class="btn ghost" id="addcat">Add</button></div>
-    <label>Photos</label>
+    <div class="row"><input type="text" id="newcat" data-tp="New category (e.g. Vegan)" placeholder="New category (e.g. Vegan)"><button type="button" class="btn ghost" id="addcat" data-t="Add">Add</button></div>
+    <label data-t="Photos">Photos</label>
     <div class="photos" id="photos"></div>
     <input type="file" id="file" accept="image/*" multiple class="hidden">
-    <button class="btn ghost" type="button" id="addphoto">Add photos</button>
-    <label>Videos</label>
+    <button class="btn ghost" type="button" id="addphoto" data-t="Add photos">Add photos</button>
+    <label data-t="Videos">Videos</label>
     <div id="vlist"></div>
     <input type="file" id="vfile" accept="video/*" multiple class="hidden">
-    <button class="btn ghost" type="button" id="addvid">Add videos</button>
-    <label>Ingredients (start with the quantity, e.g. 200g pasta)</label>
+    <button class="btn ghost" type="button" id="addvid" data-t="Add videos">Add videos</button>
+    <label data-t="Ingredients (start with the quantity, e.g. 200g pasta)">Ingredients (start with the quantity, e.g. 200g pasta)</label>
     <div id="ings"></div>
-    <button class="btn ghost" type="button" id="adding">Add ingredient</button>
-    <label for="steps">Steps (one per line)</label>
-    <textarea id="steps" placeholder="Boil the pasta&#10;Fry the bacon"></textarea>
-    <label for="tip">Tips and notes</label>
+    <button class="btn ghost" type="button" id="adding" data-t="Add ingredient">Add ingredient</button>
+    <label for="steps" data-t="Steps (one per line)">Steps (one per line)</label>
+    <textarea id="steps" data-tp="Boil the pasta&#10;Fry the bacon" placeholder="Boil the pasta&#10;Fry the bacon"></textarea>
+    <label for="tip" data-t="Tips and notes">Tips and notes</label>
     <textarea id="tip" style="min-height:70px"></textarea>
     <div class="actions">
-      <button class="btn" type="button" id="save">Save recipe</button>
-      <button class="btn ghost" type="button" id="cancel">Cancel</button>
+      <button class="btn" type="button" id="save" data-t="Save recipe">Save recipe</button>
+      <button class="btn ghost" type="button" id="cancel" data-t="Cancel">Cancel</button>
     </div>
   </form>
 </div>
 <nav id="cats" aria-label="Categories"></nav>
 
 <div id="profm" class="overlay hidden"><div class="dlg">
-  <h3 class="sec">Your daily calories</h3>
-  <p style="margin-top:0">Which category are you in? It sets a suggested daily calorie goal for your meal plan.</p>
-  <label>Sex</label><div class="seg" id="pf-sex"><button type="button" data-v="f">Female</button><button type="button" data-v="m">Male</button></div>
-  <label>Age</label><div class="seg" id="pf-age"><button type="button" data-v="19">19–30</button><button type="button" data-v="31">31–60</button><button type="button" data-v="61">61+</button></div>
-  <label>Activity</label><div class="seg" id="pf-act"><button type="button" data-v="s">Sedentary</button><button type="button" data-v="a">Active</button></div>
-  <label for="ptgt">Daily goal (kcal)</label><input type="number" id="ptgt" min="0" step="50">
+  <h3 class="sec" data-t="Your daily calories">Your daily calories</h3>
+  <p style="margin-top:0" data-t="Which category are you in? It sets a suggested daily calorie goal for your meal plan.">Which category are you in? It sets a suggested daily calorie goal for your meal plan.</p>
+  <label data-t="Sex">Sex</label><div class="seg" id="pf-sex"><button type="button" data-v="f" data-t="Female">Female</button><button type="button" data-v="m" data-t="Male">Male</button></div>
+  <label data-t="Age">Age</label><div class="seg" id="pf-age"><button type="button" data-v="19">19–30</button><button type="button" data-v="31">31–60</button><button type="button" data-v="61">61+</button></div>
+  <label data-t="Activity">Activity</label><div class="seg" id="pf-act"><button type="button" data-v="s" data-t="Sedentary">Sedentary</button><button type="button" data-v="a" data-t="Active">Active</button></div>
+  <label for="ptgt" data-t="Daily goal (kcal)">Daily goal (kcal)</label><input type="number" id="ptgt" min="0" step="50">
   <small id="prange" style="color:var(--muted)"></small>
-  <div class="actions"><button class="btn" id="psave">Save</button><button class="btn ghost" id="pcancel">Cancel</button></div>
-  <p style="font-size:12px;color:var(--muted);margin:12px 0 0">General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.</p>
+  <div class="actions"><button class="btn" id="psave" data-t="Save">Save</button><button class="btn ghost" id="pcancel" data-t="Cancel">Cancel</button></div>
+  <p style="font-size:12px;color:var(--muted);margin:12px 0 0" data-t="General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.">General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.</p>
 </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
-  <h3 class="sec">Owner tools</h3>
-  <div class="ltools"><button class="btn ghost" id="sign">Sign in with Google</button><button class="btn ghost" id="exp">Export JSON</button><button class="btn ghost" id="imp">Import</button><button class="btn ghost" id="sout">Sign out</button></div>
-  <h3 class="sec" style="margin-top:20px">Google connection</h3>
-  <label for="cid">Google OAuth Client ID</label><input type="text" id="cid">
-  <label for="fold">Drive folder link</label><input type="text" id="fold">
-  <div class="actions"><button class="btn" id="lsave">Save</button><button class="btn ghost" id="lclose">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 n (image sizes)</small>
+  <h3 class="sec" data-t="Owner tools">Owner tools</h3>
+  <div class="ltools"><button class="btn ghost" id="sign">Sign in with Google</button><button class="btn ghost" id="exp" data-t="Export JSON">Export JSON</button><button class="btn ghost" id="imp" data-t="Import">Import</button><button class="btn ghost" id="sout" data-t="Sign out">Sign out</button></div>
+  <h3 class="sec" style="margin-top:20px" data-t="Google connection">Google connection</h3>
+  <label for="cid" data-t="Google OAuth Client ID">Google OAuth Client ID</label><input type="text" id="cid">
+  <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
+  <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 o (languages)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
-  <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px">My Recipe Book</h3>
-  <p style="margin-top:0">Sign in with your Google email to open the recipes.</p>
-  <input type="text" id="gemail" placeholder="you@gmail.com" inputmode="email" autocomplete="email" aria-label="Google email">
-  <button class="btn" id="signbtn" style="width:100%;margin-top:12px">Sign in with Google</button>
+  <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
+  <p style="margin-top:0" data-t="Sign in with your Google email to open the recipes.">Sign in with your Google email to open the recipes.</p>
+  <input type="text" id="gemail" placeholder="you@gmail.com" inputmode="email" autocomplete="email" data-ta="Google email" aria-label="Google email">
+  <button class="btn" id="signbtn" data-t="Sign in with Google" style="width:100%;margin-top:12px">Sign in with Google</button>
   <p id="gmsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
-  <p id="gcfgp" style="font-size:12px;margin:10px 0 0"><a href="#" id="gcfg" style="color:var(--muted)">Connection settings</a></p>
+  <p id="gcfgp" style="font-size:12px;margin:10px 0 0"><a href="#" id="gcfg" data-t="Connection settings" style="color:var(--muted)">Connection settings</a></p>
 </div></div>
 <script>
 var KEY='recipe-book-drive-cache', SEED='recipe-book-seed-carbonara', recipes=[], cur=null, factor=1, DB=null, ASSETS=null, canWrite=true;
@@ -384,73 +386,192 @@ var CARBONARA={"id": "carbonara", "ts": 1, "name": "Carbonara", "serv": 2, "prep
 function load(){recipes=[];try{localStorage.removeItem(KEY)}catch(e){}}
 function persist(){return true}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+// ---- Languages: English text is the key; French and Spanish translations below ----
+var TR={fr:{
+  "My Recipe Book":"Mon livre de recettes","Meal plan":"Planning repas","Switch light or dark mode":"Mode clair ou sombre","Owner tools":"Outils d'administration","Language":"Langue",
+  "Add recipe":"Ajouter une recette","Not signed in. Tap “Sign in with Google”.":"Non connecté. Touchez « Se connecter avec Google ».","Search recipes or ingredients":"Rechercher une recette ou un ingrédient",
+  "Recipes as JSON":"Recettes en JSON","This is all your data. You can edit it here and apply it, or copy it as a backup.":"Voici toutes vos données. Vous pouvez les modifier ici et les appliquer, ou les copier comme sauvegarde.",
+  "Apply changes":"Appliquer les modifications","Close":"Fermer","New recipe":"Nouvelle recette","Edit recipe":"Modifier la recette","Name":"Nom","Servings":"Portions","Difficulty":"Difficulté",
+  "Easy":"Facile","Medium":"Moyen","Hard":"Difficile","Prep (min)":"Préparation (min)","Cooking (min)":"Cuisson (min)","Rest (min)":"Repos (min)","Cost":"Coût","Cheap":"Bon marché","Average":"Moyen","Expensive":"Cher",
+  "Calories (whole dish)":"Calories (plat entier)","Leave empty to estimate":"Laisser vide pour estimer","Categories":"Catégories","New category (e.g. Vegan)":"Nouvelle catégorie (ex. Végan)","Add":"Ajouter",
+  "Photos":"Photos","Add photos":"Ajouter des photos","Videos":"Vidéos","Add videos":"Ajouter des vidéos","Ingredients (start with the quantity, e.g. 200g pasta)":"Ingrédients (commencez par la quantité, ex. 200 g de pâtes)",
+  "Add ingredient":"Ajouter un ingrédient","Steps (one per line)":"Étapes (une par ligne)","Boil the pasta\nFry the bacon":"Faire cuire les pâtes\nFaire revenir les lardons","Tips and notes":"Astuces et notes",
+  "Save recipe":"Enregistrer la recette","Cancel":"Annuler","Your daily calories":"Vos calories quotidiennes",
+  "Which category are you in? It sets a suggested daily calorie goal for your meal plan.":"Dans quelle catégorie êtes-vous ? Elle sert à proposer un objectif calorique quotidien pour votre planning.",
+  "Sex":"Sexe","Female":"Femme","Male":"Homme","Age":"Âge","Activity":"Activité","Sedentary":"Vie sédentaire","Active":"Vie active","Daily goal (kcal)":"Objectif quotidien (kcal)","Save":"Enregistrer",
+  "General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.":"Repères généraux pour les adultes (Healthline, Benenden). Les besoins varient ; demandez conseil à un professionnel de santé.",
+  "Sign in with Google":"Se connecter avec Google","Export JSON":"Exporter en JSON","Import":"Importer","Sign out":"Se déconnecter","Google connection":"Connexion Google","Google OAuth Client ID":"ID client OAuth Google",
+  "Drive folder link":"Lien du dossier Drive","Sign in with your Google email to open the recipes.":"Connectez-vous avec votre e-mail Google pour ouvrir les recettes.","Connection settings":"Paramètres de connexion","Google email":"E-mail Google",
+  "Refresh from Drive":"Actualiser depuis Drive","All":"Toutes","Collapse or expand categories":"Réduire ou agrandir les catégories","What shall we cook today?":"Qu'est-ce qu'on cuisine aujourd'hui ?","Featured: {n} →":"À la une : {n} →",
+  "No recipes match your search.":"Aucune recette ne correspond à votre recherche.","No recipes yet. Tap “Add recipe” to save your first one.":"Pas encore de recette. Touchez « Ajouter une recette » pour enregistrer la première.",
+  "Early morning":"Tôt le matin","Breakfast":"Petit-déjeuner","Morning snack":"Collation du matin","Lunch":"Déjeuner","Afternoon snack":"Goûter","Dinner":"Dîner","Evening snack":"Collation du soir",
+  "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
+  "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
+  "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
+  "Clear week":"Vider la semaine","Day":"Jour","Week":"Semaine","Meal times:":"Repas :","This week: {n} day planned · average {k} kcal a day":"Cette semaine : {n} jour planifié · moyenne {k} kcal par jour",
+  "This week: {n} days planned · average {k} kcal a day":"Cette semaine : {n} jours planifiés · moyenne {k} kcal par jour","Today":"Aujourd'hui","Removed recipe":"Recette supprimée","Fewer portions":"Moins de portions",
+  "Portions":"Portions","More portions":"Plus de portions","Remove from plan":"Retirer du planning","Remove all meals from this week?":"Retirer tous les repas de cette semaine ?",
+  "Suggested for you: {r} kcal a day. You can type your own goal.":"Suggestion pour vous : {r} kcal par jour. Vous pouvez saisir votre propre objectif.","about {n}":"environ {n}",
+  "Choose your category to see a suggestion.":"Choisissez votre catégorie pour voir une suggestion.","Choose your category or type a daily goal.":"Choisissez votre catégorie ou saisissez un objectif quotidien.",
+  "All recipes":"Toutes les recettes","Same categories":"Mêmes catégories","Show or hide other recipes":"Afficher ou masquer les autres recettes","Other recipes":"Autres recettes","No recipes in this category.":"Aucune recette dans cette catégorie.",
+  "Prep":"Préparation","Cooking":"Cuisson","Rest":"Repos","Total":"Total","← Back":"← Retour","Ingredients":"Ingrédients","For":"Pour","people":"personnes","Fewer servings":"Moins de personnes","More servings":"Plus de personnes",
+  "Got it":"J'ai cet ingrédient","Preparation":"Préparation","Step {n}":"Étape {n}","Videos and photos":"Vidéos et photos","Loading…":"Chargement…","Edit":"Modifier","Delete":"Supprimer","in total":"au total","per person":"par personne",
+  "Calories entered in the recipe.":"Calories saisies dans la recette.","Estimated from the ingredients.":"Estimation à partir des ingrédients.","Not counted:":"Non comptés :","Sign in to load videos":"Connectez-vous pour charger les vidéos",
+  "Could not load video":"Impossible de charger la vidéo","Sound":"Son","Delete “{n}”?":"Supprimer « {n} » ?","Give your recipe a name.":"Donnez un nom à votre recette.","e.g. 200g spaghetti":"ex. 200 g de spaghetti",
+  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Remove video":"Retirer la vidéo",
+  "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} dépasse 200 Mo et risque de ne pas s'envoyer. L'ajouter quand même ?","Session expired. Sign in again.":"Session expirée. Reconnectez-vous.",
+  "Could not load Google sign-in. Check your connection.":"Impossible de charger la connexion Google. Vérifiez votre connexion.","Sign-in failed: {e}. Ask the owner to add your email.":"Échec de la connexion : {e}. Demandez l'accès pour votre e-mail.",
+  "Sign-in was closed or blocked. Allow pop-ups and try again.":"La connexion a été fermée ou bloquée. Autorisez les fenêtres pop-up et réessayez.","Loading from Drive…":"Chargement depuis Drive…",
+  "Synced: {n} recipe(s) from Drive":"Synchronisé : {n} recette(s) depuis Drive","Organizing {n} recipe(s) into folders…":"Rangement de {n} recette(s) dans des dossiers…","Could not load: {e}":"Chargement impossible : {e}",
+  "Saving…":"Enregistrement…","Uploading video(s), please keep this page open…":"Envoi de la ou des vidéos, gardez cette page ouverte…","Saved to Drive in folder “{n}”":"Enregistré dans Drive, dossier « {n} »",
+  "Not saved":"Non enregistré","Could not save to Drive: {e}":"Impossible d'enregistrer dans Drive : {e}","Deleted":"Supprimé","Could not delete in Drive.":"Impossible de supprimer dans Drive.",
+  "Connection changed. Sign in again.":"Connexion modifiée. Reconnectez-vous.","This file is not a valid recipes JSON file.":"Ce fichier n'est pas un fichier JSON de recettes valide.","Sign in with Google first.":"Connectez-vous d'abord avec Google.",
+  "Starter":"Entrée","Main course":"Plat principal","Dessert":"Dessert","Italian":"Italien","Peruvian":"Péruvien","Japanese":"Japonais","Other":"Autre"
+},es:{
+  "My Recipe Book":"Mi libro de recetas","Meal plan":"Plan de comidas","Switch light or dark mode":"Modo claro u oscuro","Owner tools":"Herramientas de administración","Language":"Idioma",
+  "Add recipe":"Añadir receta","Not signed in. Tap “Sign in with Google”.":"No has iniciado sesión. Toca «Iniciar sesión con Google».","Search recipes or ingredients":"Buscar recetas o ingredientes",
+  "Recipes as JSON":"Recetas en JSON","This is all your data. You can edit it here and apply it, or copy it as a backup.":"Estos son todos tus datos. Puedes editarlos aquí y aplicarlos, o copiarlos como copia de seguridad.",
+  "Apply changes":"Aplicar cambios","Close":"Cerrar","New recipe":"Nueva receta","Edit recipe":"Editar receta","Name":"Nombre","Servings":"Porciones","Difficulty":"Dificultad",
+  "Easy":"Fácil","Medium":"Media","Hard":"Difícil","Prep (min)":"Preparación (min)","Cooking (min)":"Cocción (min)","Rest (min)":"Reposo (min)","Cost":"Costo","Cheap":"Económico","Average":"Medio","Expensive":"Caro",
+  "Calories (whole dish)":"Calorías (plato entero)","Leave empty to estimate":"Dejar vacío para estimar","Categories":"Categorías","New category (e.g. Vegan)":"Nueva categoría (p. ej. Vegano)","Add":"Añadir",
+  "Photos":"Fotos","Add photos":"Añadir fotos","Videos":"Videos","Add videos":"Añadir videos","Ingredients (start with the quantity, e.g. 200g pasta)":"Ingredientes (empieza con la cantidad, p. ej. 200 g de pasta)",
+  "Add ingredient":"Añadir ingrediente","Steps (one per line)":"Pasos (uno por línea)","Boil the pasta\nFry the bacon":"Hervir la pasta\nFreír el tocino","Tips and notes":"Consejos y notas",
+  "Save recipe":"Guardar receta","Cancel":"Cancelar","Your daily calories":"Tus calorías diarias",
+  "Which category are you in? It sets a suggested daily calorie goal for your meal plan.":"¿En qué categoría estás? Sirve para sugerir un objetivo diario de calorías para tu plan de comidas.",
+  "Sex":"Sexo","Female":"Mujer","Male":"Hombre","Age":"Edad","Activity":"Actividad","Sedentary":"Vida sedentaria","Active":"Vida activa","Daily goal (kcal)":"Objetivo diario (kcal)","Save":"Guardar",
+  "General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.":"Orientación general para adultos (Healthline, Benenden). Las necesidades varían; consulta a un profesional de la salud.",
+  "Sign in with Google":"Iniciar sesión con Google","Export JSON":"Exportar JSON","Import":"Importar","Sign out":"Cerrar sesión","Google connection":"Conexión con Google","Google OAuth Client ID":"ID de cliente OAuth de Google",
+  "Drive folder link":"Enlace de la carpeta de Drive","Sign in with your Google email to open the recipes.":"Inicia sesión con tu correo de Google para abrir las recetas.","Connection settings":"Ajustes de conexión","Google email":"Correo de Google",
+  "Refresh from Drive":"Actualizar desde Drive","All":"Todas","Collapse or expand categories":"Contraer o expandir categorías","What shall we cook today?":"¿Qué cocinamos hoy?","Featured: {n} →":"Destacado: {n} →",
+  "No recipes match your search.":"Ninguna receta coincide con tu búsqueda.","No recipes yet. Tap “Add recipe” to save your first one.":"Aún no hay recetas. Toca «Añadir receta» para guardar la primera.",
+  "Early morning":"Temprano","Breakfast":"Desayuno","Morning snack":"Media mañana","Lunch":"Almuerzo","Afternoon snack":"Merienda","Dinner":"Cena","Evening snack":"Snack de la noche",
+  "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
+  "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
+  "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
+  "Clear week":"Vaciar semana","Day":"Día","Week":"Semana","Meal times:":"Comidas:","This week: {n} day planned · average {k} kcal a day":"Esta semana: {n} día planificado · promedio {k} kcal al día",
+  "This week: {n} days planned · average {k} kcal a day":"Esta semana: {n} días planificados · promedio {k} kcal al día","Today":"Hoy","Removed recipe":"Receta eliminada","Fewer portions":"Menos porciones",
+  "Portions":"Porciones","More portions":"Más porciones","Remove from plan":"Quitar del plan","Remove all meals from this week?":"¿Quitar todas las comidas de esta semana?",
+  "Suggested for you: {r} kcal a day. You can type your own goal.":"Sugerido para ti: {r} kcal al día. Puedes escribir tu propio objetivo.","about {n}":"unas {n}",
+  "Choose your category to see a suggestion.":"Elige tu categoría para ver una sugerencia.","Choose your category or type a daily goal.":"Elige tu categoría o escribe un objetivo diario.",
+  "All recipes":"Todas las recetas","Same categories":"Mismas categorías","Show or hide other recipes":"Mostrar u ocultar otras recetas","Other recipes":"Otras recetas","No recipes in this category.":"No hay recetas en esta categoría.",
+  "Prep":"Preparación","Cooking":"Cocción","Rest":"Reposo","Total":"Total","← Back":"← Volver","Ingredients":"Ingredientes","For":"Para","people":"personas","Fewer servings":"Menos personas","More servings":"Más personas",
+  "Got it":"Lo tengo","Preparation":"Preparación","Step {n}":"Paso {n}","Videos and photos":"Videos y fotos","Loading…":"Cargando…","Edit":"Editar","Delete":"Eliminar","in total":"en total","per person":"por persona",
+  "Calories entered in the recipe.":"Calorías indicadas en la receta.","Estimated from the ingredients.":"Estimado a partir de los ingredientes.","Not counted:":"No contados:","Sign in to load videos":"Inicia sesión para cargar los videos",
+  "Could not load video":"No se pudo cargar el video","Sound":"Sonido","Delete “{n}”?":"¿Eliminar «{n}»?","Give your recipe a name.":"Ponle un nombre a tu receta.","e.g. 200g spaghetti":"p. ej. 200 g de espaguetis",
+  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Remove video":"Quitar video",
+  "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} pesa más de 200 MB y puede que no se suba. ¿Añadirlo de todos modos?","Session expired. Sign in again.":"La sesión ha caducado. Vuelve a iniciar sesión.",
+  "Could not load Google sign-in. Check your connection.":"No se pudo cargar el inicio de sesión de Google. Revisa tu conexión.","Sign-in failed: {e}. Ask the owner to add your email.":"Error al iniciar sesión: {e}. Pide acceso para tu correo.",
+  "Sign-in was closed or blocked. Allow pop-ups and try again.":"El inicio de sesión se cerró o se bloqueó. Permite las ventanas emergentes e inténtalo de nuevo.","Loading from Drive…":"Cargando desde Drive…",
+  "Synced: {n} recipe(s) from Drive":"Sincronizado: {n} receta(s) desde Drive","Organizing {n} recipe(s) into folders…":"Organizando {n} receta(s) en carpetas…","Could not load: {e}":"No se pudo cargar: {e}",
+  "Saving…":"Guardando…","Uploading video(s), please keep this page open…":"Subiendo video(s), mantén esta página abierta…","Saved to Drive in folder “{n}”":"Guardado en Drive en la carpeta «{n}»",
+  "Not saved":"No guardado","Could not save to Drive: {e}":"No se pudo guardar en Drive: {e}","Deleted":"Eliminado","Could not delete in Drive.":"No se pudo eliminar en Drive.",
+  "Connection changed. Sign in again.":"Conexión cambiada. Vuelve a iniciar sesión.","This file is not a valid recipes JSON file.":"Este archivo no es un JSON de recetas válido.","Sign in with Google first.":"Primero inicia sesión con Google.",
+  "Starter":"Entrante","Main course":"Plato principal","Dessert":"Postre","Italian":"Italiana","Peruvian":"Peruana","Japanese":"Japonesa","Other":"Otros"
+}};
+var DAYS={en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],fr:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],es:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']};
+var MONS={en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],fr:['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'],
+  es:['ene','feb','mar','abr','may','jun','jul','ago','sept','oct','nov','dic']};
+var LOCALE={en:'en-GB',fr:'fr-FR',es:'es-ES'},viewId=null;
+var LANG=(function(){var l=lsGet('rb-lang','')||String(navigator.language||'en').slice(0,2).toLowerCase();return LOCALE[l]?l:'en'})();
+// Translate an English UI text; {name} placeholders are filled from v
+function tr(s,v){var r=(TR[LANG]&&TR[LANG][s])||s;if(v)Object.keys(v).forEach(function(k){r=r.split('{'+k+'}').join(v[k])});return r}
+// Built-in category names are shown translated; the English name is what recipes store
+function catName(c){return DEFCATS.some(function(d){return d[0]===c})?tr(c):c}
+function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;document.title=tr('My Recipe Book');DAYN=DAYS[LANG];MON=MONS[LANG];
+  document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=tr(e.dataset.t)});
+  document.querySelectorAll('[data-tp]').forEach(function(e){e.placeholder=tr(e.dataset.tp)});
+  document.querySelectorAll('[data-ta]').forEach(function(e){e.setAttribute('aria-label',tr(e.dataset.ta))});
+  $('sign').textContent=tr(TOKEN?'Refresh from Drive':'Sign in with Google')}
 function updateTop(){var b=document.body.classList;$('top').classList.toggle('clear',(b.contains('rv')||b.contains('lv'))&&window.scrollY<60)}
 window.addEventListener('scroll',updateTop,{passive:true});
 function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 // Calorie estimate: [names, kcal per 100 g, grams per piece, grams per ml]
+// Names are English, Spanish and French (singular is enough: plurals contain it); the longest matching name wins
 var FOODS=[
-  [['egg yolk','yolk','yema','jaune'],322,17],[['egg white','clara','blanc d\'oeuf'],52,33],[['egg','huevo','oeuf','œuf'],143,55],
-  [['pasta','spaghetti','penne','fusilli','tagliatelle','linguine','fettuccine','macaroni','lasagna','noodle','fideo','pâtes'],360],
-  [['rice','arroz','riz'],360,0,.85],[['quinoa'],368,0,.85],[['oats','oatmeal','avena'],389,0,.35],[['couscous'],376,0,.7],
-  [['flour','harina','farine'],364,0,.53],[['cornstarch','maicena','cornflour'],381,0,.53],[['breadcrumbs','pan rallado'],395,0,.45],
-  [['bread','pan ','pain'],265,30],[['tortilla'],300,45],[['puff pastry','pastry','hojaldre'],550],
-  [['sugar','azúcar','azucar','sucre'],400,0,.85],[['brown sugar'],380,0,.85],[['honey','miel'],304,0,1.42],[['maple syrup'],260,0,1.32],[['jam','mermelada','confiture'],250,0,1.3],
-  [['butter','mantequilla','beurre'],717,0,.96],[['peanut butter'],588,0,1.1],
-  [['oil','aceite','huile'],884,0,.92],
-  [['milk','leche','lait'],61,0,1.03],[['coconut milk','leche de coco'],197,0,1],[['evaporated milk','leche evaporada'],134,0,1.07],[['condensed milk','leche condensada'],321,0,1.3],
-  [['cream','crema de leche','nata','crème'],340,0,1],[['sour cream'],198,0,1],[['cream cheese','queso crema'],342],[['yogurt','yoghurt','yogur','yaourt'],61,0,1.03],
-  [['cheese','queso','fromage'],400],[['pecorino'],387],[['parmesan','parmigiano'],431],[['mozzarella'],280,125],[['feta'],264],[['ricotta'],174],[['gruyère','gruyere','emmental','cheddar'],400],
-  [['bacon','tocino'],417],[['guanciale'],655],[['pancetta'],458],[['ham','jamón','jamon','jambon'],145],[['chorizo'],455],[['sausage','salchicha','saucisse'],300,60],
-  [['chicken','pollo','poulet'],150],[['turkey','pavo'],135],[['beef','res ','carne','boeuf'],250],[['minced meat','ground beef','mince','carne molida'],254],[['pork','cerdo','porc'],242],[['lamb','cordero','agneau'],282],
-  [['salmon','salmón','saumon'],208],[['tuna','atún','atun','thon'],132],[['fish','pescado','poisson','cod','bacalao'],100],[['shrimp','prawn','langostino','camarón','camaron','crevette'],99],[['octopus','pulpo'],82],[['squid','calamar'],92],
-  [['tofu'],76],[['lentil','lenteja','lentille'],352,0,.85],[['chickpea','garbanzo','pois chiche'],164],[['beans','frijol','haricot','alubia'],120],
-  [['potato','papa','patata','pomme de terre'],77,170],[['sweet potato','camote','batata','patate douce'],86,130],[['yuca','cassava','manioc'],160,400],
-  [['onion','cebolla','oignon','shallot','chalota'],40,110],[['garlic','ajo','ail'],149,4],[['tomato','tomate'],18,120],[['passata','tomato sauce','salsa de tomate','tomato paste'],35,0,1.05],
-  [['carrot','zanahoria','carotte'],41,60],[['bell pepper','pepper','pimiento','poivron','capsicum'],26,150],[['chili','chilli','ají','aji','piment'],40,15],[['black pepper','pimienta','poivre'],251],
-  [['avocado','palta','aguacate','avocat'],160,150],[['lemon','limón','limon','citron'],29,60],[['lime','lima'],30,45],[['orange','naranja'],47,140],[['apple','manzana','pomme'],52,180],[['banana','plátano','platano','banane'],89,120],
-  [['strawberr','fresa','fraise'],32,12],[['blueberr','raspberr','arándano','frambuesa'],50],[['mango'],60,300],[['pineapple','piña','ananas'],50],
-  [['corn','maíz','maiz','choclo','maïs'],86,150],[['peas','arvejas','guisantes','petits pois'],81],[['mushroom','champiñón','champignon','hongo'],22,15],[['spinach','espinaca','épinard'],23],
+  [['egg yolk','yolk','yema','jaune d\'oeuf','jaune d\'œuf','jaunes d\'oeufs','jaunes d\'œufs'],322,17],[['egg white','clara','blanc d\'oeuf','blanc d\'œuf','blancs d\'oeufs'],52,33],[['egg','huevo','oeuf','œuf'],143,55],
+  [['pasta','spaghetti','espagueti','penne','fusilli','tagliatelle','tallarin','linguine','fettuccine','macaroni','macarron','lasagna','lasagne','lasaña','noodle','nouille','fideo','pâtes'],360],
+  [['rice','arroz','riz'],360,0,.85],[['quinoa','quinua'],368,0,.85],[['oats','oatmeal','avena','avoine'],389,0,.35],[['couscous','cuscús'],376,0,.7],
+  [['flour','harina','farine'],364,0,.53],[['cornstarch','cornflour','maicena','maïzena','fécule','almidón de maíz'],381,0,.53],[['breadcrumbs','pan rallado','chapelure'],395,0,.45],
+  [['bread','pan ','pain','baguette','pan de molde'],265,30],[['tortilla'],300,45],[['puff pastry','pastry','hojaldre','pâte feuilletée','pâte brisée'],550],
+  [['biscuit','cookie','galleta','galette','sablé'],480,10],[['ladyfinger','boudoir','bizcochos de soletilla','soletilla','savoiardi'],390,8],
+  [['sugar','azúcar','azucar','sucre'],400,0,.85],[['brown sugar','azúcar rubia','azúcar morena','sucre roux','cassonade','chancaca'],380,0,.85],[['honey','miel'],304,0,1.42],
+  [['maple syrup','sirop d\'érable','jarabe de arce'],260,0,1.32],[['jam','mermelada','confiture'],250,0,1.3],[['dulce de leche','manjar blanco','manjarblanco','confiture de lait'],315,0,1.3],
+  [['butter','mantequilla','beurre'],717,0,.96],[['peanut butter','mantequilla de maní','crema de cacahuete','beurre de cacahuète','beurre de cacahuete'],588,0,1.1],
+  [['oil','olive oil','aceite','aceite de oliva','huile','huile d\'olive'],884,0,.92],
+  [['milk','leche','lait'],61,0,1.03],[['coconut milk','leche de coco','lait de coco'],197,0,1],[['evaporated milk','leche evaporada','lait évaporé'],134,0,1.07],[['condensed milk','leche condensada','lait concentré sucré','lait concentré'],321,0,1.3],
+  [['cream','crema','crema de leche','nata','crème','crème fraîche','crème liquide'],340,0,1],[['sour cream','crema agria','crème aigre'],198,0,1],[['ice cream','helado','glace'],207,0,.55],
+  [['cream cheese','queso crema','fromage frais','philadelphia'],342],[['yogurt','yoghurt','yogur','yaourt','yoghourt'],61,0,1.03],
+  [['cheese','queso','fromage'],400],[['pecorino'],387],[['parmesan','parmesano','parmigiano'],431],[['mozzarella'],280,125],[['feta'],264],[['ricotta'],174],[['mascarpone'],429],
+  [['queso fresco'],264],[['gruyère','gruyere','emmental','cheddar','comté'],400],[['goat cheese','queso de cabra','fromage de chèvre','chèvre'],364],
+  [['bacon','tocino','beicon','lardon'],417],[['guanciale'],655],[['pancetta','panceta'],458],[['ham','jamón','jamon','jambon'],145],[['chorizo'],455],[['sausage','salchicha','saucisse'],300,60],
+  [['chicken','pollo','poulet','gallina','pechuga','volaille'],150],[['turkey','pavo','dinde'],135],[['duck','pato','canard'],337],
+  [['beef','res ','carne','boeuf','bœuf','steak','bistec','lomo'],250],[['veal','veau','ternera'],172],
+  [['minced meat','ground beef','mince','carne molida','carne picada','viande hachée','haché'],254],[['pork','cerdo','chancho','porc'],242],[['lamb','cordero','agneau'],282],
+  [['salmon','salmón','saumon'],208],[['tuna','atún','atun','thon'],132],[['fish','pescado','poisson','cod','bacalao','cabillaud','merlu','merluza','corvina','lenguado','tilapia'],100],
+  [['shrimp','prawn','langostino','camarón','camaron','gamba','crevette'],99],[['octopus','pulpo','poulpe'],82],[['squid','calamar'],92],[['mussel','mejillón','mejillon','moule'],86],
+  [['tofu'],76],[['lentil','lenteja','lentille'],352,0,.85],[['chickpea','garbanzo','pois chiche'],164],[['beans','frijol','poroto','judía','alubia','haricot'],120],
+  [['potato','papa','patata','pomme de terre','pommes de terre'],77,170],[['sweet potato','camote','batata','boniato','patate douce','patates douces'],86,130],[['yuca','cassava','manioc'],160,400],
+  [['onion','cebolla','oignon','shallot','chalota','échalote'],40,110],[['garlic','ajo','ail'],149,4],[['tomato','tomate'],18,120],
+  [['passata','tomato sauce','tomato paste','salsa de tomate','puré de tomate','pasta de tomate','coulis de tomate','concentré de tomate','sauce tomate','pulpe de tomate'],35,0,1.05],
+  [['carrot','zanahoria','carotte'],41,60],[['bell pepper','pepper','pimiento','morrón','poivron','capsicum'],26,150],[['chili','chilli','ají','aji','rocoto','piment'],40,15],[['black pepper','pimienta','poivre'],251],
+  [['avocado','palta','aguacate','avocat'],160,150],[['lemon','limón','limon','citron'],29,60],[['lime','lima','citron vert'],30,45],[['orange','naranja'],47,140],[['apple','manzana','pomme'],52,180],[['banana','plátano','platano','banane'],89,120],
+  [['strawberr','fresa','frutilla','fraise'],32,12],[['blueberr','raspberr','arándano','frambuesa','framboise','myrtille'],50],[['mango','mangue'],60,300],[['pineapple','piña','ananas'],50],[['pear','pera','poire'],57,170],[['peach','durazno','melocotón','pêche'],39,150],
+  [['corn','maíz','maiz','choclo','mazorca','maïs'],86,150],[['peas','arveja','guisante','petits pois'],81],[['mushroom','champiñón','champiñon','champignon','hongo','seta'],22,15],[['spinach','espinaca','épinard'],23],
   [['zucchini','courgette','calabacín','calabacin','zapallito'],17,200],[['eggplant','aubergine','berenjena'],25,300],[['cucumber','pepino','concombre'],15,300],[['lettuce','lechuga','laitue','salad'],15,300],
-  [['cabbage','repollo','col ','chou'],25,900],[['broccoli','brócoli','brocoli'],34,300],[['celery','apio','céleri'],16,40],[['pumpkin','squash','zapallo','calabaza','potiron'],26],[['leek','puerro','poireau'],61,150],
-  [['ginger','jengibre','gingembre'],80],[['parsley','cilantro','coriander','basil','albahaca','perejil','mint','menta','herb','persil','basilic'],30,1],
-  [['chocolate','chocolat'],546],[['dark chocolate','chocolate negro','chocolate bitter'],598],[['cocoa','cacao'],228,0,.4],
-  [['almond','almendra','amande'],579],[['walnut','nuez','nueces','noix'],654],[['peanut','maní','mani','cacahuete'],567],[['hazelnut','avellana','noisette'],628],[['pecan'],691],[['sesame','ajonjolí'],573],[['coconut','coco'],354],[['raisin','pasas'],299],
-  [['mayonnaise','mayonesa'],680,0,.91],[['ketchup'],112,0,1.1],[['mustard','mostaza','moutarde'],66,0,1.05],[['soy sauce','sillao','salsa de soja','sauce soja'],53,0,1.15],[['vinegar','vinagre','vinaigre'],18,0,1],
-  [['wine','vino','vin '],85,0,1],[['beer','cerveza','bière'],43,0,1],[['pisco','rum','ron','vodka','whisky'],231,0,.95],
-  [['stock','broth','caldo','bouillon','chicken stock','chicken broth','beef stock','vegetable stock'],5,0,1],
-  [['gelatin','gelatina','gélatine'],335,0,.6],[['baking powder','polvo de hornear','levure chimique'],53],[['yeast','levadura','levure'],325],[['vanilla','vainilla','vanille'],288,0,1],
+  [['cabbage','repollo','col ','chou'],25,900],[['cauliflower','coliflor','chou-fleur'],25,600],[['broccoli','brócoli','brocoli'],34,300],[['celery','apio','céleri'],16,40],
+  [['pumpkin','squash','zapallo','calabaza','potiron','citrouille','courge'],26],[['leek','puerro','poireau'],61,150],[['olive','aceituna'],115,4],
+  [['ginger','jengibre','gingembre'],80],[['parsley','cilantro','coriander','basil','albahaca','perejil','mint','menta','menthe','herb','hierba','persil','basilic','coriandre','ciboulette','thyme','tomillo','thym','rosemary','romero','romarin','huacatay'],30,1],
+  [['chocolate','chocolat'],546],[['dark chocolate','chocolate negro','chocolate amargo','chocolate bitter','chocolat noir'],598],[['cocoa','cacao'],228,0,.4],[['coffee','café','espresso'],2,0,1],
+  [['almond','almendra','amande'],579],[['walnut','nuez','nueces','noix'],654],[['peanut','maní','mani','cacahuete','cacahuète'],567],[['hazelnut','avellana','noisette'],628],[['pecan','pacana'],691],[['pine nut','piñón','pignon'],673],
+  [['sesame','ajonjolí','sésamo','sésame'],573],[['coconut','coco','noix de coco'],354],[['raisin','pasas','raisins secs'],299],
+  [['mayonnaise','mayonesa'],680,0,.91],[['ketchup'],112,0,1.1],[['mustard','mostaza','moutarde'],66,0,1.05],[['soy sauce','sillao','salsa de soja','salsa de soya','sauce soja'],53,0,1.15],[['vinegar','vinagre','vinaigre'],18,0,1],
+  [['wine','vino','vin '],85,0,1],[['beer','cerveza','bière'],43,0,1],[['pisco','rum','ron','vodka','whisky','cognac','brandy','marsala','amaretto'],231,0,.95],
+  [['stock','broth','caldo','bouillon','fumet','fond de volaille','chicken stock','chicken broth','beef stock','vegetable stock','caldo de pollo','caldo de res','caldo de verduras','bouillon de poulet','bouillon de légumes'],5,0,1],
+  [['gelatin','gelatina','gélatine'],335,0,.6],[['baking powder','polvo de hornear','polvo para hornear','levadura en polvo','levadura química','levure chimique'],53],[['yeast','levadura','levure'],325],
+  [['vanilla','vainilla','vanille'],288,0,1],[['cinnamon','canela','cannelle','cumin','comino','paprika','pimentón','oregano','orégano','origan','spice','especia','épice','curry','nutmeg','nuez moscada','muscade'],300],
   [['salt','sal ','sel '],0],[['water','agua','eau'],0]
 ];
-var UNITS=[[/^(kg|kilos?|kilograms?|kilogramos?)\b/,1000,'g'],[/^(g|gr|grs|grams?|grammes?|gramos?)\b\.?/,1,'g'],[/^(mg)\b/,.001,'g'],
-  [/^(l|lt|liters?|litres?|litros?)\b/,1000,'ml'],[/^(dl)\b/,100,'ml'],[/^(cl)\b/,10,'ml'],[/^(ml|milliliters?|millilitres?|mililitros?)\b/,1,'ml'],
-  [/^(tbsps?|tbs|tablespoons?|cucharadas?|c\.\s?s\.|cs|càs)\b\.?/,15,'ml'],[/^(tsps?|teaspoons?|cucharaditas?|c\.\s?c\.|cc|càc)\b\.?/,5,'ml'],[/^(cups?|tazas?|tasses?)\b/,240,'ml'],
-  [/^(oz|ounces?)\b/,28.35,'g'],[/^(lbs?|pounds?)\b/,453.6,'g'],[/^(pinch(es)?|pizcas?|pincées?)\b/,.5,'g'],[/^(cloves?|dientes?|gousses?)\b/,4,'g'],
-  [/^(slices?|rebanadas?|tranches?)\b/,30,'g'],[/^(cans?|tins?|latas?|boîtes?)\b/,400,'g'],[/^(handfuls?|puñados?)\b/,30,'g']];
+// Units: [pattern, size, 'g' or 'ml']; size 0 means "pieces" (counted by the food's piece weight)
+function unit(re,n,k){return [new RegExp('^(?:'+re+')(?![a-zà-ÿœ])\\.?'),n,k]}
+var UNITS=[unit('kg|kilos?|kilogrammes?|kilograms?|kilogramos?',1000,'g'),unit('mg',.001,'g'),unit('g|gr|grs|grams?|grammes?|gramos?',1,'g'),
+  unit('ml|milliliters?|millilitres?|mililitros?',1,'ml'),unit('cl',10,'ml'),unit('dl',100,'ml'),unit('l|lt|liters?|litres?|litros?',1000,'ml'),
+  unit('tbsps?|tbs|tablespoons?|cuillères? à soupe|cuillerées? à soupe|c\\.? ?à ?s|càs|cas|cs|cucharadas?|cdas?',15,'ml'),
+  unit('tsps?|teaspoons?|cuillères? à café|cuillerées? à café|cuillères? à thé|c\\.? ?à ?c|càc|cac|cc|cucharaditas?|cdtas?|cditas?',5,'ml'),
+  unit('cups?|tazas?|tasses?',240,'ml'),unit('glass(es)?|verres?|vasos?',200,'ml'),
+  unit('oz|ounces?|onzas?|onces?',28.35,'g'),unit('lbs?|pounds?|libras?|livres?',453.6,'g'),unit('pinch(es)?|pizcas?|pincées?',.5,'g'),
+  unit('cloves?|dientes?|gousses?',4,'g'),unit('slices?|rebanadas?|lonjas?|tajadas?|tranches?',30,'g'),unit('cans?|tins?|latas?|boîtes?',400,'g'),
+  unit('handfuls?|puñados?|poignées?',30,'g'),unit('sachets?|sobres?|packets?',10,'g'),unit('sprigs?|ramitas?|brins?',1,'g'),unit('bunch(es)?|manojos?|atados?|bottes?',50,'g'),
+  unit('pieces?|pcs?|unidad(es)?|unités?|pièces?',0)];
 var FRAC={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅔':2/3};
+var NUMW={a:1,an:1,one:1,un:1,une:1,uno:1,una:1,two:2,deux:2,dos:2,three:3,trois:3,tres:3,half:.5,demi:.5,'demi-':.5,media:.5,medio:.5};
+// True when k appears in s at the start of a word
+function hasWord(s,k){for(var i=s.indexOf(k);i>-1;i=s.indexOf(k,i+1))if(!/[a-zà-ÿœ]/.test(s.charAt(i-1)))return true;return false}
 function findFood(s){var best=null,bl=0;s=' '+s+' ';
-  FOODS.forEach(function(f){f[0].forEach(function(k){if(k.length>bl&&s.indexOf(k)>-1&&/[^a-zà-ÿ]/.test(s.charAt(s.indexOf(k)-1))){best=f;bl=k.length}})});return best}
+  FOODS.forEach(function(f){f[0].forEach(function(k){if(k.length>bl&&hasWord(s,k)){best=f;bl=k.length}})});return best}
 function ingKcal(line){
-  var s=line.toLowerCase().replace(/[½¼¾⅓⅔]/g,function(c){return ' '+FRAC[c]+' '}).trim(),q=0,m,u=null;
+  var s=line.toLowerCase().replace(/[’`]/g,"'").replace(/[½¼¾⅓⅔]/g,function(c){return ' '+FRAC[c]+' '}).trim(),q=0,m,u=null;
   while((m=s.match(/^(\d+(?:[.,]\d+)?(?:\/\d+)?)\s*/))){var p=m[1].replace(',','.').split('/');q+=p.length>1?p[0]/p[1]:+p[0];s=s.slice(m[0].length)}
-  s=s.replace(/^[-–]\s*\d+(?:[.,]\d+)?\s*/,'');
-  for(var i=0;i<UNITS.length;i++){m=s.match(UNITS[i][0]);if(m){u=UNITS[i];s=s.slice(m[0].length);break}}
-  s=s.replace(/^\s*(of|de|d')\s*/,'');
+  if(!q&&(m=s.match(/^(an|a|one|une|un|uno|una|two|deux|dos|three|trois|tres|half|demi-|demi|media|medio)\s+/))){q=NUMW[m[1]];s=s.slice(m[0].length)}
+  s=s.replace(/^[-–]\s*\d+(?:[.,]\d+)?\s*/,'').replace(/^x\s*/,'');
+  for(var i=0;i<UNITS.length;i++){m=s.match(UNITS[i][0]);if(m){u=UNITS[i][1]?UNITS[i]:null;s=s.slice(m[0].length);break}}
+  s=s.replace(/^\s*(?:of\s+(?:the\s+)?|de\s+la\s+|de\s+l'|del\s+|de\s+|d'|du\s+|des\s+)/,'');
   var f=findFood(s);if(!q)return {k:0};if(!f)return null;
   var g=u?(u[2]==='g'?q*u[1]:q*u[1]*(f[3]||1)):(f[2]?q*f[2]:null);
   return g==null?null:{k:g*f[1]/100}}
 function recipeKcal(r){if(+r.kcal>0)return {k:+r.kcal,miss:[],manual:true};
   var t=0,miss=[];(r.ings||[]).forEach(function(l){var c=ingKcal(l);if(c)t+=c.k;else miss.push(l)});return {k:Math.round(t),miss:miss}}
 function kcalHtml(r,f){var c=recipeKcal(r),base=+r.serv||0;if(!c.k)return '';
-  return '<div class="kcal" id="kcalbox">🔥 '+(c.manual?'':'≈ ')+'<b>'+Math.round(c.k*f).toLocaleString()+' kcal</b> in total'+(base?' · <b>'+Math.round(c.k/base).toLocaleString()+' kcal</b> per person':'')+
-    '<small>'+(c.manual?'Calories entered in the recipe.':'Estimated from the ingredients.'+(c.miss.length?' Not counted: '+esc(c.miss.join(', ')):''))+'</small></div>'}
+  return '<div class="kcal" id="kcalbox">🔥 '+(c.manual?'':'≈ ')+'<b>'+nf(c.k*f)+' kcal</b> '+tr('in total')+(base?' · <b>'+nf(c.k/base)+' kcal</b> '+tr('per person'):'')+
+    '<small>'+(c.manual?tr('Calories entered in the recipe.'):tr('Estimated from the ingredients.')+(c.miss.length?' '+tr('Not counted:')+' '+esc(c.miss.join(', ')):''))+'</small></div>'}
 function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
 
 var DEFCATS=[['Starter','🥗'],['Main course','🍽️'],['Dessert','🍰'],['Italian','🍝'],['Peruvian','🌶️'],['Japanese','🍣'],['Other','✨']],catSel=[],catPick=[];
 function catIcon(c){var d=DEFCATS.filter(function(x){return x[0]===c})[0];return d?d[1]:'🏷️'}
 function catTile(c,label,icon,on){return '<label class="cat'+(on?' on':'')+'" title="'+esc(label)+'"><input type="checkbox" data-c="'+esc(c)+'"'+(on?' checked':'')+'><span class="ic">'+icon+'</span><span class="cl">'+esc(label)+'</span></label>'}
-function catTiles(list,sel){var h=list.map(function(c){return catTile(c,c,catIcon(c),sel.indexOf(c)>-1)});
-  h.unshift(catTile('','All','📖',!sel.length));
+function catTiles(list,sel){var h=list.map(function(c){return catTile(c,catName(c),catIcon(c),sel.indexOf(c)>-1)});
+  h.unshift(catTile('',tr('All'),'📖',!sel.length));
   return '<div class="cats">'+h.join('')+'</div>'}
 function usedCats(){var u=[];DEFCATS.forEach(function(d){if(recipes.some(function(r){return (r.cats||[]).indexOf(d[0])>-1}))u.push(d[0])});
   recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(u.indexOf(c)<0)u.push(c)})});return u}
@@ -460,27 +581,27 @@ applyTheme(lsGet('rb-theme',''));
 $('theme').onclick=function(){var t=isDark()?'light':'dark';lsSet('rb-theme',t);applyTheme(t)};
 var catCol=lsGet('rb-ccol','')==='1';document.body.classList.toggle('ccol',catCol);
 function renderCats(){var u=usedCats();catSel=catSel.filter(function(c){return u.indexOf(c)>-1});document.body.classList.toggle('hascats',u.length>0);
-  $('cats').innerHTML=u.length?'<div class="chd"><b>Categories</b><button type="button" class="ctog" aria-label="Collapse or expand categories">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catSel):''}
+  $('cats').innerHTML=u.length?'<div class="chd"><b>'+tr('Categories')+'</b><button type="button" class="ctog" aria-label="'+tr('Collapse or expand categories')+'">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catSel):''}
 function allCats(){var a=DEFCATS.map(function(x){return x[0]});recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(a.indexOf(c)<0)a.push(c)})});catPick.forEach(function(c){if(a.indexOf(c)<0)a.push(c)});return a}
-function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(c)+'</button>'}).join('')}
+function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(catName(c))+'</button>'}).join('')}
 // Main page hero: a random recipe photo, kept for the whole visit
 var heroId=null;
 function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
   if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
   var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&pic(r,0,'lg');
   $('lhero').className='rhero lhero'+(ph?'':' none');
-  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">What shall we cook today?</h2>'+
-    (r?'<button type="button" class="rcat" id="herogo">Featured: '+esc(r.name)+' →</button>':'')+'</div>'}
+  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
+    (r?'<button type="button" class="rcat" id="herogo">'+esc(tr('Featured: {n} →',{n:r.name}))+'</button>':'')+'</div>'}
 $('lhero').onclick=function(e){if(e.target.closest('#herogo')){factor=1;openRecipe(heroId)}};
 function renderList(){
   renderCats();renderHero();
   if(document.body.classList.contains('pv')&&$('pcar')){renderPlanCar();renderPlanDays()}
   var q=$('search').value.toLowerCase().trim();
   var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catSel.length||(r.cats||[]).some(function(c){return catSel.indexOf(c)>-1}))&&(!q||(r.name+' '+r.ings.join(' ')).toLowerCase().indexOf(q)>-1)});
-  if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
+  if(!items.length){$('grid').innerHTML='<div class="empty">'+tr(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
-    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+pic(r,0,'md')+'" alt="" loading="lazy" decoding="async">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
+    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+pic(r,0,'md')+'" alt="" loading="lazy" decoding="async">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(tr(r.diff||'Easy'))+'</p></div></button>'}).join('');
 }
 $('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
 $('search').oninput=renderList;
@@ -498,7 +619,7 @@ function pad2(n){return (n<10?'0':'')+n}
 function dkey(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())}
 function pday(i){var d=new Date(planWeek);d.setDate(d.getDate()+i);return d}
 function fmtD(d){return d.getDate()+' '+MON[d.getMonth()]}
-function nf(n){return Math.round(n).toLocaleString()}
+function nf(n){return Math.round(n).toLocaleString(LOCALE[LANG])}
 function savePlan(){lsSet('rb-plan',JSON.stringify(plan))}
 function recById(id){return recipes.find(function(x){return x.id===id})}
 function portionKcal(r){var c=recipeKcal(r);return c.k?Math.round(c.k/(+r.serv||1)):0}
@@ -510,36 +631,36 @@ function cleanDay(k){var d=plan[k];if(!d)return;Object.keys(d).forEach(function(
 function setPick(id){pick=id;document.body.classList.toggle('picking',!!id);if($('pcar'))$('pcar').querySelectorAll('.pcard').forEach(function(x){x.classList.toggle('pick',x.dataset.id===id)})}
 
 function renderPlan(){var g=goal();
-  $('plan').innerHTML='<div class="phead"><h2>Meal plan</h2><div class="pgoal">🎯 '+(g?'Daily goal <b>'+nf(g)+' kcal</b>':'No daily goal yet')+
-    ' <button type="button" class="btn ghost btn-s" data-a="prof">'+(g?'Change':'Set my goal')+'</button></div></div>'+
-    '<div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="Search dishes" aria-label="Search dishes"><div class="pcar" id="pcar"></div>'+
-    '<div class="phint">Drag a dish onto a meal, or tap a dish and then tap a meal.</div></div><div id="pctl"></div><div id="pdays"></div>';
+  $('plan').innerHTML='<div class="phead"><h2>'+tr('Meal plan')+'</h2><div class="pgoal">🎯 '+(g?tr('Daily goal')+' <b>'+nf(g)+' kcal</b>':tr('No daily goal yet'))+
+    ' <button type="button" class="btn ghost btn-s" data-a="prof">'+tr(g?'Change':'Set my goal')+'</button></div></div>'+
+    '<div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="'+tr('Search dishes')+'" aria-label="'+tr('Search dishes')+'"><div class="pcar" id="pcar"></div>'+
+    '<div class="phint">'+tr('Drag a dish onto a meal, or tap a dish and then tap a meal.')+'</div></div><div id="pctl"></div><div id="pdays"></div>';
   $('pcarw').style.top=$('top').offsetHeight+'px';
   renderPlanCar();renderPlanDays()}
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   var list=recipes.slice().sort(function(a,b){return a.name.localeCompare(b.name)}).filter(function(r){return !q||r.name.toLowerCase().indexOf(q)>-1});
   $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
-    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><b>'+esc(r.name)+'</b><small>'+(k?nf(k)+' kcal / portion':'kcal unknown')+'</small></button>'}).join('')
-    :'<div class="phint" style="padding:16px">'+(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
+    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><b>'+esc(r.name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></button>'}).join('')
+    :'<div class="phint" style="padding:16px">'+tr(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
 function renderPlanDays(){
   var days=planMode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
   var shown=SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})});
   var tots=[0,1,2,3,4,5,6].map(function(i){return dayTotal(dkey(pday(i)))}),used=tots.filter(function(t){return t>0});
-  $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="Previous week">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
-    '<button type="button" class="ibtn" data-a="next" aria-label="Next week">›</button><button type="button" class="btn ghost btn-s" data-a="today">This week</button>'+
-    '<button type="button" class="btn ghost btn-s" data-a="clear">Clear week</button>'+
-    '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>Day</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>Week</button></span></div>'+
+  $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="'+tr('Previous week')+'">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
+    '<button type="button" class="ibtn" data-a="next" aria-label="'+tr('Next week')+'">›</button><button type="button" class="btn ghost btn-s" data-a="today">'+tr('This week')+'</button>'+
+    '<button type="button" class="btn ghost btn-s" data-a="clear">'+tr('Clear week')+'</button>'+
+    '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span></div>'+
     (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
-    '<div class="ptimes"><span>Meal times:</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+s[1]+'</button>'}).join('')+'</div>'+
-    (used.length?'<div class="psum">This week: '+used.length+' day'+(used.length>1?'s':'')+' planned · average '+nf(used.reduce(function(a,b){return a+b},0)/used.length)+' kcal a day</div>':'');
+    '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
+    (used.length?'<div class="psum">'+tr(used.length>1?'This week: {n} days planned · average {k} kcal a day':'This week: {n} day planned · average {k} kcal a day',{n:used.length,k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'</div>':'');
   var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);
   pd.innerHTML=days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
-    return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">Today</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
+    return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">'+tr('Today')+'</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
-        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+s[1]+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,'xs');
-          return '<div class="pchip" data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?r.name:'Removed recipe')+'</b><small>'+(pk?nf(pk*m.p)+' kcal':'kcal unknown')+'</small></span>'+
-            '<span class="pcb"><button type="button" data-a="minus" aria-label="Fewer portions">−</button><span title="Portions">'+m.p+'</span><button type="button" data-a="plus" aria-label="More portions">+</button><button type="button" data-a="del" aria-label="Remove from plan">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
+        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+tr(s[1])+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,'xs');
+          return '<div class="pchip" data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?r.name:tr('Removed recipe'))+'</b><small>'+(pk?nf(pk*m.p)+' kcal':tr('kcal unknown'))+'</small></span>'+
+            '<span class="pcb"><button type="button" data-a="minus" aria-label="'+tr('Fewer portions')+'">−</button><span title="'+tr('Portions')+'">'+m.p+'</span><button type="button" data-a="plus" aria-label="'+tr('More portions')+'">+</button><button type="button" data-a="del" aria-label="'+tr('Remove from plan')+'">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
 
 $('plan').onclick=function(e){if(pdJust)return;
   var c=e.target.closest('.pcard');if(c){setPick(pick===c.dataset.id?null:c.dataset.id);return}
@@ -554,7 +675,7 @@ $('plan').onclick=function(e){if(pdJust)return;
     else if(a==='mode'){planMode=b.dataset.m;lsSet('rb-pmode',planMode)}
     else if(a==='day')planDay=+b.dataset.i;
     else if(a==='slot'){var i=slotsOn.indexOf(b.dataset.s);if(i>-1)slotsOn.splice(i,1);else slotsOn.push(b.dataset.s);lsSet('rb-slots',JSON.stringify(slotsOn))}
-    else if(a==='clear'){if(!confirm('Remove all meals from this week?'))return;for(var d=0;d<7;d++)delete plan[dkey(pday(d))];savePlan()}
+    else if(a==='clear'){if(!confirm(tr('Remove all meals from this week?')))return;for(var d=0;d<7;d++)delete plan[dkey(pday(d))];savePlan()}
     renderPlanDays();return}
   var sl=e.target.closest('.pslot');if(sl&&pick){var id=pick;setPick(null);addMeal(sl.dataset.k,sl.dataset.s,id)}};
 $('plan').oninput=function(e){if(e.target.id==='psearch')renderPlanCar()};
@@ -585,10 +706,10 @@ window.addEventListener('pointercancel',function(){pdEnd(false)});
 function openProf(){pf=prof?Object.assign({},prof):{};$('ptgt').value=prof&&prof.target||'';paintProf();$('profm').classList.remove('hidden')}
 function paintProf(){['sex','age','act'].forEach(function(f){$('pf-'+f).querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.v===pf[f])})});
   var r=pf.sex&&pf.age&&pf.act?goalRange(pf):null;
-  $('prange').textContent=r?'Suggested for you: '+(r[0]===r[1]?'about '+nf(r[0]):nf(r[0])+'–'+nf(r[1]))+' kcal a day. You can type your own goal.':'Choose your category to see a suggestion.'}
+  $('prange').textContent=r?tr('Suggested for you: {r} kcal a day. You can type your own goal.',{r:r[0]===r[1]?tr('about {n}',{n:nf(r[0])}):nf(r[0])+'–'+nf(r[1])}):tr('Choose your category to see a suggestion.')}
 $('profm').onclick=function(e){var b=e.target.closest('.seg button');if(!b)return;pf[b.parentNode.id.slice(3)]=b.dataset.v;paintProf();
   if(pf.sex&&pf.age&&pf.act){var r=goalRange(pf);$('ptgt').value=Math.round((r[0]+r[1])/2)}};
-$('psave').onclick=function(){var t=+$('ptgt').value;if(!t){alert('Choose your category or type a daily goal.');return}
+$('psave').onclick=function(){var t=+$('ptgt').value;if(!t){alert(tr('Choose your category or type a daily goal.'));return}
   pf.target=t;prof=pf;lsSet('rb-prof',JSON.stringify(prof));$('profm').classList.add('hidden');renderPlan()};
 $('pcancel').onclick=function(){$('profm').classList.add('hidden')};
 $('planbtn').onclick=function(){setPick(null);show('plan');renderPlan();if(!prof)openProf()};
@@ -596,43 +717,43 @@ document.querySelector('.top h1').onclick=function(){show('list')};
 
 var feedSel='same',feedCol=lsGet('rb-fcol','')==='1';
 function setFeedCol(v){feedCol=v;lsSet('rb-fcol',v?'1':'');document.body.classList.toggle('fcol',v)}
-function feedLabel(r){if(feedSel==='all')return 'All recipes';if(feedSel==='same')return (r.cats&&r.cats.length)?'Same categories':'All recipes';return feedSel.slice(2)}
+function feedLabel(r){if(feedSel==='all')return tr('All recipes');if(feedSel==='same')return tr((r.cats&&r.cats.length)?'Same categories':'All recipes');return catName(feedSel.slice(2))}
 function paintFeed(r){var f=$('feed');if(!f)return;
   var list=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(x){
     if(feedSel==='all')return true;
     if(feedSel==='same')return !(r.cats&&r.cats.length)||(x.cats||[]).some(function(c){return r.cats.indexOf(c)>-1});
     return (x.cats||[]).indexOf(feedSel.slice(2))>-1});
-  var opts=[['same','Same categories'],['all','All recipes']].concat(usedCats().map(function(c){return ['c:'+c,c]}));
-  f.innerHTML='<button type="button" class="ftab" id="ftab" aria-label="Show or hide other recipes"><span class="fi"></span><span class="ft">Other recipes</span></button><div class="fbody"><div class="fhead"><button type="button" class="fsel" id="fsel">'+esc(feedLabel(r))+' ▾</button><div class="fmenu hidden" id="fmenu">'+
-    opts.map(function(o){return '<button type="button" data-v="'+esc(o[0])+'"'+(o[0]===feedSel?' class="on"':'')+'>'+(o[0].slice(0,2)==='c:'?catIcon(o[1])+' ':'')+esc(o[1])+'</button>'}).join('')+'</div></div>'+
+  var opts=[['same',tr('Same categories')],['all',tr('All recipes')]].concat(usedCats().map(function(c){return ['c:'+c,catName(c)]}));
+  f.innerHTML='<button type="button" class="ftab" id="ftab" aria-label="'+tr('Show or hide other recipes')+'"><span class="fi"></span><span class="ft">'+tr('Other recipes')+'</span></button><div class="fbody"><div class="fhead"><button type="button" class="fsel" id="fsel">'+esc(feedLabel(r))+' ▾</button><div class="fmenu hidden" id="fmenu">'+
+    opts.map(function(o){return '<button type="button" data-v="'+esc(o[0])+'"'+(o[0]===feedSel?' class="on"':'')+'>'+(o[0].slice(0,2)==='c:'?catIcon(o[0].slice(2))+' ':'')+esc(o[1])+'</button>'}).join('')+'</div></div>'+
     '<div class="flist">'+(list.length?list.map(function(x){var im=pic(x,0,'xs'),t=(+x.prep||0)+(+x.cook||0)+(+x.rest||0);
-      return '<button type="button" class="fitem'+(x.id===r.id?' cur':'')+'" data-id="'+esc(x.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="ftx"><b>'+esc(x.name)+'</b><small>'+(t?fmt(t)+' · ':'')+esc(x.diff||'Easy')+'</small></span></button>'}).join(''):'<div class="empty" style="padding:16px">No recipes in this category.</div>')+'</div></div>';
+      return '<button type="button" class="fitem'+(x.id===r.id?' cur':'')+'" data-id="'+esc(x.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="ftx"><b>'+esc(x.name)+'</b><small>'+(t?fmt(t)+' · ':'')+esc(tr(x.diff||'Easy'))+'</small></span></button>'}).join(''):'<div class="empty" style="padding:16px">'+tr('No recipes in this category.')+'</div>')+'</div></div>';
   $('ftab').onclick=function(){setFeedCol(!feedCol)};
   $('fsel').onclick=function(e){e.stopPropagation();$('fmenu').classList.toggle('hidden')};
   $('fmenu').onclick=function(e){var b=e.target.closest('button');if(!b)return;feedSel=b.dataset.v;paintFeed(r)};
   f.querySelectorAll('.fitem').forEach(function(b){b.onclick=function(){factor=1;openRecipe(b.dataset.id)}})}
 document.addEventListener('click',function(e){var m=$('fmenu');if(m&&!e.target.closest('#fmenu')&&!e.target.closest('#fsel'))m.classList.add('hidden')});
 function tmrHtml(r,total){var a=[['Prep',r.prep],['Cooking',r.cook],['Rest',r.rest]].filter(function(x){return +x[1]>0});if(!a.length)return '';a.push(['Total',total]);
-  return '<div class="tmr">'+a.map(function(x){return '<span>'+x[0]+' <b>'+fmt(x[1])+'</b></span>'}).join('')+'</div>'}
-function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return '<button type="button" class="rcat" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(c)+'</button>'}).join('')+'</div>'}
+  return '<div class="tmr">'+a.map(function(x){return '<span>'+tr(x[0])+' <b>'+fmt(x[1])+'</b></span>'}).join('')+'</div>'}
+function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return '<button type="button" class="rcat" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(catName(c))+'</button>'}).join('')+'</div>'}
 function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
 function openRecipe(id){
-  var r=recipes.find(function(x){return x.id===id});if(!r)return;
+  var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
   var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
   $('view').innerHTML=
    '<div class="rhero'+(ph[0]?'':' none')+'">'+(ph[0]?'<img src="'+pic(r,0,'lg')+'" alt="">':'<span class="emo">🍝</span>')+
-   '<button class="rback" id="back">← Back</button>'+
-   '<div class="rcap"><h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(r.diff||'Easy')+' · '+esc(r.cost||'Cheap')+'</div>'+(r.cats&&r.cats.length?rcatHtml(r.cats):'')+'</div></div>'+
-   '<div class="rgrid"><div class="panel ring">'+(ph[0]?'<img class="ringimg" src="'+ph[0]+'" alt="">':'')+'<h3 class="sec">Ingredients</h3>'+
-   (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+kcalHtml(r,f)+
-   '<ul class="ing" id="ingl">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div>'+
+   '<button class="rback" id="back">'+tr('← Back')+'</button>'+
+   '<div class="rcap"><h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(tr(r.diff||'Easy'))+' · '+esc(tr(r.cost||'Cheap'))+'</div>'+(r.cats&&r.cats.length?rcatHtml(r.cats):'')+'</div></div>'+
+   '<div class="rgrid"><div class="panel ring">'+(ph[0]?'<img class="ringimg" src="'+ph[0]+'" alt="">':'')+'<h3 class="sec">'+tr('Ingredients')+'</h3>'+
+   (base?'<div class="srv"><span>'+tr('For')+'</span><button id="minus" aria-label="'+tr('Fewer servings')+'">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="'+tr('More servings')+'">+</button><span>'+tr('people')+'</span></div>':'')+kcalHtml(r,f)+
+   '<ul class="ing" id="ingl">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="'+esc(tr('Got it'))+'"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div>'+
    '<div class="rsteps">'+
-   ((r.steps||total)?'<div class="panel"><h3 class="sec">Preparation</h3>'+tmrHtml(r,total)+(r.steps||'').split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
-   (r.tip?'<div class="tip"><b>Tips and notes</b><br>'+esc(r.tip)+'</div>':'')+'</div>'+
-   (nm?'<div class="panel rmedia"><h3 class="sec">Videos and photos</h3><div class="car v" id="mcar">'+vv.map(function(v,i){return '<div class="vslide" data-i="'+i+'"><div class="vload">Loading…</div></div>'}).join('')+ph.slice(1).map(function(p,i){return '<img src="'+pic(r,i+1,'md')+'" alt="" loading="lazy" decoding="async">'}).join('')+'</div>'+dotsHtml(nm)+'</div>':'')+
+   ((r.steps||total)?'<div class="panel"><h3 class="sec">'+tr('Preparation')+'</h3>'+tmrHtml(r,total)+(r.steps||'').split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>'+tr('Step {n}',{n:i+1})+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
+   (r.tip?'<div class="tip"><b>'+tr('Tips and notes')+'</b><br>'+esc(r.tip)+'</div>':'')+'</div>'+
+   (nm?'<div class="panel rmedia"><h3 class="sec">'+tr('Videos and photos')+'</h3><div class="car v" id="mcar">'+vv.map(function(v,i){return '<div class="vslide" data-i="'+i+'"><div class="vload">'+tr('Loading…')+'</div></div>'}).join('')+ph.slice(1).map(function(p,i){return '<img src="'+pic(r,i+1,'md')+'" alt="" loading="lazy" decoding="async">'}).join('')+'</div>'+dotsHtml(nm)+'</div>':'')+
    '<aside class="panel feed" id="feed"></aside></div>'+
-   '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
+   '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">'+tr('Edit')+'</button><button class="btn danger" id="del">'+tr('Delete')+'</button></div>';
   show('view');
   paintFeed(r);
   $('view').querySelectorAll('.cat,.rcat').forEach(function(b){b.onclick=function(){catSel=b.dataset.c?[b.dataset.c]:[];renderList();show('list')}});
@@ -641,25 +762,25 @@ function openRecipe(id){
     var vels=[],canHover=window.matchMedia('(hover:hover)').matches,obsSet=false;
     var playOnly=function(el){vels.forEach(function(x){if(x!==el){x.pause();x.currentTime=0}});var pr=el.play();if(pr&&pr.catch)pr.catch(function(){})};
     var loadVid=function(i){var slide=mc.querySelector('.vslide[data-i="'+i+'"]');if(!slide)return Promise.resolve();
-      if(!TOKEN){slide.firstChild.textContent='Sign in to load videos';return Promise.resolve()}
+      if(!TOKEN){slide.firstChild.textContent=tr('Sign in to load videos');return Promise.resolve()}
       return api('https://www.googleapis.com/drive/v3/files/'+vv[i].id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(function(bl){
         var el=document.createElement('video');el.muted=true;el.loop=true;el.playsInline=true;el.preload='auto';el.src=URL.createObjectURL(bl)+'#t=0.001';
-        var mb=document.createElement('button');mb.className='vmute';mb.textContent='🔇';mb.setAttribute('aria-label','Sound');
+        var mb=document.createElement('button');mb.className='vmute';mb.textContent='🔇';mb.setAttribute('aria-label',tr('Sound'));
         mb.onclick=function(e){e.stopPropagation();el.muted=!el.muted;mb.textContent=el.muted?'🔇':'🔊'};
         slide.innerHTML='';slide.appendChild(el);slide.appendChild(mb);vels.push(el);
         if(canHover){el.onmouseenter=function(){playOnly(el)};el.onmouseleave=function(){el.pause();el.currentTime=0}}
         else el.onclick=function(){if(el.paused)playOnly(el);else el.pause()};
         if(!obsSet){obsSet=true;new IntersectionObserver(function(es){es.forEach(function(e){
           if(e.isIntersecting){if(!vels.some(function(x){return x!==el&&!x.paused}))playOnly(el)}else{el.pause()}})},{threshold:.6}).observe(el)}
-      }).catch(function(e){if(e.message!=='auth')slide.firstChild.textContent='Could not load video'})};
+      }).catch(function(e){if(e.message!=='auth')slide.firstChild.textContent=tr('Could not load video')})};
     var started=false;
     new IntersectionObserver(function(es,o){if(es[0].isIntersecting&&!started){started=true;o.disconnect();
       vv.reduce(function(p,_,i){return p.then(function(){return loadVid(i)})},Promise.resolve())}},{rootMargin:'200px'}).observe(mc);
   }
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
-  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN){if(r._folder)driveTrash(r._folder);else if(r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}}persist();renderList();show('list')}};
-  if($('minus')){var paint=function(){$('srvn').textContent=Math.round(base*factor*100)/100;if($('kcalbox'))$('kcalbox').outerHTML=kcalHtml(r,factor);$('ingl').innerHTML=r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,factor))+'</span></li>'}).join('');bindIng()};
+  $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm(tr('Delete “{n}”?',{n:r.name}))){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN){if(r._folder)driveTrash(r._folder);else if(r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}}persist();renderList();show('list')}};
+  if($('minus')){var paint=function(){$('srvn').textContent=Math.round(base*factor*100)/100;if($('kcalbox'))$('kcalbox').outerHTML=kcalHtml(r,factor);$('ingl').innerHTML=r.ings.map(function(i){return '<li><input type="checkbox" aria-label="'+esc(tr('Got it'))+'"><span>'+esc(scale(i,factor))+'</span></li>'}).join('');bindIng()};
     $('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);paint()}};$('plus').onclick=function(){factor+=1/base;paint()}}
   $('view').querySelectorAll('.car').forEach(function(c){var d=c.nextElementSibling;if(!d||!d.classList.contains('dots'))return;
     c.addEventListener('scroll',function(){var w=c.firstElementChild.getBoundingClientRect().width+(c.classList.contains('p')?0:10),i=Math.round(c.scrollLeft/w);
@@ -671,12 +792,12 @@ function openRecipe(id){
 var photos=[],srcFid={},vids=[];
 function ingRow(v){
   var d=document.createElement('div');d.className='row';
-  d.innerHTML='<input type="text" placeholder="e.g. 200g spaghetti" value="'+esc(v||'')+'" aria-label="Ingredient"><button type="button" class="btn ghost x" aria-label="Remove ingredient">✕</button>';
+  d.innerHTML='<input type="text" placeholder="'+tr('e.g. 200g spaghetti')+'" value="'+esc(v||'')+'" aria-label="'+tr('Ingredient')+'"><button type="button" class="btn ghost x" aria-label="'+esc(tr('Remove ingredient'))+'">✕</button>';
   d.querySelector('.x').onclick=function(){d.remove()};
   $('ings').appendChild(d);return d;
 }
 function renderPhotos(){
-  $('photos').innerHTML=photos.map(function(p,i){return '<div class="p"><img src="'+p+'" alt=""><button type="button" data-i="'+i+'" aria-label="Remove photo">✕</button></div>'}).join('');
+  $('photos').innerHTML=photos.map(function(p,i){return '<div class="p"><img src="'+p+'" alt=""><button type="button" data-i="'+i+'" aria-label="'+tr('Remove photo')+'">✕</button></div>'}).join('');
 }
 $('photos').onclick=function(e){var b=e.target.closest('button');if(b){photos.splice(+b.dataset.i,1);renderPhotos()}};
 $('addphoto').onclick=function(){$('file').click()};
@@ -698,7 +819,7 @@ $('adding').onclick=function(){ingRow('').querySelector('input').focus()};
 function openForm(r){
   if(!TOKEN){$('signm').classList.remove('hidden');return}
   cur=r||null;
-  $('ftitle').textContent=r?'Edit recipe':'New recipe';
+  $('ftitle').textContent=tr(r?'Edit recipe':'New recipe');
   $('name').value=r?r.name:'';$('serv').value=r&&r.serv?r.serv:'';
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
@@ -712,7 +833,7 @@ $('add').onclick=function(){openForm(null)};
 $('cancel').onclick=function(){cur?openRecipe(cur.id):show('list')};
 $('save').onclick=function(){
   var name=$('name').value.trim();
-  if(!name){alert('Give your recipe a name.');$('name').focus();return}
+  if(!name){alert(tr('Give your recipe a name.'));$('name').focus();return}
   var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
   var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
     diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim(),kcal:+$('kcalin').value||0};
@@ -732,15 +853,15 @@ var FOLDER_DEFAULT='1Yb4bCOm2NJFB8SjoeTqls0bKT8vC5kLY', CID_DEFAULT='78776364468
 function lsGet(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function cfgv(){return {cid:lsGet('rb-cid',CID_DEFAULT),folder:lsGet('rb-folder',FOLDER_DEFAULT)}}
-function status(t){$('status').textContent=t}
+function status(s){var e=$('status');e.removeAttribute('data-t');e.textContent=s}
 function strip(r){var o={};for(var k in r)if(k[0]!=='_')o[k]=r[k];return o}
 function api(url,opt){opt=opt||{};opt.headers=Object.assign({Authorization:'Bearer '+TOKEN},opt.headers||{});
   return fetch(url,opt).then(function(r){
-    if(r.status===401){TOKEN=null;try{sessionStorage.removeItem('rb-tok')}catch(e){}$('sign').textContent='Sign in with Google';status('Session expired. Sign in again.');$('signm').classList.remove('hidden');throw new Error('auth')}
+    if(r.status===401){TOKEN=null;try{sessionStorage.removeItem('rb-tok')}catch(e){}$('sign').textContent=tr('Sign in with Google');status(tr('Session expired. Sign in again.'));$('signm').classList.remove('hidden');throw new Error('auth')}
     if(!r.ok)return r.text().then(function(t){throw new Error(r.status+' '+t)});return r})}
 function loadGsi(cb){if(window.google&&google.accounts){cb();return}
   var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=cb;
-  s.onerror=function(){alert('Could not load Google sign-in. Check your connection.')};document.head.appendChild(s)}
+  s.onerror=function(){alert(tr('Could not load Google sign-in. Check your connection.'))};document.head.appendChild(s)}
 function setToken(r){TOKEN=r.access_token;try{sessionStorage.setItem('rb-tok',JSON.stringify({t:TOKEN,e:Date.now()+((+r.expires_in||3600)-120)*1000}))}catch(e){}}
 function signIn(){
   var c=cfgv(),em=($('gemail').value||'').trim();
@@ -749,9 +870,9 @@ function signIn(){
   $('gmsg').textContent='';
   loadGsi(function(){
     var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
-      callback:function(r){if(r.error){$('gmsg').textContent='Sign-in failed: '+r.error+'. Ask the owner to add your email.';return}
-        setToken(r);$('signm').classList.add('hidden');$('sign').textContent='Refresh from Drive';checkOwner();refresh()},
-      error_callback:function(){$('gmsg').textContent='Sign-in was closed or blocked. Allow pop-ups and try again.'}});
+      callback:function(r){if(r.error){$('gmsg').textContent=tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
+        setToken(r);$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');checkOwner();refresh()},
+      error_callback:function(){$('gmsg').textContent=tr('Sign-in was closed or blocked. Allow pop-ups and try again.')}});
     tc.requestAccessToken({prompt:'',hint:em||undefined})})}
 var FOLDER_MIME='application/vnd.google-apps.folder';
 function slim(f){return {id:f.id,name:f.name}}
@@ -795,22 +916,22 @@ function hydrate(r){var fl=r._imgFiles||[];if(!fl.length)return;
   Promise.all(fl.map(function(f){return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSizes))}))
   .then(function(l){r._xs=l.map(function(x){return x[0]});r._imgs=l.map(function(x){return x[1]});r._lg=l.map(function(x){return x[2]});renderList()}).catch(function(){fl.forEach(function(f){delete imgCache[f.id]})})}
 function refresh(){
-  var root=cfgv().folder;status('Loading from Drive…');
+  var root=cfgv().folder;status(tr('Loading from Drive…'));
   listFiles("'"+root+"' in parents and trashed=false").then(function(rootFiles){
     var folders=rootFiles.filter(function(f){return f.mimeType===FOLDER_MIME}),others=rootFiles.filter(function(f){return f.mimeType!==FOLDER_MIME});
     return Promise.all([Promise.all(folders.map(loadFolder)),loadLegacy(others)])
   }).then(function(res){
     var map={};res[1].forEach(function(x){map[x.id]=x});res[0].filter(Boolean).forEach(function(x){map[x.id]=x});
     recipes=Object.keys(map).map(function(k){return map[k]});
-    renderList();status('Synced: '+recipes.length+' recipe(s) from Drive');
+    renderList();status(tr('Synced: {n} recipe(s) from Drive',{n:recipes.length}));
     recipes.forEach(hydrate);
     recipes.forEach(function(r){
       if(r._fid&&!r._multi&&r._fname){var nm=safeName(r.name,r.id)+'.json';if(r._fname!==nm)renameFile(r._fid,nm).then(function(){r._fname=nm}).catch(function(){})}
       if(r._folder&&r._folderName&&r._folderName!==safeName(r.name,r.id)){var fn=safeName(r.name,r.id);renameFile(r._folder,fn).then(function(){r._folderName=fn}).catch(function(){})}});
     var legacy=recipes.filter(function(r){return r._inRoot&&!r._multi});
-    if(legacy.length){status('Organizing '+legacy.length+' recipe(s) into folders…');
-      return legacy.reduce(function(p,x){return p.then(function(){return migrate(x,root)})},Promise.resolve()).then(function(){status('Synced: '+recipes.length+' recipe(s) from Drive')})}
-  }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
+    if(legacy.length){status(tr('Organizing {n} recipe(s) into folders…',{n:legacy.length}));
+      return legacy.reduce(function(p,x){return p.then(function(){return migrate(x,root)})},Promise.resolve()).then(function(){status(tr('Synced: {n} recipe(s) from Drive',{n:recipes.length}))})}
+  }).catch(function(e){if(e.message!=='auth')status(tr('Could not load: {e}',{e:String(e.message).slice(0,140)}))})}
 var imgCache={};
 function imgs(r){return (r._imgs||[]).concat(r.photos||[])}
 // Photo i of a recipe at a size that fits where it is shown: 'xs' thumbnails, 'md' cards and panels (default), 'lg' full-width heroes
@@ -831,10 +952,10 @@ function upload(method,fid,meta,ctype,data){
   var body=new Blob(['--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+bd+'\r\nContent-Type: '+ctype+'\r\n\r\n',data,'\r\n--'+bd+'--']);
   return api('https://www.googleapis.com/upload/drive/v3/files'+(fid?'/'+fid:'')+'?uploadType=multipart&supportsAllDrives=true&fields=id,name',{method:method,headers:{'Content-Type':'multipart/related; boundary='+bd},body:body}).then(function(r){return r.json()})}
 function renameFile(fid,name){return api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true&fields=id,name',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name})}).then(function(r){return r.json()})}
-function renderVids(){$('vlist').innerHTML=vids.map(function(v,i){return '<div class="row" style="align-items:center"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🎬 '+esc(v.f?v.f.name:v.file.name)+'</span><button type="button" class="btn ghost x" data-i="'+i+'" aria-label="Remove video">✕</button></div>'}).join('')}
+function renderVids(){$('vlist').innerHTML=vids.map(function(v,i){return '<div class="row" style="align-items:center"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🎬 '+esc(v.f?v.f.name:v.file.name)+'</span><button type="button" class="btn ghost x" data-i="'+i+'" aria-label="'+tr('Remove video')+'">✕</button></div>'}).join('')}
 $('vlist').onclick=function(e){var b=e.target.closest('button');if(b){vids.splice(+b.dataset.i,1);renderVids()}};
 $('addvid').onclick=function(){$('vfile').click()};
-$('vfile').onchange=function(){Array.prototype.forEach.call($('vfile').files,function(f){if(f.size>200*1048576&&!confirm(f.name+' is larger than 200 MB and may fail to upload. Add it anyway?'))return;vids.push({file:f})});$('vfile').value='';renderVids()};
+$('vfile').onchange=function(){Array.prototype.forEach.call($('vfile').files,function(f){if(f.size>200*1048576&&!confirm(tr('{n} is larger than 200 MB and may fail to upload. Add it anyway?',{n:f.name})))return;vids.push({file:f})});$('vfile').value='';renderVids()};
 function moveFile(id,to,from){return api('https://www.googleapis.com/drive/v3/files/'+id+'?addParents='+to+'&removeParents='+from+'&supportsAllDrives=true&fields=id',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{}'})}
 function findFolder(name){var q="'"+cfgv().folder+"' in parents and trashed=false and mimeType='"+FOLDER_MIME+"' and name='"+name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'";
   return listFiles(q).then(function(l){return l[0]||null})}
@@ -849,7 +970,7 @@ function ensureFolder(rec){
   }).then(function(d){rec._folder=d.id;rec._folderName=want;return d.id})}
 function driveSave(rec){
   if(!TOKEN)return;
-  status('Saving…');
+  status(tr('Saving…'));
   var base=safeName(rec.name,rec.id),jname=base+'.json',root=cfgv().folder,oldRoot=!!rec._inRoot,oldFid=(rec._inRoot&&!rec._multi)?rec._fid:null;
   ensureFolder(rec).then(function(folder){
     var json=JSON.stringify(strip(rec),null,2),pj;
@@ -870,7 +991,7 @@ function driveSave(rec){
         rec._imgFiles=files.map(function(f){return {id:f.id,name:f.name}});rec._pend=null;rec._oldFiles=null})}
     if(rec._vpend){
       var vp=rec._vpend,vn=vp.length,vkeep={},vold=rec._oldVids||[];
-      if(vp.some(function(p){return p.file}))status('Uploading video(s), please keep this page open…');
+      if(vp.some(function(p){return p.file}))status(tr('Uploading video(s), please keep this page open…'));
       pv=Promise.all(vp.map(function(p,i){var suf=vn>1?'_'+(i+1):'';
         if(p.f){vkeep[p.f.id]=1;var ext=(p.f.name.match(/\.[^.]+$/)||['.mp4'])[0],nm=base+suf+ext,mv=oldRoot?moveFile(p.f.id,folder,root):Promise.resolve();
           return mv.then(function(){return p.f.name===nm?{id:p.f.id,name:nm}:renameFile(p.f.id,nm)})}
@@ -879,8 +1000,8 @@ function driveSave(rec){
       })).then(function(files){vold.forEach(function(f){if(!vkeep[f.id])driveTrash(f.id,true)});
         rec._vids=files.map(function(f){return {id:f.id,name:f.name}});rec._vpend=null;rec._oldVids=null})}
     return Promise.all([pj,pi,pv]).then(function(){rec._inRoot=false})
-  }).then(function(){status('Saved to Drive in folder “'+rec._folderName+'”')}).catch(function(e){if(e.message!=='auth'){status('Not saved');alert('Could not save to Drive: '+String(e.message).slice(0,150))}})}
-function driveTrash(fid,q){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){if(!q)status('Deleted')}).catch(function(e){if(e.message!=='auth')alert('Could not delete in Drive.')})}
+  }).then(function(){status(tr('Saved to Drive in folder “{n}”',{n:rec._folderName}))}).catch(function(e){if(e.message!=='auth'){status(tr('Not saved'));alert(tr('Could not save to Drive: {e}',{e:String(e.message).slice(0,150)}))}})}
+function driveTrash(fid,q){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){if(!q)status(tr('Deleted'))}).catch(function(e){if(e.message!=='auth')alert(tr('Could not delete in Drive.'))})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
 // Owner tools (padlock) are shown only when Google says the signed-in account is the owner.
 var OWNER='gisela.cookbook@gmail.com';
@@ -894,14 +1015,14 @@ $('lock').onclick=function(){var c=cfgv();$('cid').value=c.cid;$('fold').value=c
 $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
 $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
   if(a)lsSet('rb-cid',a);if(b)lsSet('rb-folder',m?m[1]:b);$('lockm').classList.add('hidden');
-  if(TOKEN){TOKEN=null;$('sign').textContent='Sign in with Google';status('Connection changed. Sign in again.');$('signm').classList.remove('hidden')}};
+  if(TOKEN){TOKEN=null;$('sign').textContent=tr('Sign in with Google');status(tr('Connection changed. Sign in again.'));$('signm').classList.remove('hidden')}};
 $('signbtn').onclick=function(){signIn()};
 $('gemail').onkeydown=function(e){if(e.key==='Enter')signIn()};
 $('gcfg').onclick=function(e){e.preventDefault();$('lock').onclick()};
-$('sout').onclick=function(){TOKEN=null;$('lock').classList.add('hidden');try{sessionStorage.removeItem('rb-tok')}catch(e){}recipes=[];renderList();$('sign').textContent='Sign in with Google';$('signm').classList.remove('hidden')};
+$('sout').onclick=function(){TOKEN=null;$('lock').classList.add('hidden');try{sessionStorage.removeItem('rb-tok')}catch(e){}recipes=[];renderList();$('sign').textContent=tr('Sign in with Google');$('signm').classList.remove('hidden')};
 $('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd=new FileReader();
-  rd.onload=function(){var list;try{list=parseList(rd.result)}catch(e){alert('This file is not a valid recipes JSON file.');return}
-    if(!TOKEN){alert('Sign in with Google first.');return}
+  rd.onload=function(){var list;try{list=parseList(rd.result)}catch(e){alert(tr('This file is not a valid recipes JSON file.'));return}
+    if(!TOKEN){alert(tr('Sign in with Google first.'));return}
     list.forEach(function(r){var i=recipes.findIndex(function(x){return x.id===r.id});if(i>-1){r._fid=recipes[i]._fid;r._multi=recipes[i]._multi;r._folder=recipes[i]._folder;r._folderName=recipes[i]._folderName;r._inRoot=recipes[i]._inRoot;recipes[i]=r}else recipes.push(r);driveSave(r)});
     persist();renderList()};
   rd.readAsText(f);$('impfile').value=''};
@@ -912,9 +1033,13 @@ $('cats').onchange=function(e){var i=e.target,c=i.dataset.c;if(c==null)return;
   renderList();if(document.body.classList.contains('rv'))show('list')};
 $('catpick').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c,i=catPick.indexOf(c);if(i>-1)catPick.splice(i,1);else catPick.push(c);renderCatPick()};
 $('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);$('newcat').value='';renderCatPick()};
-load();renderList();updateTop();
+$('lang').onchange=function(){LANG=this.value;lsSet('rb-lang',LANG);applyLang();var b=document.body.classList;renderList();
+  if(b.contains('rv')&&viewId){var y=window.scrollY;openRecipe(viewId);window.scrollTo(0,y)}else if(b.contains('pv'))renderPlan();
+  if(!$('form').classList.contains('hidden')){$('ftitle').textContent=tr(cur?'Edit recipe':'New recipe');renderCatPick()}
+  if(!$('profm').classList.contains('hidden'))paintProf()};
+applyLang();load();renderList();updateTop();
 (function(){$('gemail').value=lsGet('rb-email','');
-  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent='Refresh from Drive';checkOwner();refresh();return}}catch(e){}
+  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent=tr('Refresh from Drive');checkOwner();refresh();return}}catch(e){}
   $('signm').classList.remove('hidden')})();
 </script>
 </body>
