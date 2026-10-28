@@ -327,8 +327,8 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 }
 /* Big screens: the dishes scroll down on the left, the plan is a table on the right (days across, meals down) */
 @media (min-width:1100px){
-  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-areas:"ctl ctl" "car days";column-gap:22px;align-items:start}
-  #pctl{grid-area:ctl}
+  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". tabs" "car days" "car times";grid-template-rows:auto auto auto 1fr;column-gap:22px;align-items:start}
+  #pctl{display:contents}
   .pcarw{grid-area:car}
   #pdays{grid-area:days;min-width:0}
   .pfab{right:28px;bottom:28px}
@@ -342,11 +342,11 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   .pcard small{padding-bottom:0}
   .pghost{width:250px}
   .phint{margin-top:6px}
-  #pctl{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-items:center}
-  #pctl .ptimes{grid-row:1;grid-column:1;margin:0 0 10px}
-  #pctl .pnav{grid-row:1;grid-column:2;margin:0 0 10px;justify-content:flex-end}
+  #pctl .pnav{grid-area:nav;margin:0 0 12px;justify-content:flex-end}
   #pctl .pnav .seg{margin-left:6px}
-  #pctl .ptabs,#pctl .psum{grid-column:1/-1}
+  #pctl .psum{grid-area:sum;margin:0 0 12px;align-self:center}
+  #pctl .ptabs{grid-area:tabs}
+  #pctl .ptimes{grid-area:times;margin:14px 0 0}
   .pdays.week{grid-template-columns:118px repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
   .pdays.week .phr{display:grid;grid-row:1/-1;grid-template-rows:subgrid;background:var(--soft);font-weight:700;font-size:14px}
   .phr span{padding:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
@@ -445,7 +445,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 u (days across the plan)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 v (meal times below the plan)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
