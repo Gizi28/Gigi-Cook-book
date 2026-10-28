@@ -490,7 +490,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zy (1 second logo)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zz (logo on every main button)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -982,20 +982,23 @@ $('profm').onclick=function(e){var b=e.target.closest('.seg button');if(!b)retur
 $('psave').onclick=function(){var t=+$('ptgt').value;if(!t){alert(tr('Choose your category or type a daily goal.'));return}
   pf.target=t;prof=pf;lsSet('rb-prof',JSON.stringify(prof));$('profm').classList.add('hidden');renderPlan()};
 $('pcancel').onclick=function(){$('profm').classList.add('hidden')};
-$('planbtn').onclick=function(){setPick(null);show('plan');renderPlan();if(!prof)openProf()};
+$('planbtn').onclick=function(){setPick(null);logoSplash(function(){show('plan');renderPlan();if(!prof)openProf()})};
 document.querySelector('.top .brand').onclick=function(){show('list')};
 
 function tmrHtml(r,total){var a=[['Prep',r.prep],['Cooking',r.cook],['Rest',r.rest]].filter(function(x){return +x[1]>0});if(!a.length)return '';a.push(['Total',total]);
   return '<div class="tmr">'+a.map(function(x){return '<span>'+tr(x[0])+' <b>'+fmt(x[1])+'</b></span>'}).join('')+'</div>'}
 function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return '<button type="button" class="rcat" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(catName(c))+'</button>'}).join('')+'</div>'}
 function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
-function goHome(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){show('list');return}
+// The big yellow GC logo zooms out for 1 second while the page changes behind it
+function logoSplash(go){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){go();return false}
   var s=document.createElement('div');s.className='splash';s.innerHTML='<span class="logom"></span>';document.body.appendChild(s);
-  document.body.classList.add('homing');setTimeout(function(){show('list')},120);
+  setTimeout(go,120);setTimeout(function(){s.remove()},1000);return true}
+function goHome(){
+  if(!logoSplash(function(){show('list')}))return;
+  document.body.classList.add('homing');
   setTimeout(function(){var cs=document.querySelectorAll('#grid .card');cs.forEach(function(c,i){c.style.setProperty('--i',Math.min(i,12))});document.body.classList.remove('homing');document.body.classList.add('reveal');
-    setTimeout(function(){document.body.classList.remove('reveal')},600+70*Math.min(cs.length,12))},780);
-  setTimeout(function(){s.remove()},1000)}
+    setTimeout(function(){document.body.classList.remove('reveal')},600+70*Math.min(cs.length,12))},780)}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;var L=rt(r);
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
@@ -1086,7 +1089,7 @@ function openForm(r){
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
   show('form');
 }
-$('add').onclick=function(){openForm(null)};
+$('add').onclick=function(){logoSplash(function(){openForm(null)})};
 $('cancel').onclick=function(){cur?openRecipe(cur.id):show('list')};
 $('save').onclick=function(){
   var name=$('name').value.trim();
