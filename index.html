@@ -53,6 +53,8 @@ h2.name{font-size:26px;line-height:1.2;margin:12px 0 4px}
 h3.sec{margin:0 0 10px;font-size:20px;color:var(--accent-text)}
 .srv{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .srv button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent-text);font-size:20px;cursor:pointer;line-height:1}
+.kcal{background:var(--soft);border-radius:8px;padding:8px 12px;margin:0 0 10px;font-size:14px}
+.kcal small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 ul.ing{padding:0;margin:0;list-style:none}
 ul.ing li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
 ul.ing li:last-child{border:0}
@@ -252,6 +254,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
       <div><label for="cook">Cooking (min)</label><input type="number" id="cook" min="0"></div>
       <div><label for="rest">Rest (min)</label><input type="number" id="rest" min="0"></div>
       <div><label for="cost">Cost</label><select id="cost"><option>Cheap</option><option>Average</option><option>Expensive</option></select></div>
+      <div><label for="kcalin">Calories (whole dish)</label><input type="number" id="kcalin" min="0" placeholder="Leave empty to estimate"></div>
     </div>
     <label>Categories</label>
     <div class="catpick" id="catpick"></div>
@@ -285,7 +288,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   <button class="btn ghost" id="sout">Sign out</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <small style="color:var(--muted);text-align:center">Version 2026-10-28 i (category checkboxes)</small>
+  <small style="color:var(--muted);text-align:center">Version 2026-10-28 j (calories)</small>
   </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
@@ -312,6 +315,62 @@ function updateTop(){$('top').classList.toggle('clear',document.body.classList.c
 window.addEventListener('scroll',updateTop,{passive:true});
 function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
+// Calorie estimate: [names, kcal per 100 g, grams per piece, grams per ml]
+var FOODS=[
+  [['egg yolk','yolk','yema','jaune'],322,17],[['egg white','clara','blanc d\'oeuf'],52,33],[['egg','huevo','oeuf','œuf'],143,55],
+  [['pasta','spaghetti','penne','fusilli','tagliatelle','linguine','fettuccine','macaroni','lasagna','noodle','fideo','pâtes'],360],
+  [['rice','arroz','riz'],360,0,.85],[['quinoa'],368,0,.85],[['oats','oatmeal','avena'],389,0,.35],[['couscous'],376,0,.7],
+  [['flour','harina','farine'],364,0,.53],[['cornstarch','maicena','cornflour'],381,0,.53],[['breadcrumbs','pan rallado'],395,0,.45],
+  [['bread','pan ','pain'],265,30],[['tortilla'],300,45],[['puff pastry','pastry','hojaldre'],550],
+  [['sugar','azúcar','azucar','sucre'],400,0,.85],[['brown sugar'],380,0,.85],[['honey','miel'],304,0,1.42],[['maple syrup'],260,0,1.32],[['jam','mermelada','confiture'],250,0,1.3],
+  [['butter','mantequilla','beurre'],717,0,.96],[['peanut butter'],588,0,1.1],
+  [['oil','aceite','huile'],884,0,.92],
+  [['milk','leche','lait'],61,0,1.03],[['coconut milk','leche de coco'],197,0,1],[['evaporated milk','leche evaporada'],134,0,1.07],[['condensed milk','leche condensada'],321,0,1.3],
+  [['cream','crema de leche','nata','crème'],340,0,1],[['sour cream'],198,0,1],[['cream cheese','queso crema'],342],[['yogurt','yoghurt','yogur','yaourt'],61,0,1.03],
+  [['cheese','queso','fromage'],400],[['pecorino'],387],[['parmesan','parmigiano'],431],[['mozzarella'],280,125],[['feta'],264],[['ricotta'],174],[['gruyère','gruyere','emmental','cheddar'],400],
+  [['bacon','tocino'],417],[['guanciale'],655],[['pancetta'],458],[['ham','jamón','jamon','jambon'],145],[['chorizo'],455],[['sausage','salchicha','saucisse'],300,60],
+  [['chicken','pollo','poulet'],150],[['turkey','pavo'],135],[['beef','res ','carne','boeuf'],250],[['minced meat','ground beef','mince','carne molida'],254],[['pork','cerdo','porc'],242],[['lamb','cordero','agneau'],282],
+  [['salmon','salmón','saumon'],208],[['tuna','atún','atun','thon'],132],[['fish','pescado','poisson','cod','bacalao'],100],[['shrimp','prawn','langostino','camarón','camaron','crevette'],99],[['octopus','pulpo'],82],[['squid','calamar'],92],
+  [['tofu'],76],[['lentil','lenteja','lentille'],352,0,.85],[['chickpea','garbanzo','pois chiche'],164],[['beans','frijol','haricot','alubia'],120],
+  [['potato','papa','patata','pomme de terre'],77,170],[['sweet potato','camote','batata','patate douce'],86,130],[['yuca','cassava','manioc'],160,400],
+  [['onion','cebolla','oignon','shallot','chalota'],40,110],[['garlic','ajo','ail'],149,4],[['tomato','tomate'],18,120],[['passata','tomato sauce','salsa de tomate','tomato paste'],35,0,1.05],
+  [['carrot','zanahoria','carotte'],41,60],[['bell pepper','pepper','pimiento','poivron','capsicum'],26,150],[['chili','chilli','ají','aji','piment'],40,15],[['black pepper','pimienta','poivre'],251],
+  [['avocado','palta','aguacate','avocat'],160,150],[['lemon','limón','limon','citron'],29,60],[['lime','lima'],30,45],[['orange','naranja'],47,140],[['apple','manzana','pomme'],52,180],[['banana','plátano','platano','banane'],89,120],
+  [['strawberr','fresa','fraise'],32,12],[['blueberr','raspberr','arándano','frambuesa'],50],[['mango'],60,300],[['pineapple','piña','ananas'],50],
+  [['corn','maíz','maiz','choclo','maïs'],86,150],[['peas','arvejas','guisantes','petits pois'],81],[['mushroom','champiñón','champignon','hongo'],22,15],[['spinach','espinaca','épinard'],23],
+  [['zucchini','courgette','calabacín','calabacin','zapallito'],17,200],[['eggplant','aubergine','berenjena'],25,300],[['cucumber','pepino','concombre'],15,300],[['lettuce','lechuga','laitue','salad'],15,300],
+  [['cabbage','repollo','col ','chou'],25,900],[['broccoli','brócoli','brocoli'],34,300],[['celery','apio','céleri'],16,40],[['pumpkin','squash','zapallo','calabaza','potiron'],26],[['leek','puerro','poireau'],61,150],
+  [['ginger','jengibre','gingembre'],80],[['parsley','cilantro','coriander','basil','albahaca','perejil','mint','menta','herb','persil','basilic'],30,1],
+  [['chocolate','chocolat'],546],[['dark chocolate','chocolate negro','chocolate bitter'],598],[['cocoa','cacao'],228,0,.4],
+  [['almond','almendra','amande'],579],[['walnut','nuez','nueces','noix'],654],[['peanut','maní','mani','cacahuete'],567],[['hazelnut','avellana','noisette'],628],[['pecan'],691],[['sesame','ajonjolí'],573],[['coconut','coco'],354],[['raisin','pasas'],299],
+  [['mayonnaise','mayonesa'],680,0,.91],[['ketchup'],112,0,1.1],[['mustard','mostaza','moutarde'],66,0,1.05],[['soy sauce','sillao','salsa de soja','sauce soja'],53,0,1.15],[['vinegar','vinagre','vinaigre'],18,0,1],
+  [['wine','vino','vin '],85,0,1],[['beer','cerveza','bière'],43,0,1],[['pisco','rum','ron','vodka','whisky'],231,0,.95],
+  [['stock','broth','caldo','bouillon','chicken stock','chicken broth','beef stock','vegetable stock'],5,0,1],
+  [['gelatin','gelatina','gélatine'],335,0,.6],[['baking powder','polvo de hornear','levure chimique'],53],[['yeast','levadura','levure'],325],[['vanilla','vainilla','vanille'],288,0,1],
+  [['salt','sal ','sel '],0],[['water','agua','eau'],0]
+];
+var UNITS=[[/^(kg|kilos?|kilograms?|kilogramos?)\b/,1000,'g'],[/^(g|gr|grs|grams?|grammes?|gramos?)\b\.?/,1,'g'],[/^(mg)\b/,.001,'g'],
+  [/^(l|lt|liters?|litres?|litros?)\b/,1000,'ml'],[/^(dl)\b/,100,'ml'],[/^(cl)\b/,10,'ml'],[/^(ml|milliliters?|millilitres?|mililitros?)\b/,1,'ml'],
+  [/^(tbsps?|tbs|tablespoons?|cucharadas?|c\.\s?s\.|cs|càs)\b\.?/,15,'ml'],[/^(tsps?|teaspoons?|cucharaditas?|c\.\s?c\.|cc|càc)\b\.?/,5,'ml'],[/^(cups?|tazas?|tasses?)\b/,240,'ml'],
+  [/^(oz|ounces?)\b/,28.35,'g'],[/^(lbs?|pounds?)\b/,453.6,'g'],[/^(pinch(es)?|pizcas?|pincées?)\b/,.5,'g'],[/^(cloves?|dientes?|gousses?)\b/,4,'g'],
+  [/^(slices?|rebanadas?|tranches?)\b/,30,'g'],[/^(cans?|tins?|latas?|boîtes?)\b/,400,'g'],[/^(handfuls?|puñados?)\b/,30,'g']];
+var FRAC={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅔':2/3};
+function findFood(s){var best=null,bl=0;s=' '+s+' ';
+  FOODS.forEach(function(f){f[0].forEach(function(k){if(k.length>bl&&s.indexOf(k)>-1&&/[^a-zà-ÿ]/.test(s.charAt(s.indexOf(k)-1))){best=f;bl=k.length}})});return best}
+function ingKcal(line){
+  var s=line.toLowerCase().replace(/[½¼¾⅓⅔]/g,function(c){return ' '+FRAC[c]+' '}).trim(),q=0,m,u=null;
+  while((m=s.match(/^(\d+(?:[.,]\d+)?(?:\/\d+)?)\s*/))){var p=m[1].replace(',','.').split('/');q+=p.length>1?p[0]/p[1]:+p[0];s=s.slice(m[0].length)}
+  s=s.replace(/^[-–]\s*\d+(?:[.,]\d+)?\s*/,'');
+  for(var i=0;i<UNITS.length;i++){m=s.match(UNITS[i][0]);if(m){u=UNITS[i];s=s.slice(m[0].length);break}}
+  s=s.replace(/^\s*(of|de|d')\s*/,'');
+  var f=findFood(s);if(!q)return {k:0};if(!f)return null;
+  var g=u?(u[2]==='g'?q*u[1]:q*u[1]*(f[3]||1)):(f[2]?q*f[2]:null);
+  return g==null?null:{k:g*f[1]/100}}
+function recipeKcal(r){if(+r.kcal>0)return {k:+r.kcal,miss:[],manual:true};
+  var t=0,miss=[];(r.ings||[]).forEach(function(l){var c=ingKcal(l);if(c)t+=c.k;else miss.push(l)});return {k:Math.round(t),miss:miss}}
+function kcalHtml(r,f){var c=recipeKcal(r),base=+r.serv||0;if(!c.k)return '';
+  return '<div class="kcal" id="kcalbox">🔥 '+(c.manual?'':'≈ ')+'<b>'+Math.round(c.k*f).toLocaleString()+' kcal</b> in total'+(base?' · <b>'+Math.round(c.k/base).toLocaleString()+' kcal</b> per person':'')+
+    '<small>'+(c.manual?'Calories entered in the recipe.':'Estimated from the ingredients.'+(c.miss.length?' Not counted: '+esc(c.miss.join(', ')):''))+'</small></div>'}
 function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
 
 var DEFCATS=[['Starter','🥗'],['Main course','🍽️'],['Dessert','🍰'],['Italian','🍝'],['Peruvian','🌶️'],['Japanese','🍣'],['Other','✨']],catSel=[],catPick=[];
@@ -374,7 +433,7 @@ function openRecipe(id){
    '<button class="rback" id="back">← Back</button>'+
    '<div class="rcap"><h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(r.diff||'Easy')+' · '+esc(r.cost||'Cheap')+'</div>'+(r.cats&&r.cats.length?rcatHtml(r.cats):'')+'</div></div>'+
    '<div class="rgrid"><div class="panel ring">'+(ph[0]?'<img class="ringimg" src="'+ph[0]+'" alt="">':'')+'<h3 class="sec">Ingredients</h3>'+
-   (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+
+   (base?'<div class="srv"><span>For</span><button id="minus" aria-label="Fewer servings">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="More servings">+</button><span>people</span></div>':'')+kcalHtml(r,f)+
    '<ul class="ing" id="ingl">'+r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div>'+
    '<div class="rsteps">'+
    ((r.steps||total)?'<div class="panel"><h3 class="sec">Preparation</h3>'+tmrHtml(r,total)+(r.steps||'').split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
@@ -408,7 +467,7 @@ function openRecipe(id){
   $('back').onclick=function(){show('list')};
   $('edit').onclick=function(){openForm(r)};
   $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm('Delete “'+r.name+'”?')){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN){if(r._folder)driveTrash(r._folder);else if(r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}}persist();renderList();show('list')}};
-  if($('minus')){var paint=function(){$('srvn').textContent=Math.round(base*factor*100)/100;$('ingl').innerHTML=r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,factor))+'</span></li>'}).join('');bindIng()};
+  if($('minus')){var paint=function(){$('srvn').textContent=Math.round(base*factor*100)/100;if($('kcalbox'))$('kcalbox').outerHTML=kcalHtml(r,factor);$('ingl').innerHTML=r.ings.map(function(i){return '<li><input type="checkbox" aria-label="Got it"><span>'+esc(scale(i,factor))+'</span></li>'}).join('');bindIng()};
     $('minus').onclick=function(){if(base*factor>1){factor=Math.max(1/base,factor-1/base);paint()}};$('plus').onclick=function(){factor+=1/base;paint()}}
   $('view').querySelectorAll('.car').forEach(function(c){var d=c.nextElementSibling;if(!d||!d.classList.contains('dots'))return;
     c.addEventListener('scroll',function(){var w=c.firstElementChild.getBoundingClientRect().width+(c.classList.contains('p')?0:10),i=Math.round(c.scrollLeft/w);
@@ -450,7 +509,7 @@ function openForm(r){
   $('name').value=r?r.name:'';$('serv').value=r&&r.serv?r.serv:'';
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
-  $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';
+  $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';$('kcalin').value=r&&r.kcal?r.kcal:'';
   photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();catPick=r&&r.cats?r.cats.slice():[];renderCatPick();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
@@ -463,7 +522,7 @@ $('save').onclick=function(){
   if(!name){alert('Give your recipe a name.');$('name').focus();return}
   var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
   var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
-    diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim()};
+    diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim(),kcal:+$('kcalin').value||0};
   rec._vpend=vids.map(function(v){return {f:v.f||null,file:v.file||null}});rec._vids=vids.filter(function(v){return v.f}).map(function(v){return v.f});rec._oldVids=(cur&&cur._vids)||[];rec._imgs=photos.slice();rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname;rec._folder=cur._folder;rec._folderName=cur._folderName;rec._inRoot=cur._inRoot}var old=recipes.slice();
   if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
   persist();driveSave(rec);
@@ -471,7 +530,7 @@ $('save').onclick=function(){
 };
 
 function download(name,text){var b=new Blob([text],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
-function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),tip:String(r.tip||''),cats:Array.isArray(r.cats)?r.cats.map(String):[]}:null}
+function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),tip:String(r.tip||''),kcal:+r.kcal||0,cats:Array.isArray(r.cats)?r.cats.map(String):[]}:null}
 function parseList(t,fb){var d=JSON.parse(t);if(!Array.isArray(d)){if(d&&Array.isArray(d.recipes))d=d.recipes;else if(d&&d.name)d=[d];else throw new Error('x')}return d.map(function(x,i){return clean(x,fb?fb+'-'+i:null)}).filter(Boolean)}
 $('exp').onclick=function(){download('recipes.json',JSON.stringify(recipes.map(strip),null,2))};
 $('imp').onclick=function(){$('impfile').click()};
