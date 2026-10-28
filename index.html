@@ -118,10 +118,11 @@ body.rv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-ar
 body.rv .top .brand{margin-left:34px}
 @media (min-width:900px){body.lv.hascats .top .brand{margin-left:34px}}
 @media (max-width:520px){body.rv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand{margin-left:26px}}
-/* Going home: a warm yellow band with the logo pushes the recipe off to the right, uncovering the main page in one move */
-.vghost{position:fixed!important;margin:0!important;z-index:44;background:var(--bg);pointer-events:none;transition:transform 1.2s cubic-bezier(.45,.05,.55,.95);will-change:transform}
-.pusher{position:fixed;top:0;bottom:0;z-index:45;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);box-shadow:6px 0 24px rgba(0,0,0,.35);pointer-events:none;transition:transform 1.2s cubic-bezier(.45,.05,.55,.95);will-change:transform}
-.pusher .logom{width:72%}
+/* Going home: the page changes behind a warm yellow screen where the big GC logo zooms out for 2 seconds */
+.splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);pointer-events:none;animation:splash 2s ease-in-out forwards}
+.splash .logom{width:min(70vw,640px);animation:dezoom 2s cubic-bezier(.3,0,.2,1) forwards}
+@keyframes splash{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
+@keyframes dezoom{from{transform:scale(1.2)}to{transform:scale(.35)}}
 /* Main page: the welcome line and featured dish sit at the bottom right of the picture */
 .lhero .rcap{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
 .htab svg{flex:none}
@@ -485,7 +486,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zu (slower push)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zv (logo splash)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -986,16 +987,9 @@ function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return
 function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
 function goHome(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){show('list');return}
-  // Freeze a copy of the recipe where it is, open the main page underneath, then slide band + copy off together
-  var v=$('view'),r=v.getBoundingClientRect(),W=Math.round(Math.min(140,innerWidth*.28)),g=v.cloneNode(true),kids=v.children;
-  g.querySelectorAll('[id]').forEach(function(e){e.removeAttribute('id')});
-  Array.prototype.forEach.call(g.children,function(c,i){var cs=getComputedStyle(kids[i]);c.style.paddingLeft=cs.paddingLeft;c.style.paddingRight=cs.paddingRight;c.style.marginLeft=cs.marginLeft;c.style.width=cs.width});
-  g.classList.add('vghost');g.style.top=r.top+'px';g.style.left=r.left+'px';g.style.width=r.width+'px';
-  var p=document.createElement('div');p.className='pusher';p.style.left=(r.left-W)+'px';p.style.width=W+'px';p.innerHTML='<span class="logom"></span>';
-  document.body.appendChild(g);document.body.appendChild(p);show('list');
-  var d=innerWidth-r.left+W;
-  requestAnimationFrame(function(){requestAnimationFrame(function(){g.style.transform=p.style.transform='translateX('+d+'px)'})});
-  setTimeout(function(){g.remove();p.remove()},1280)}
+  var s=document.createElement('div');s.className='splash';s.innerHTML='<span class="logom"></span>';document.body.appendChild(s);
+  setTimeout(function(){show('list')},180);
+  setTimeout(function(){s.remove()},2000)}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;var L=rt(r);
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
