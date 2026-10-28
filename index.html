@@ -118,9 +118,9 @@ body.rv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-ar
 body.rv .top .brand{margin-left:34px}
 @media (min-width:900px){body.lv.hascats .top .brand{margin-left:34px}}
 @media (max-width:520px){body.rv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand{margin-left:26px}}
-/* Going home: the page changes while the big warm yellow GC logo zooms out over it for 2 seconds */
-.splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;color:var(--accent);filter:drop-shadow(0 2px 14px rgba(0,0,0,.45));pointer-events:none;animation:splash 2s ease-in-out forwards}
-.splash .logom{width:min(70vw,640px);animation:dezoom 2s cubic-bezier(.3,0,.2,1) forwards}
+/* Going home: the page changes while the big warm yellow GC logo zooms out over it for 1 second */
+.splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;color:var(--accent);filter:drop-shadow(0 2px 14px rgba(0,0,0,.45));pointer-events:none;animation:splash 1s ease-in-out forwards}
+.splash .logom{width:min(70vw,640px);animation:dezoom 1s cubic-bezier(.3,0,.2,1) forwards}
 @keyframes splash{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
 @keyframes dezoom{from{transform:scale(1.2)}to{transform:scale(.35)}}
 /* ...and the recipe cards appear one after another as the logo fades away */
@@ -490,7 +490,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zx (recipes appear after the logo)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zy (1 second logo)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -992,10 +992,10 @@ function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').
 function goHome(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){show('list');return}
   var s=document.createElement('div');s.className='splash';s.innerHTML='<span class="logom"></span>';document.body.appendChild(s);
-  document.body.classList.add('homing');setTimeout(function(){show('list')},180);
+  document.body.classList.add('homing');setTimeout(function(){show('list')},120);
   setTimeout(function(){var cs=document.querySelectorAll('#grid .card');cs.forEach(function(c,i){c.style.setProperty('--i',Math.min(i,12))});document.body.classList.remove('homing');document.body.classList.add('reveal');
-    setTimeout(function(){document.body.classList.remove('reveal')},600+70*Math.min(cs.length,12))},1550);
-  setTimeout(function(){s.remove()},2000)}
+    setTimeout(function(){document.body.classList.remove('reveal')},600+70*Math.min(cs.length,12))},780);
+  setTimeout(function(){s.remove()},1000)}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;var L=rt(r);
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
