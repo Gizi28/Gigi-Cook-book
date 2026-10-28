@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Recipe Book (Google Drive)</title>
+<meta name="theme-color" content="#f2b01e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recipe Book">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
@@ -385,7 +394,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 q (account icon)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 r (installable app)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -451,6 +460,7 @@ var TR={fr:{
   "Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.":"Google a bloqué la connexion pour ce compte. Son adresse doit être ajoutée comme utilisateur test dans Google Cloud, ou l'application doit être publiée.",
   "Pop-ups are blocked. Allow pop-ups for this site and try again.":"Les fenêtres pop-up sont bloquées. Autorisez-les pour ce site et réessayez.",
   "The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.":"La fenêtre Google a été fermée. Si Google a affiché « Accès bloqué », cette adresse doit être ajoutée comme utilisateur test dans Google Cloud.",
+  "Install the app":"Installer l'application","On iPhone or iPad: tap the Share button, then “Add to Home Screen”.":"Sur iPhone ou iPad : touchez le bouton Partager, puis « Sur l'écran d'accueil ».",
   "Starter":"Entrée","Main course":"Plat principal","Dessert":"Dessert","Italian":"Italien","Peruvian":"Péruvien","Japanese":"Japonais","Other":"Autre"
 },es:{
   "My Recipe Book":"Mi libro de recetas","Meal plan":"Plan de comidas","Switch light or dark mode":"Modo claro u oscuro","Owner tools":"Herramientas de administración","Language":"Idioma",
@@ -499,6 +509,7 @@ var TR={fr:{
   "Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.":"Google bloqueó el inicio de sesión de esta cuenta. Hay que añadir su correo como usuario de prueba en Google Cloud o publicar la aplicación.",
   "Pop-ups are blocked. Allow pop-ups for this site and try again.":"Las ventanas emergentes están bloqueadas. Permítelas para este sitio e inténtalo de nuevo.",
   "The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.":"Se cerró la ventana de Google. Si Google mostró «Acceso bloqueado», hay que añadir este correo como usuario de prueba en Google Cloud.",
+  "Install the app":"Instalar la aplicación","On iPhone or iPad: tap the Share button, then “Add to Home Screen”.":"En iPhone o iPad: toca el botón Compartir y luego «Añadir a pantalla de inicio».",
   "Starter":"Entrante","Main course":"Plato principal","Dessert":"Postre","Italian":"Italiana","Peruvian":"Peruana","Japanese":"Japonesa","Other":"Otros"
 }};
 var DAYS={en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],fr:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],es:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']};
@@ -1128,10 +1139,19 @@ function renderMeMenu(){var m=$('memenu');
   m.innerHTML=ME?'<div class="mehd"><span class="mav">'+meAvatar()+'</span><span><small>'+tr('Signed in as')+'</small><b>'+esc(ME.name||ME.email)+'</b>'+(ME.name?'<small>'+esc(ME.email)+'</small>':'')+'</span></div>'+
       (accessMsg?'<div class="mewarn">'+esc(accessMsg)+'</div>':'')+'<button type="button" class="btn ghost" id="meout">'+tr('Sign out')+'</button>'
     :'<div class="mehd"><span class="mav">'+PERSON+'</span><b>'+tr('Not signed in')+'</b></div><button type="button" class="btn" id="mein">'+tr('Sign in with Google')+'</button>';
+  if(canInstall())m.innerHTML+='<button type="button" class="btn ghost" id="meinst">📲 '+tr('Install the app')+'</button>';
   m.style.top=($('top').getBoundingClientRect().bottom+6)+'px'}
 $('me').onclick=function(e){e.stopPropagation();var m=$('memenu');if(m.classList.contains('hidden')){renderMeMenu();m.classList.remove('hidden')}else m.classList.add('hidden')};
-$('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein')return;$('memenu').classList.add('hidden');
-  if(id==='meout')$('sout').onclick();else $('signm').classList.remove('hidden')};
+$('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein'&&id!=='meinst')return;$('memenu').classList.add('hidden');
+  if(id==='meout')$('sout').onclick();else if(id==='mein')$('signm').classList.remove('hidden');else installApp()};
+// ---- Installing as an app (home-screen / desktop icon) ----
+var installEvt=null,IOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function isInstalled(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
+function canInstall(){return !isInstalled()&&(!!installEvt||IOS)}
+function installApp(){if(installEvt){installEvt.prompt();installEvt.userChoice.then(function(){installEvt=null})}else alert(tr('On iPhone or iPad: tap the Share button, then “Add to Home Screen”.'))}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installEvt=e});
+window.addEventListener('appinstalled',function(){installEvt=null});
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){});
 document.addEventListener('click',function(){$('memenu').classList.add('hidden')});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('memenu').classList.add('hidden')});
 applyLang();load();renderList();updateTop();
