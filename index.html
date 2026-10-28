@@ -70,7 +70,7 @@ textarea{min-height:110px;resize:vertical}
 .photos img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .photos .p button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.rhero{position:relative;height:clamp(300px,58vh,560px);background:linear-gradient(135deg,var(--accent),var(--soft));overflow:hidden;color:#fff}
+.rhero{position:relative;margin-left:var(--fw);transition:margin-left .25s;height:clamp(300px,58vh,560px);background:linear-gradient(135deg,var(--accent),var(--soft));overflow:hidden;color:#fff}
 .rhero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .rhero::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,.65));pointer-events:none}
 .rhero.none{color:var(--accent-ink)}
@@ -104,16 +104,13 @@ textarea{min-height:110px;resize:vertical}
 }
 @media (min-width:1100px){
   body.rv{--fw:260px}
-  body.rv.fcol{--fw:42px}
+  body.rv.fcol{--fw:0px}
+  .top{left:var(--fw);transition:background .25s,color .25s,box-shadow .25s,left .25s}
   #view>.rgrid,#view>.actions{margin-left:var(--fw);margin-right:0;max-width:none;width:calc(100% - var(--fw));transition:margin-left .25s,width .25s}
-  .rcap{max-width:none;margin:0;padding-left:calc(var(--fw) + 14px);padding-right:14px;transition:padding-left .25s}
-  .rback{left:calc(var(--fw) + 14px);transition:left .25s}
-  .feed{grid-column:auto;grid-row:auto;position:fixed;left:0;top:calc(64px + env(safe-area-inset-top,0px));bottom:0;width:var(--fw);z-index:30;margin:0;padding:12px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;transition:width .25s}
-  body.rv.fcol .feed{padding:0}
+  .feed{grid-column:auto;grid-row:auto;position:fixed;left:0;top:0;bottom:0;width:260px;z-index:45;margin:0;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 12px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;transition:transform .25s;box-shadow:2px 0 12px rgba(0,0,0,.12)}
+  body.rv.fcol .feed{transform:translateX(-100%);box-shadow:none}
+  .ftab{display:flex;position:absolute;left:100%;top:140px;width:38px;height:178px;flex-direction:column;align-items:center;padding:10px 0;gap:12px}
   .fbody{display:flex;flex-direction:column;min-height:0;flex:1}
-  body.rv.fcol .fbody{display:none}
-  body.rv.fcol .ftab{display:flex}
-  .fclose{display:block}
   .flist{display:grid;overflow:auto;min-height:0;gap:4px;align-content:start;scroll-snap-type:none}
   .fitem{flex:none;flex-direction:row;align-items:center;padding:8px;border:0;background:transparent;border-radius:10px;gap:10px;overflow:visible}
   .fitem.cur{background:var(--accent)}
@@ -136,8 +133,10 @@ textarea{min-height:110px;resize:vertical}
 .fmenu button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:10px 12px;cursor:pointer;color:var(--ink)}
 .fmenu button.on{background:var(--soft);font-weight:700}
 .fbody{display:block}
-.ftab{display:none;width:100%;height:100%;writing-mode:vertical-rl;transform:rotate(180deg);align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);border:0;cursor:pointer;font-weight:700;letter-spacing:.5px;font-size:15px}
-.fclose{display:none;flex:none;width:36px;margin-left:6px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer;font-size:16px}
+.ftab{display:none;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2)}
+.ftab .fi::before{content:'−';font-size:22px;font-weight:700;line-height:1}
+body.fcol .ftab .fi::before{content:'+'}
+.ftab .ft{writing-mode:vertical-rl;transform:rotate(180deg);font-size:14px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
 .fsel{flex:1;min-width:0}
 .flist{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
 .flist::-webkit-scrollbar{display:none}
@@ -241,7 +240,7 @@ textarea{min-height:110px;resize:vertical}
   <button class="btn ghost" id="sout">Sign out</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <small style="color:var(--muted);text-align:center">Version 2026-10-28 e (sidebar)</small>
+  <small style="color:var(--muted);text-align:center">Version 2026-10-28 f (slide bar)</small>
   </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
@@ -301,11 +300,11 @@ function paintFeed(r){var f=$('feed');if(!f)return;
     if(feedSel==='same')return !(r.cats&&r.cats.length)||(x.cats||[]).some(function(c){return r.cats.indexOf(c)>-1});
     return (x.cats||[]).indexOf(feedSel.slice(2))>-1});
   var opts=[['same','Same categories'],['all','All recipes']].concat(usedCats().map(function(c){return ['c:'+c,c]}));
-  f.innerHTML='<button type="button" class="ftab" id="ftab" aria-label="Show other recipes"><span>Other recipes</span></button><div class="fbody"><div class="fhead"><button type="button" class="fsel" id="fsel">'+esc(feedLabel(r))+' ▾</button><button type="button" class="fclose" id="fclose" aria-label="Collapse list">«</button><div class="fmenu hidden" id="fmenu">'+
+  f.innerHTML='<button type="button" class="ftab" id="ftab" aria-label="Show or hide other recipes"><span class="fi"></span><span class="ft">Other recipes</span></button><div class="fbody"><div class="fhead"><button type="button" class="fsel" id="fsel">'+esc(feedLabel(r))+' ▾</button><div class="fmenu hidden" id="fmenu">'+
     opts.map(function(o){return '<button type="button" data-v="'+esc(o[0])+'"'+(o[0]===feedSel?' class="on"':'')+'>'+(o[0].slice(0,2)==='c:'?catIcon(o[1])+' ':'')+esc(o[1])+'</button>'}).join('')+'</div></div>'+
     '<div class="flist">'+(list.length?list.map(function(x){var im=imgs(x)[0],t=(+x.prep||0)+(+x.cook||0)+(+x.rest||0);
       return '<button type="button" class="fitem'+(x.id===r.id?' cur':'')+'" data-id="'+esc(x.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="ftx"><b>'+esc(x.name)+'</b><small>'+(t?fmt(t)+' · ':'')+esc(x.diff||'Easy')+'</small></span></button>'}).join(''):'<div class="empty" style="padding:16px">No recipes in this category.</div>')+'</div></div>';
-  $('fclose').onclick=function(){setFeedCol(true)};$('ftab').onclick=function(){setFeedCol(false)};
+  $('ftab').onclick=function(){setFeedCol(!feedCol)};
   $('fsel').onclick=function(e){e.stopPropagation();$('fmenu').classList.toggle('hidden')};
   $('fmenu').onclick=function(e){var b=e.target.closest('button');if(!b)return;feedSel=b.dataset.v;paintFeed(r)};
   f.querySelectorAll('.fitem').forEach(function(b){b.onclick=function(){factor=1;openRecipe(b.dataset.id)}})}
