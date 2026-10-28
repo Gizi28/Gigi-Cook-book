@@ -146,14 +146,16 @@ body.fcol .ftab .fi::before{content:'+'}
 body.hascats.lv #cats,body.hascats.rv #cats{display:block}
 #cats .chd{display:none}
 #cats .cats{margin:0;border-radius:0;border-width:1px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 10px rgba(0,0,0,.12)}
-#cats .cat{flex:1 0 84px;min-width:84px;padding:8px 6px;font-size:13px}
+#cats .cat{position:relative;flex:1 0 84px;min-width:84px;margin:0;padding:8px 6px;font-size:13px;font-weight:400}
+#cats .cat.on{font-weight:700}
 #cats .cat .ic{font-size:22px}
+#cats .cat input{position:absolute;top:6px;left:6px;width:15px;height:15px;margin:0;accent-color:var(--accent-text);cursor:pointer}
 body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
 @media (min-width:900px){
   body.lv.hascats,body.rv.hascats{--cw:230px}
   body.lv.hascats.ccol,body.rv.hascats.ccol{--cw:68px}
   .top{left:calc(var(--fw) + var(--cw));transition:background .25s,color .25s,box-shadow .25s,left .25s}
-  body.lv.hascats .wrap{padding-left:calc(var(--cw) + 14px);padding-bottom:80px;max-width:calc(760px + var(--cw));transition:padding-left .25s,max-width .25s}
+  body.lv.hascats .wrap{padding-left:calc(var(--cw) + 32px);padding-bottom:80px;max-width:calc(760px + var(--cw));transition:padding-left .25s,max-width .25s}
   body.rv.hascats .wrap{padding-left:var(--cw);padding-bottom:80px;transition:padding-left .25s}
   body.hascats.lv #cats,body.hascats.rv #cats{right:auto;top:0;width:var(--cw);z-index:46;background:var(--surface);border-right:1px solid var(--line);box-shadow:2px 0 12px rgba(0,0,0,.12);padding-top:calc(14px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;overflow:hidden;transition:width .25s}
   #cats .chd{display:flex;flex:none;align-items:center;justify-content:space-between;gap:6px;padding:0 10px 10px 20px}
@@ -162,12 +164,23 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   #cats .cats{flex:1;min-height:0;flex-direction:column;overflow-x:hidden;overflow-y:auto;border:0;box-shadow:none;padding:0 10px 12px;gap:2px}
   #cats .cat{flex:none;min-width:0;flex-direction:row;justify-content:flex-start;gap:12px;border:0;border-radius:10px;padding:10px 12px;font-size:15px;text-align:left;white-space:nowrap}
   #cats .cat .ic{font-size:24px}
+  #cats .cat input{position:static;width:18px;height:18px;flex:none;accent-color:var(--accent-ink)}
   #cats .cat:hover{background:var(--soft)}
   #cats .cat.on{background:var(--accent);color:var(--accent-ink)}
+  body.ccol #cats .cat input{display:none}
+  body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:32px}
+  body.rv.hascats .rcap{padding-left:32px}
+  body.rv.hascats .rback{left:32px}
   body.ccol #cats .chd{justify-content:center;padding:0 0 10px}
   body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
   body.ccol #cats .cats{padding:0 8px 12px}
   body.ccol #cats .cat{justify-content:center;padding:10px 0}
+}
+@media (min-width:1100px){
+  /* leave room for the "Other recipes" tab that sticks out of its panel */
+  body.rv #view>.rgrid,body.rv #view>.actions,body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:62px}
+  body.rv .rcap,body.rv.hascats .rcap{padding-left:62px}
+  body.rv .rback,body.rv.hascats .rback{left:62px}
 }
 .fsel{flex:1;min-width:0}
 .flist{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
@@ -272,7 +285,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   <button class="btn ghost" id="sout">Sign out</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <small style="color:var(--muted);text-align:center">Version 2026-10-28 h (categories everywhere, themes)</small>
+  <small style="color:var(--muted);text-align:center">Version 2026-10-28 i (category checkboxes)</small>
   </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
@@ -301,10 +314,11 @@ function show(w){['list','view','form','json'].forEach(function(i){$(i).classLis
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
 
-var DEFCATS=[['Starter','🥗'],['Main course','🍽️'],['Dessert','🍰'],['Italian','🍝'],['Peruvian','🌶️'],['Japanese','🍣'],['Other','✨']],catFilter='',catPick=[];
+var DEFCATS=[['Starter','🥗'],['Main course','🍽️'],['Dessert','🍰'],['Italian','🍝'],['Peruvian','🌶️'],['Japanese','🍣'],['Other','✨']],catSel=[],catPick=[];
 function catIcon(c){var d=DEFCATS.filter(function(x){return x[0]===c})[0];return d?d[1]:'🏷️'}
-function catTiles(list,active,noAll){var h=list.map(function(c){return '<button class="cat'+(c===active?' on':'')+'" data-c="'+esc(c)+'" title="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span><span class="cl">'+esc(c)+'</span></button>'});
-  if(!noAll)h.unshift('<button class="cat'+(active===''?' on':'')+'" data-c="" title="All"><span class="ic">📖</span><span class="cl">All</span></button>');
+function catTile(c,label,icon,on){return '<label class="cat'+(on?' on':'')+'" title="'+esc(label)+'"><input type="checkbox" data-c="'+esc(c)+'"'+(on?' checked':'')+'><span class="ic">'+icon+'</span><span class="cl">'+esc(label)+'</span></label>'}
+function catTiles(list,sel){var h=list.map(function(c){return catTile(c,c,catIcon(c),sel.indexOf(c)>-1)});
+  h.unshift(catTile('','All','📖',!sel.length));
   return '<div class="cats">'+h.join('')+'</div>'}
 function usedCats(){var u=[];DEFCATS.forEach(function(d){if(recipes.some(function(r){return (r.cats||[]).indexOf(d[0])>-1}))u.push(d[0])});
   recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(u.indexOf(c)<0)u.push(c)})});return u}
@@ -313,14 +327,14 @@ function applyTheme(t){if(t)document.documentElement.dataset.theme=t;$('theme').
 applyTheme(lsGet('rb-theme',''));
 $('theme').onclick=function(){var t=isDark()?'light':'dark';lsSet('rb-theme',t);applyTheme(t)};
 var catCol=lsGet('rb-ccol','')==='1';document.body.classList.toggle('ccol',catCol);
-function renderCats(){var u=usedCats();if(catFilter&&u.indexOf(catFilter)<0)catFilter='';document.body.classList.toggle('hascats',u.length>0);
-  $('cats').innerHTML=u.length?'<div class="chd"><b>Categories</b><button type="button" class="ctog" aria-label="Collapse or expand categories">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catFilter):''}
+function renderCats(){var u=usedCats();catSel=catSel.filter(function(c){return u.indexOf(c)>-1});document.body.classList.toggle('hascats',u.length>0);
+  $('cats').innerHTML=u.length?'<div class="chd"><b>Categories</b><button type="button" class="ctog" aria-label="Collapse or expand categories">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catSel):''}
 function allCats(){var a=DEFCATS.map(function(x){return x[0]});recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(a.indexOf(c)<0)a.push(c)})});catPick.forEach(function(c){if(a.indexOf(c)<0)a.push(c)});return a}
 function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(c)+'</button>'}).join('')}
 function renderList(){
   renderCats();
   var q=$('search').value.toLowerCase().trim();
-  var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catFilter||(r.cats||[]).indexOf(catFilter)>-1)&&(!q||(r.name+' '+r.ings.join(' ')).toLowerCase().indexOf(q)>-1)});
+  var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catSel.length||(r.cats||[]).some(function(c){return catSel.indexOf(c)>-1}))&&(!q||(r.name+' '+r.ings.join(' ')).toLowerCase().indexOf(q)>-1)});
   if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
@@ -369,9 +383,8 @@ function openRecipe(id){
    '<aside class="panel feed" id="feed"></aside></div>'+
    '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
   show('view');
-  $('cats').querySelectorAll('.cat').forEach(function(b){b.classList.toggle('on',(r.cats||[]).indexOf(b.dataset.c)>-1)});
   paintFeed(r);
-  $('view').querySelectorAll('.cat,.rcat').forEach(function(b){b.onclick=function(){catFilter=b.dataset.c;renderList();show('list')}});
+  $('view').querySelectorAll('.cat,.rcat').forEach(function(b){b.onclick=function(){catSel=b.dataset.c?[b.dataset.c]:[];renderList();show('list')}});
   var mc=$('mcar');
   if(mc&&vv.length){
     var vels=[],canHover=window.matchMedia('(hover:hover)').matches,obsSet=false;
@@ -631,7 +644,10 @@ $('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd
     persist();renderList()};
   rd.readAsText(f);$('impfile').value=''};
 $('cats').onclick=function(e){var t=e.target.closest('.ctog');if(t){catCol=!catCol;lsSet('rb-ccol',catCol?'1':'');document.body.classList.toggle('ccol',catCol);t.textContent=catCol?'»':'«';return}
-  var b=e.target.closest('.cat');if(!b)return;catFilter=b.dataset.c;renderList();if(document.body.classList.contains('rv'))show('list')};
+};
+$('cats').onchange=function(e){var i=e.target,c=i.dataset.c;if(c==null)return;
+  if(!c)catSel=[];else if(i.checked){if(catSel.indexOf(c)<0)catSel.push(c)}else catSel=catSel.filter(function(x){return x!==c});
+  renderList();if(document.body.classList.contains('rv'))show('list')};
 $('catpick').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c,i=catPick.indexOf(c);if(i>-1)catPick.splice(i,1);else catPick.push(c);renderCatPick()};
 $('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);$('newcat').value='';renderCatPick()};
 load();renderList();
