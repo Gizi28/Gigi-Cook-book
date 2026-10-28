@@ -24,9 +24,10 @@ body{--fw:0px;--cw:0px}
 body.rv .wrap{max-width:none;padding:0 0 80px}
 .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:700}
 .top .btn{background:var(--accent-ink);color:var(--accent)}
-#add .sm{display:none}
+.top .sm{display:none}
+.top h1{cursor:pointer}
 .top #theme{padding:10px 12px;line-height:1}
-@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:25px;white-space:nowrap}.top .btn,.top #theme{padding:8px 9px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:4px!important}#add .lg{display:none}#add .sm{display:inline}}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -225,11 +226,75 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
 .dlg{width:100%;max-width:380px;background:var(--surface);border-radius:14px;padding:18px}
 .gate{background:var(--bg);z-index:60}
 #lockm{z-index:70}
+/* Meal planner */
+body.pv .wrap{max-width:1500px}
+.seg{display:inline-flex;border:1.5px solid var(--accent);border-radius:999px;overflow:hidden;vertical-align:middle}
+.seg button{border:0;background:transparent;color:var(--accent-text);padding:7px 14px;cursor:pointer;font-weight:700}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.btn-s{padding:6px 12px;font-size:13px}
+.ibtn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent-text);cursor:pointer;font-size:20px;line-height:1;padding:0}
+.phead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-bottom:6px}
+.phead h2{margin:0;font:700 42px/1 'Caveat','Segoe Script','Bradley Hand',cursive;color:var(--accent-text)}
+.pgoal{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
+.pcarw{position:sticky;top:60px;z-index:20;background:var(--bg);padding:8px 0 6px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+#psearch{margin:0 0 8px;padding:9px 14px}
+.pcar{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;overscroll-behavior-x:contain}
+.pcard{flex:0 0 132px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;text-align:left;padding:0;color:var(--ink)}
+.pcard .fth{aspect-ratio:16/9}
+.pcard b{display:block;font-size:13px;line-height:1.25;padding:6px 8px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard small{display:block;padding:0 8px 7px;color:var(--muted);font-size:12px}
+.pcard.pick{outline:3px solid var(--accent);outline-offset:-3px}
+.pghost{position:fixed;z-index:80;pointer-events:none;width:132px;opacity:.92;transform:translate(-50%,-50%) rotate(-3deg);box-shadow:0 12px 28px rgba(0,0,0,.35)}
+body.dragging,body.dragging *{cursor:grabbing!important;user-select:none}
+.phint{font-size:12px;color:var(--muted)}
+.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0 10px}
+.pnav .wk{font-weight:700;min-width:140px;text-align:center}
+.pnav .seg{margin-left:auto}
+.ptabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}
+.ptabs button{flex:1 1 0;min-width:40px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:6px 4px;cursor:pointer;font-weight:700;display:flex;flex-direction:column;align-items:center;font-size:13px}
+.ptabs button small{font-weight:400;color:var(--muted)}
+.ptabs button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ptabs button.on small{color:inherit}
+.ptimes{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:13px}
+.ptimes .cpick{padding:4px 10px;font-size:13px}
+.psum{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+.pdays{display:grid;gap:12px}
+.pday{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px;align-content:start;min-width:0}
+.pday.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pdt{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}
+.pdt b{font-size:15px}
+.pdt small{color:var(--muted);font-size:12px;white-space:nowrap}
+.ptoday{font-size:11px;background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:1px 7px;margin-left:4px;font-weight:700}
+.pbar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:5px}
+.pbar i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.pbar.ok i{background:#3c9a5f}
+.pbar.over i{background:#c0392b}
+.pslot{border:1.5px dashed var(--line);border-radius:10px;padding:6px;min-height:54px;display:flex;flex-direction:column;gap:5px;min-width:0;transition:background .15s,border-color .15s}
+.psl{font-size:12px;color:var(--muted);font-weight:700}
+body.picking .pslot{border-color:var(--accent);cursor:copy}
+.pslot.hov,body.picking .pslot:hover{border-color:var(--accent);border-style:solid;background:var(--soft)}
+.pchip{display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:8px;padding:5px 6px;min-width:0}
+.pci{flex:0 0 30px;width:30px;height:30px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--surface);font-size:16px}
+.pci img{width:100%;height:100%;object-fit:cover;display:block}
+.pct{flex:1;min-width:0;line-height:1.2}
+.pct b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.pct small{color:var(--muted);font-size:11px}
+.pcb{display:flex;align-items:center;gap:2px;font-size:12px;flex:none}
+.pcb button{width:22px;height:22px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);cursor:pointer;font-size:13px;line-height:1;padding:0}
+@media (min-width:900px){
+  .pdays.week{grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 8px}
+  .pdays.week .pday{grid-row:span var(--rr);grid-template-rows:subgrid;padding:8px}
+  .pdays.week .pchip{flex-wrap:wrap;row-gap:3px}
+  .pdays.week .pct{flex-basis:calc(100% - 40px)}
+  .pdays.week .pcb{margin-left:auto}
+  .pdays.day{max-width:640px}
+}
+@media (min-width:900px) and (max-width:1250px){.pdays.week .pci{display:none}}
 .hidden{display:none}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="theme" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="set">Settings</button><button class="btn" id="lock" aria-label="Google connection settings" style="display:inline-flex;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add"><span class="lg">Add recipe</span><span class="sm">+ Add</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="theme" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" aria-label="Meal plan"><span class="lg">Meal plan</span><span class="sm">📅</span></button><button class="btn" id="set">Settings</button><button class="btn" id="lock" aria-label="Google connection settings" style="display:inline-flex;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add"><span class="lg">Add recipe</span><span class="sm">+ Add</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div class="wrap">
   <div id="list">
     <div id="status" style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
@@ -237,6 +302,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
     <div id="grid" class="grid"></div>
   </div>
   <div id="view" class="hidden"></div>
+  <div id="plan" class="hidden"></div>
   <div id="json" class="hidden panel">
     <h3 class="sec">Recipes as JSON</h3>
     <p style="color:var(--muted);margin-top:0">This is all your data. You can edit it here and apply it, or copy it as a backup.</p>
@@ -288,8 +354,19 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   <button class="btn ghost" id="sout">Sign out</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <small style="color:var(--muted);text-align:center">Version 2026-10-28 j (calories)</small>
+  <small style="color:var(--muted);text-align:center">Version 2026-10-28 k (meal plan)</small>
   </div></div>
+<div id="profm" class="overlay hidden"><div class="dlg">
+  <h3 class="sec">Your daily calories</h3>
+  <p style="margin-top:0">Which category are you in? It sets a suggested daily calorie goal for your meal plan.</p>
+  <label>Sex</label><div class="seg" id="pf-sex"><button type="button" data-v="f">Female</button><button type="button" data-v="m">Male</button></div>
+  <label>Age</label><div class="seg" id="pf-age"><button type="button" data-v="19">19–30</button><button type="button" data-v="31">31–60</button><button type="button" data-v="61">61+</button></div>
+  <label>Activity</label><div class="seg" id="pf-act"><button type="button" data-v="s">Sedentary</button><button type="button" data-v="a">Active</button></div>
+  <label for="ptgt">Daily goal (kcal)</label><input type="number" id="ptgt" min="0" step="50">
+  <small id="prange" style="color:var(--muted)"></small>
+  <div class="actions"><button class="btn" id="psave">Save</button><button class="btn ghost" id="pcancel">Cancel</button></div>
+  <p style="font-size:12px;color:var(--muted);margin:12px 0 0">General guidance for adults (Healthline, Benenden). Everyone's needs differ; ask a health professional for personal advice.</p>
+</div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
   <label for="cid">Google OAuth Client ID</label><input type="text" id="cid">
@@ -313,7 +390,7 @@ function persist(){return true}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function updateTop(){$('top').classList.toggle('clear',document.body.classList.contains('rv')&&window.scrollY<60)}
 window.addEventListener('scroll',updateTop,{passive:true});
-function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
+function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 // Calorie estimate: [names, kcal per 100 g, grams per piece, grams per ml]
 var FOODS=[
@@ -392,6 +469,7 @@ function allCats(){var a=DEFCATS.map(function(x){return x[0]});recipes.forEach(f
 function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(c)+'</button>'}).join('')}
 function renderList(){
   renderCats();
+  if(document.body.classList.contains('pv')&&$('pcar')){renderPlanCar();renderPlanDays()}
   var q=$('search').value.toLowerCase().trim();
   var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catSel.length||(r.cats||[]).some(function(c){return catSel.indexOf(c)>-1}))&&(!q||(r.name+' '+r.ings.join(' ')).toLowerCase().indexOf(q)>-1)});
   if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
@@ -401,6 +479,115 @@ function renderList(){
 }
 $('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
 $('search').oninput=renderList;
+
+// ---- Meal planner (saved in this browser) ----
+var SLOTS=[['em','Early morning','06:30'],['b','Breakfast','08:00'],['ms','Morning snack','10:30'],['l','Lunch','13:00'],['as','Afternoon snack','16:30'],['d','Dinner','19:30'],['es','Evening snack','21:30']];
+var DAYN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+// kcal per day by sex+age group: [sedentary low, sedentary high, active]
+var GOALS={f19:[1800,2000,2400],f31:[1600,1600,2200],f61:[1600,1600,2200],m19:[2200,2400,3000],m31:[2200,2400,3000],m61:[2000,2000,2600]};
+function jget(k,d){try{var v=JSON.parse(lsGet(k,''));return v==null?d:v}catch(e){return d}}
+function monday(d){d=new Date(d);d.setHours(0,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7);return d}
+var plan=jget('rb-plan',{}),prof=jget('rb-prof',null),slotsOn=jget('rb-slots',['b','l','d']),planMode=lsGet('rb-pmode','week'),
+  planWeek=monday(new Date()),planDay=(new Date().getDay()+6)%7,pick=null,pf={};
+function pad2(n){return (n<10?'0':'')+n}
+function dkey(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())}
+function pday(i){var d=new Date(planWeek);d.setDate(d.getDate()+i);return d}
+function fmtD(d){return d.getDate()+' '+MON[d.getMonth()]}
+function nf(n){return Math.round(n).toLocaleString()}
+function savePlan(){lsSet('rb-plan',JSON.stringify(plan))}
+function recById(id){return recipes.find(function(x){return x.id===id})}
+function portionKcal(r){var c=recipeKcal(r);return c.k?Math.round(c.k/(+r.serv||1)):0}
+function dayTotal(k){var t=0,d=plan[k]||{};Object.keys(d).forEach(function(s){d[s].forEach(function(m){var r=recById(m.id);if(r)t+=portionKcal(r)*m.p})});return t}
+function goal(){return prof&&+prof.target||0}
+function goalRange(p){var g=GOALS[p.sex+p.age];return p.act==='a'?[g[2],g[2]]:[g[0],g[1]]}
+function addMeal(k,s,id){plan[k]=plan[k]||{};(plan[k][s]=plan[k][s]||[]).push({id:id,p:1});savePlan();renderPlanDays()}
+function cleanDay(k){var d=plan[k];if(!d)return;Object.keys(d).forEach(function(s){if(!d[s].length)delete d[s]});if(!Object.keys(d).length)delete plan[k]}
+function setPick(id){pick=id;document.body.classList.toggle('picking',!!id);if($('pcar'))$('pcar').querySelectorAll('.pcard').forEach(function(x){x.classList.toggle('pick',x.dataset.id===id)})}
+
+function renderPlan(){var g=goal();
+  $('plan').innerHTML='<div class="phead"><h2>Meal plan</h2><div class="pgoal">🎯 '+(g?'Daily goal <b>'+nf(g)+' kcal</b>':'No daily goal yet')+
+    ' <button type="button" class="btn ghost btn-s" data-a="prof">'+(g?'Change':'Set my goal')+'</button></div></div>'+
+    '<div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="Search dishes" aria-label="Search dishes"><div class="pcar" id="pcar"></div>'+
+    '<div class="phint">Drag a dish onto a meal, or tap a dish and then tap a meal.</div></div><div id="pctl"></div><div id="pdays"></div>';
+  $('pcarw').style.top=$('top').offsetHeight+'px';
+  renderPlanCar();renderPlanDays()}
+function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
+  var list=recipes.slice().sort(function(a,b){return a.name.localeCompare(b.name)}).filter(function(r){return !q||r.name.toLowerCase().indexOf(q)>-1});
+  $('pcar').innerHTML=list.length?list.map(function(r){var im=imgs(r)[0],k=portionKcal(r);
+    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false">':'🍝')+'</span><b>'+esc(r.name)+'</b><small>'+(k?nf(k)+' kcal / portion':'kcal unknown')+'</small></button>'}).join('')
+    :'<div class="phint" style="padding:16px">'+(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
+function renderPlanDays(){
+  var days=planMode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
+  var shown=SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})});
+  var tots=[0,1,2,3,4,5,6].map(function(i){return dayTotal(dkey(pday(i)))}),used=tots.filter(function(t){return t>0});
+  $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="Previous week">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
+    '<button type="button" class="ibtn" data-a="next" aria-label="Next week">›</button><button type="button" class="btn ghost btn-s" data-a="today">This week</button>'+
+    '<button type="button" class="btn ghost btn-s" data-a="clear">Clear week</button>'+
+    '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>Day</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>Week</button></span></div>'+
+    (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
+    '<div class="ptimes"><span>Meal times:</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+s[1]+'</button>'}).join('')+'</div>'+
+    (used.length?'<div class="psum">This week: '+used.length+' day'+(used.length>1?'s':'')+' planned · average '+nf(used.reduce(function(a,b){return a+b},0)/used.length)+' kcal a day</div>':'');
+  var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);
+  pd.innerHTML=days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
+    return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">Today</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
+      (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
+      shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
+        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+s[1]+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&imgs(r)[0];
+          return '<div class="pchip" data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?r.name:'Removed recipe')+'</b><small>'+(pk?nf(pk*m.p)+' kcal':'kcal unknown')+'</small></span>'+
+            '<span class="pcb"><button type="button" data-a="minus" aria-label="Fewer portions">−</button><span title="Portions">'+m.p+'</span><button type="button" data-a="plus" aria-label="More portions">+</button><button type="button" data-a="del" aria-label="Remove from plan">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
+
+$('plan').onclick=function(e){if(pdJust)return;
+  var c=e.target.closest('.pcard');if(c){setPick(pick===c.dataset.id?null:c.dataset.id);return}
+  var b=e.target.closest('[data-a]');
+  if(b){var a=b.dataset.a,ch=b.closest('.pchip');
+    if(ch){var k=ch.dataset.k,arr=plan[k][ch.dataset.s],j=+ch.dataset.j;
+      if(a==='plus')arr[j].p+=.5;else if(a==='minus'){if(arr[j].p>.5)arr[j].p-=.5}else if(a==='del')arr.splice(j,1);
+      cleanDay(k);savePlan();renderPlanDays();return}
+    if(a==='prof'){openProf();return}
+    if(a==='prev'||a==='next')planWeek.setDate(planWeek.getDate()+(a==='prev'?-7:7));
+    else if(a==='today'){planWeek=monday(new Date());planDay=(new Date().getDay()+6)%7}
+    else if(a==='mode'){planMode=b.dataset.m;lsSet('rb-pmode',planMode)}
+    else if(a==='day')planDay=+b.dataset.i;
+    else if(a==='slot'){var i=slotsOn.indexOf(b.dataset.s);if(i>-1)slotsOn.splice(i,1);else slotsOn.push(b.dataset.s);lsSet('rb-slots',JSON.stringify(slotsOn))}
+    else if(a==='clear'){if(!confirm('Remove all meals from this week?'))return;for(var d=0;d<7;d++)delete plan[dkey(pday(d))];savePlan()}
+    renderPlanDays();return}
+  var sl=e.target.closest('.pslot');if(sl&&pick){var id=pick;setPick(null);addMeal(sl.dataset.k,sl.dataset.s,id)}};
+$('plan').oninput=function(e){if(e.target.id==='psearch')renderPlanCar()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pick)setPick(null)});
+
+// Drag a dish card onto a meal. On touch screens a sideways swipe scrolls the carousel instead.
+var pdrag=null,pdJust=false,pdTimer=null;
+$('plan').addEventListener('pointerdown',function(e){var c=e.target.closest('.pcard');if(!c||e.button>0)return;
+  pdrag={id:c.dataset.id,el:c,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,t:e.pointerType,mode:'',sl:$('pcar').scrollLeft}});
+window.addEventListener('pointermove',function(e){if(!pdrag)return;var dx=e.clientX-pdrag.x,dy=e.clientY-pdrag.y;
+  if(!pdrag.mode){if(Math.abs(dx)<6&&Math.abs(dy)<6)return;
+    pdrag.mode=pdrag.t!=='mouse'&&Math.abs(dx)>Math.abs(dy)?'scroll':'drag';
+    if(pdrag.mode==='drag'){pdrag.gh=pdrag.el.cloneNode(true);pdrag.gh.classList.add('pghost');pdrag.gh.classList.remove('pick');document.body.appendChild(pdrag.gh);document.body.classList.add('dragging');pdTimer=setInterval(pdAuto,30)}}
+  if(pdrag.mode==='scroll'){$('pcar').scrollLeft=pdrag.sl-dx;return}
+  pdrag.cx=e.clientX;pdrag.cy=e.clientY;pdrag.gh.style.left=e.clientX+'px';pdrag.gh.style.top=e.clientY+'px';pdHover()});
+function pdSlot(d){var el=document.elementFromPoint(d.cx,d.cy);return el&&el.closest('.pslot')}
+function pdHover(){var s=pdSlot(pdrag);document.querySelectorAll('.pslot.hov').forEach(function(x){if(x!==s)x.classList.remove('hov')});if(s)s.classList.add('hov')}
+function pdAuto(){if(!pdrag)return;var b=$('pcarw').getBoundingClientRect().bottom,y=pdrag.cy;
+  if(y>innerHeight-70)window.scrollBy(0,14);else if(y>b&&y<b+50)window.scrollBy(0,-14);else return;pdHover()}
+function pdEnd(drop){if(!pdrag)return;clearInterval(pdTimer);var d=pdrag;pdrag=null;
+  if(d.mode){pdJust=true;setTimeout(function(){pdJust=false},60)}
+  if(d.mode!=='drag')return;
+  var s=drop&&pdSlot(d);d.gh.remove();document.body.classList.remove('dragging');document.querySelectorAll('.pslot.hov').forEach(function(x){x.classList.remove('hov')});
+  if(s){setPick(null);addMeal(s.dataset.k,s.dataset.s,d.id)}}
+window.addEventListener('pointerup',function(){pdEnd(true)});
+window.addEventListener('pointercancel',function(){pdEnd(false)});
+
+function openProf(){pf=prof?Object.assign({},prof):{};$('ptgt').value=prof&&prof.target||'';paintProf();$('profm').classList.remove('hidden')}
+function paintProf(){['sex','age','act'].forEach(function(f){$('pf-'+f).querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.v===pf[f])})});
+  var r=pf.sex&&pf.age&&pf.act?goalRange(pf):null;
+  $('prange').textContent=r?'Suggested for you: '+(r[0]===r[1]?'about '+nf(r[0]):nf(r[0])+'–'+nf(r[1]))+' kcal a day. You can type your own goal.':'Choose your category to see a suggestion.'}
+$('profm').onclick=function(e){var b=e.target.closest('.seg button');if(!b)return;pf[b.parentNode.id.slice(3)]=b.dataset.v;paintProf();
+  if(pf.sex&&pf.age&&pf.act){var r=goalRange(pf);$('ptgt').value=Math.round((r[0]+r[1])/2)}};
+$('psave').onclick=function(){var t=+$('ptgt').value;if(!t){alert('Choose your category or type a daily goal.');return}
+  pf.target=t;prof=pf;lsSet('rb-prof',JSON.stringify(prof));$('profm').classList.add('hidden');renderPlan()};
+$('pcancel').onclick=function(){$('profm').classList.add('hidden')};
+$('planbtn').onclick=function(){setPick(null);show('plan');renderPlan();if(!prof)openProf()};
+document.querySelector('.top h1').onclick=function(){show('list')};
 
 var feedSel='same',feedCol=lsGet('rb-fcol','')==='1';
 function setFeedCol(v){feedCol=v;lsSet('rb-fcol',v?'1':'');document.body.classList.toggle('fcol',v)}
