@@ -64,6 +64,8 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .card .t{padding:10px 12px 12px}
 .card h3{margin:0;font-size:16px}
 .card p{margin:2px 0 0;color:var(--muted);font-size:13px}
+/* Phones: two smaller recipe cards per row */
+@media (max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card .ph{font-size:30px}.card .t{padding:8px 9px 9px}.card h3{font-size:14px;line-height:1.25}.card p{font-size:12px}}
 .empty{text-align:center;color:var(--muted);padding:48px 12px}
 .grid>.empty{grid-column:1/-1}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
@@ -490,7 +492,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zza (content waits for the logo)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zzb (two recipes per row on phones)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
