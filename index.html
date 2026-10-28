@@ -325,7 +325,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   .pdays.week .pday{grid-row:span var(--rr);grid-template-rows:subgrid;padding:8px}
   .pdays.week .pci{display:none}
 }
-/* Big screens: the dishes scroll down on the left, the plan is a table on the right (days down, meals across) */
+/* Big screens: the dishes scroll down on the left, the plan is a table on the right (days across, meals down) */
 @media (min-width:1100px){
   .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-areas:"ctl ctl" "car days";column-gap:22px;align-items:start}
   #pctl{grid-area:ctl}
@@ -342,18 +342,30 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   .pcard small{padding-bottom:0}
   .pghost{width:250px}
   .phint{margin-top:6px}
-  .pdays.week{grid-template-columns:128px repeat(var(--nc),minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
-  .pdays.week .phr{display:grid;grid-column:1/-1;grid-template-columns:subgrid;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:14px;text-align:center}
-  .phr span{padding:9px 6px;border-left:1px solid rgba(0,0,0,.1)}
-  .phr span:first-child{border-left:0}
-  .phr small{display:block;font-weight:400;font-size:11px;opacity:.75}
-  .pdays.week .pday{grid-column:1/-1;grid-template-columns:subgrid;gap:0;padding:0;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none}
-  .pdays.week .pdh{padding:10px;background:var(--soft);display:flex;flex-direction:column;justify-content:center}
-  .pdays.week .pday.today .pdh{box-shadow:inset 4px 0 0 var(--accent)}
+  #pctl{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-items:center}
+  #pctl .ptimes{grid-row:1;grid-column:1;margin:0 0 10px}
+  #pctl .pnav{grid-row:1;grid-column:2;margin:0 0 10px;justify-content:flex-end}
+  #pctl .pnav .seg{margin-left:6px}
+  #pctl .ptabs,#pctl .psum{grid-column:1/-1}
+  .pdays.week{grid-template-columns:118px repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .pdays.week .phr{display:grid;grid-row:1/-1;grid-template-rows:subgrid;background:var(--soft);font-weight:700;font-size:14px}
+  .phr span{padding:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+  .phr span:first-child{border-top:0;background:var(--accent)}
+  .phr small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+  .pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;gap:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none}
+  .pdays.week .pdh{padding:10px 8px;background:var(--accent);color:var(--accent-ink)}
   .pdays.week .pdt{flex-direction:column;align-items:flex-start;gap:2px}
-  .pdays.week .pslot{border:0;border-left:1px solid var(--line);border-radius:0;min-height:64px}
+  .pdays.week .pdt small{color:inherit;opacity:.75}
+  .pdays.week .pday.today .pdh{box-shadow:inset 0 -4px 0 var(--accent-ink)}
+  .pdays.week .pdh .ptoday{background:var(--accent-ink);color:var(--accent)}
+  .pdays.week .pdh .pbar{background:rgba(0,0,0,.15)}
+  .pdays.week .pdh .pbar i{background:var(--accent-ink)}
+  .pdays.week .pdh .pbar.ok i{background:#2e7d4b}
+  .pdays.week .pdh .pbar.over i{background:#b03021}
+  .pdays.week .pslot{border:0;border-top:1px solid var(--line);border-radius:0;min-height:72px}
   .pdays.week .psl{display:none}
 }
+@media (min-width:1100px) and (max-width:1400px){.pdays.week .pci{display:none}}
 .hidden{display:none}
 </style>
 </head>
@@ -433,7 +445,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 t (floating export buttons)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 u (days across the plan)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -782,7 +794,7 @@ function renderPlanDays(){
     '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
     (used.length?'<div class="psum">'+tr(used.length>1?'This week: {n} days planned · average {k} kcal a day':'This week: {n} day planned · average {k} kcal a day',{n:used.length,k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'</div>':'');
   var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);pd.style.setProperty('--nc',shown.length);
-  pd.innerHTML=(planMode==='week'?'<div class="phr"><span>'+tr('Day')+'</span>'+shown.map(function(s){return '<span>'+tr(s[1])+'<small>'+s[2]+'</small></span>'}).join('')+'</div>':'')+days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
+  pd.innerHTML=(planMode==='week'?'<div class="phr"><span></span>'+shown.map(function(s){return '<span>'+tr(s[1])+'<small>'+s[2]+'</small></span>'}).join('')+'</div>':'')+days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
     return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">'+tr('Today')+'</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
