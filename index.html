@@ -307,9 +307,13 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .pcb{display:flex;align-items:center;gap:2px;font-size:12px;flex:none}
 .pcb button{width:22px;height:22px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);cursor:pointer;font-size:13px;line-height:1;padding:0}
 .pcx{display:block;min-width:0}
-.pmain{min-width:0}
 .phr{display:none}
-.pexp{display:flex;flex-wrap:wrap;gap:6px}
+#plan{padding-bottom:84px}
+.pfab{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.pfab button{display:flex;align-items:center;height:50px;min-width:50px;padding:0 15px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:14px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
+.pfab svg{flex:none}
+.pfab .lbl{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .25s,margin .25s}
+.pfab button:hover .lbl,.pfab button:focus-visible .lbl{max-width:220px;margin-left:8px}
 @media (min-width:900px){
   .pdays.week .pchip{flex-wrap:wrap;row-gap:3px}
   .pdays.week .pct{flex-basis:calc(100% - 40px)}
@@ -323,7 +327,12 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 }
 /* Big screens: the dishes scroll down on the left, the plan is a table on the right (days down, meals across) */
 @media (min-width:1100px){
-  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;align-items:start}
+  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-areas:"ctl ctl" "car days";column-gap:22px;align-items:start}
+  #pctl{grid-area:ctl}
+  .pcarw{grid-area:car}
+  #pdays{grid-area:days;min-width:0}
+  .pfab{right:28px;bottom:28px}
+  .pfab button{height:58px;min-width:58px;padding:0 18px;font-size:15px}
   .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
   .pcar{flex-direction:column;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 2px 2px;gap:8px}
   .pcard{flex:none;flex-direction:row;align-items:center}
@@ -424,7 +433,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 s (meal plan PDF + calendar)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 t (floating export buttons)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -750,7 +759,9 @@ function renderPlan(){var g=goal();
   $('plan').innerHTML='<div class="phead"><h2>'+tr('Meal plan')+'</h2><div class="pgoal">🎯 '+(g?tr('Daily goal')+' <b>'+nf(g)+' kcal</b>':tr('No daily goal yet'))+
     ' <button type="button" class="btn ghost btn-s" data-a="prof">'+tr(g?'Change':'Set my goal')+'</button></div></div>'+
     '<div class="pwrap"><div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="'+tr('Search dishes')+'" aria-label="'+tr('Search dishes')+'"><div class="pcar" id="pcar"></div>'+
-    '<div class="phint">'+tr('Drag a dish onto a meal, or tap a dish and then tap a meal.')+'</div></div><div class="pmain"><div id="pctl"></div><div id="pdays"></div></div></div>';
+    '<div class="phint">'+tr('Drag a dish onto a meal, or tap a dish and then tap a meal.')+'</div></div><div id="pctl"></div><div id="pdays"></div></div>'+
+    '<div class="pfab"><button type="button" data-a="ics" title="'+tr('Add to calendar')+'" aria-label="'+tr('Add to calendar')+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg><span class="lbl">'+tr('Add to calendar')+'</span></button>'+
+    '<button type="button" data-a="pdf" title="'+tr('Download PDF')+'" aria-label="'+tr('Download PDF')+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">'+tr('Download PDF')+'</span></button></div>';
   $('pcarw').style.top=$('top').offsetHeight+'px';
   renderPlanCar();renderPlanDays()}
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
@@ -766,7 +777,6 @@ function renderPlanDays(){
   $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="'+tr('Previous week')+'">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
     '<button type="button" class="ibtn" data-a="next" aria-label="'+tr('Next week')+'">›</button><button type="button" class="btn ghost btn-s" data-a="today">'+tr('This week')+'</button>'+
     '<button type="button" class="btn ghost btn-s" data-a="clear">'+tr('Clear week')+'</button>'+
-    '<span class="pexp"><button type="button" class="btn btn-s" data-a="pdf">⬇ '+tr('Download PDF')+'</button><button type="button" class="btn btn-s" data-a="ics">📅 '+tr('Add to calendar')+'</button></span>'+
     '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span></div>'+
     (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
     '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
@@ -829,7 +839,8 @@ function planEmpty(){for(var i=0;i<7;i++)if(plan[dkey(pday(i))])return false;ret
 function loadJs(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 function dataUrl(u){return fetch(u).then(function(r){return r.blob()}).then(function(b){return new Promise(function(ok){var f=new FileReader();f.onload=function(){ok(f.result)};f.readAsDataURL(b)})})}
 function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=recById(m.id),pk=r?portionKcal(r):0;
-  return {n:(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):''),k:pk?nf(pk*m.p)+' kcal':''}})}
+  return {n:(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):''),k:pk?nf(pk*m.p)+' kcal':'',
+    i:r?(rt(r).ings||[]).map(function(x){return scale(x,m.p/(+r.serv||1))}):[]}})}
 function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
   Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/icon-192.png').catch(function(){return null})]).then(function(a){
     var logo=a[1],doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=12,y=0;
@@ -868,7 +879,7 @@ function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));r
     doc.save('meal-plan-'+keys[0]+'.pdf')
   }).catch(function(){alert(tr('Could not create the PDF. Check your internet connection.'))})}
 function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n')}
-function icsFold(l){var o='';while(l.length>70){o+=l.slice(0,70)+'\r\n ';l=l.slice(70)}return o+l}
+function icsFold(l){var o='',n;while(l.length>70){n=l.charAt(69)==='\\'?69:70;o+=l.slice(0,n)+'\r\n ';l=l.slice(n)}return o+l}
 function planIcs(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
   var g=goal(),now=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',
     L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Gigi Cook Book//Meal plan//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:'+icsEsc(tr('Meal plan'))];
@@ -878,7 +889,7 @@ function planIcs(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));r
       function ts(x){return dkey(x).replace(/-/g,'')+'T'+pad2(x.getHours())+pad2(x.getMinutes())+'00'}
       L.push('BEGIN:VEVENT','UID:'+k+'-'+s[0]+'@gizi28.github.io','DTSTAMP:'+now,'DTSTART:'+ts(st),'DTEND:'+ts(en),
         'SUMMARY:'+icsEsc(tr(s[1])+': '+ms.map(function(m){return m.n}).join(', ')),
-        'DESCRIPTION:'+icsEsc(ms.map(function(m){return '• '+m.n+(m.k?' – '+m.k:'')}).join('\n')+'\n\n'+tr('Day total: {k} kcal',{k:nf(tot)})+(g?' / '+nf(g):'')),'END:VEVENT')})}
+        'DESCRIPTION:'+icsEsc(ms.map(function(m){return '• '+m.n+(m.k?' – '+m.k:'')+(m.i.length?'\n'+tr('Ingredients')+':\n'+m.i.map(function(x){return '  - '+x}).join('\n'):'')}).join('\n\n')+'\n\n'+tr('Day total: {k} kcal',{k:nf(tot)})+(g?' / '+nf(g):'')),'END:VEVENT')})}
   L.push('END:VCALENDAR');
   download('meal-plan-'+dkey(pday(0))+'.ics',L.map(icsFold).join('\r\n')+'\r\n','text/calendar')}
 
