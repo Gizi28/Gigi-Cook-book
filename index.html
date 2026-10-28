@@ -32,7 +32,7 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .ltools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .top h1{cursor:pointer}
 .top #theme{padding:10px 12px;line-height:1}
-@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -45,6 +45,7 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .card h3{margin:0;font-size:16px}
 .card p{margin:2px 0 0;color:var(--muted);font-size:13px}
 .empty{text-align:center;color:var(--muted);padding:48px 12px}
+.grid>.empty{grid-column:1/-1}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
 .hero{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;display:block}
 .hero.none{background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:64px}
@@ -228,6 +229,19 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
 .dlg{width:100%;max-width:380px;background:var(--surface);border-radius:14px;padding:18px}
 .gate{background:var(--bg);z-index:60}
 #lockm{z-index:70}
+/* Account icon and menu */
+#me{width:38px;height:38px;padding:0;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;flex:none}
+#me img{width:100%;height:100%;object-fit:cover;display:block}
+#me.in{box-shadow:0 0 0 2px var(--accent),0 0 0 4px #3c9a5f}
+.mei{font-weight:700;font-size:16px;line-height:1}
+.memenu{position:fixed;z-index:65;right:12px;width:min(290px,calc(100vw - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.28);padding:14px;display:grid;gap:10px}
+.mehd{display:flex;gap:10px;align-items:center;min-width:0}
+.mehd>span:last-child{min-width:0}
+.mehd b,.mehd small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mehd small{color:var(--muted);font-size:12px}
+.mav{flex:none;width:42px;height:42px;border-radius:50%;overflow:hidden;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center}
+.mav img{width:100%;height:100%;object-fit:cover}
+.mewarn{font-size:13px;background:var(--soft);border-radius:8px;padding:8px 10px}
 /* Meal planner */
 body.pv .wrap{max-width:1500px}
 .seg{display:inline-flex;border:1.5px solid var(--accent);border-radius:999px;overflow:hidden;vertical-align:middle}
@@ -296,7 +310,8 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><h1 data-t="My Recipe Book">My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><h1 data-t="My Recipe Book">My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div id="memenu" class="memenu hidden"></div>
 <div class="rhero lhero none" id="lhero"></div>
 <div class="wrap">
   <div id="list">
@@ -370,7 +385,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 p (recipe translation)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 q (account icon)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -431,6 +446,11 @@ var TR={fr:{
   "Translate recipes":"Traduire les recettes","Translating…":"Traduction…","Translating recipes: {i} of {n}…":"Traduction des recettes : {i} sur {n}…","All recipes are translated.":"Toutes les recettes sont traduites.",
   "Daily translation limit reached. Try again tomorrow.":"Limite quotidienne de traduction atteinte. Réessayez demain.","Translation failed; the original text is kept.":"La traduction a échoué ; le texte original est conservé.",
   "Translated automatically":"Traduit automatiquement","Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)":"E-mail pour le service de traduction (facultatif : fait passer la limite quotidienne de 5 000 à 50 000 caractères)",
+  "Account":"Compte","Signed in as":"Connecté en tant que","Not signed in":"Non connecté",
+  "This Google account cannot open the recipe folder. Ask for the Google Drive folder to be shared with {e}.":"Ce compte Google ne peut pas ouvrir le dossier des recettes. Demandez que le dossier Google Drive soit partagé avec {e}.",
+  "Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.":"Google a bloqué la connexion pour ce compte. Son adresse doit être ajoutée comme utilisateur test dans Google Cloud, ou l'application doit être publiée.",
+  "Pop-ups are blocked. Allow pop-ups for this site and try again.":"Les fenêtres pop-up sont bloquées. Autorisez-les pour ce site et réessayez.",
+  "The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.":"La fenêtre Google a été fermée. Si Google a affiché « Accès bloqué », cette adresse doit être ajoutée comme utilisateur test dans Google Cloud.",
   "Starter":"Entrée","Main course":"Plat principal","Dessert":"Dessert","Italian":"Italien","Peruvian":"Péruvien","Japanese":"Japonais","Other":"Autre"
 },es:{
   "My Recipe Book":"Mi libro de recetas","Meal plan":"Plan de comidas","Switch light or dark mode":"Modo claro u oscuro","Owner tools":"Herramientas de administración","Language":"Idioma",
@@ -474,6 +494,11 @@ var TR={fr:{
   "Translate recipes":"Traducir recetas","Translating…":"Traduciendo…","Translating recipes: {i} of {n}…":"Traduciendo recetas: {i} de {n}…","All recipes are translated.":"Todas las recetas están traducidas.",
   "Daily translation limit reached. Try again tomorrow.":"Se alcanzó el límite diario de traducción. Inténtalo mañana.","Translation failed; the original text is kept.":"La traducción falló; se mantiene el texto original.",
   "Translated automatically":"Traducido automáticamente","Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)":"Correo para el servicio de traducción (opcional: sube el límite diario de 5.000 a 50.000 caracteres)",
+  "Account":"Cuenta","Signed in as":"Sesión iniciada como","Not signed in":"Sin iniciar sesión",
+  "This Google account cannot open the recipe folder. Ask for the Google Drive folder to be shared with {e}.":"Esta cuenta de Google no puede abrir la carpeta de recetas. Pide que compartan la carpeta de Google Drive con {e}.",
+  "Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.":"Google bloqueó el inicio de sesión de esta cuenta. Hay que añadir su correo como usuario de prueba en Google Cloud o publicar la aplicación.",
+  "Pop-ups are blocked. Allow pop-ups for this site and try again.":"Las ventanas emergentes están bloqueadas. Permítelas para este sitio e inténtalo de nuevo.",
+  "The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.":"Se cerró la ventana de Google. Si Google mostró «Acceso bloqueado», hay que añadir este correo como usuario de prueba en Google Cloud.",
   "Starter":"Entrante","Main course":"Plato principal","Dessert":"Postre","Italian":"Italiana","Peruvian":"Peruana","Japanese":"Japonesa","Other":"Otros"
 }};
 var DAYS={en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],fr:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],es:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']};
@@ -489,7 +514,7 @@ function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;doc
   document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=tr(e.dataset.t)});
   document.querySelectorAll('[data-tp]').forEach(function(e){e.placeholder=tr(e.dataset.tp)});
   document.querySelectorAll('[data-ta]').forEach(function(e){e.setAttribute('aria-label',tr(e.dataset.ta))});
-  $('sign').textContent=tr(TOKEN?'Refresh from Drive':'Sign in with Google')}
+  $('sign').textContent=tr(TOKEN?'Refresh from Drive':'Sign in with Google');renderMe();if(!$('memenu').classList.contains('hidden'))renderMeMenu()}
 function updateTop(){var b=document.body.classList;$('top').classList.toggle('clear',(b.contains('rv')||b.contains('lv'))&&window.scrollY<60)}
 window.addEventListener('scroll',updateTop,{passive:true});
 function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
@@ -642,7 +667,7 @@ function renderList(){
   if(document.body.classList.contains('pv')&&$('pcar')){renderPlanCar();renderPlanDays()}
   var q=$('search').value.toLowerCase().trim();
   var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catSel.length||(r.cats||[]).some(function(c){return catSel.indexOf(c)>-1}))&&(!q||(r.name+' '+r.ings.join(' ')+' '+rt(r).name+' '+rt(r).ings.join(' ')).toLowerCase().indexOf(q)>-1)});
-  if(!items.length){$('grid').innerHTML='<div class="empty">'+tr(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
+  if(!items.length){$('grid').innerHTML='<div class="empty">'+tr(accessMsg&&!recipes.length?accessMsg:recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
     return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+pic(r,0,'md')+'" alt="" loading="lazy" decoding="async">':'🍝')+'</div><div class="t"><h3>'+esc(rt(r).name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(tr(r.diff||'Easy'))+'</p></div></button>'}).join('');
@@ -901,7 +926,7 @@ function status(s){var e=$('status');e.removeAttribute('data-t');e.textContent=s
 function strip(r){var o={};for(var k in r)if(k[0]!=='_')o[k]=r[k];return o}
 function api(url,opt){opt=opt||{};opt.headers=Object.assign({Authorization:'Bearer '+TOKEN},opt.headers||{});
   return fetch(url,opt).then(function(r){
-    if(r.status===401){TOKEN=null;try{sessionStorage.removeItem('rb-tok')}catch(e){}$('sign').textContent=tr('Sign in with Google');status(tr('Session expired. Sign in again.'));$('signm').classList.remove('hidden');throw new Error('auth')}
+    if(r.status===401){TOKEN=null;try{sessionStorage.removeItem('rb-tok')}catch(e){}$('sign').textContent=tr('Sign in with Google');ME=null;renderMe();status(tr('Session expired. Sign in again.'));$('signm').classList.remove('hidden');throw new Error('auth')}
     if(!r.ok)return r.text().then(function(t){throw new Error(r.status+' '+t)});return r})}
 function loadGsi(cb){if(window.google&&google.accounts){cb();return}
   var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.onload=cb;
@@ -914,9 +939,9 @@ function signIn(){
   $('gmsg').textContent='';
   loadGsi(function(){
     var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
-      callback:function(r){if(r.error){$('gmsg').textContent=tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
-        setToken(r);$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');checkOwner();refresh()},
-      error_callback:function(){$('gmsg').textContent=tr('Sign-in was closed or blocked. Allow pop-ups and try again.')}});
+      callback:function(r){if(r.error){$('gmsg').textContent=r.error==='access_denied'?tr('Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.'):tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
+        setToken(r);ME=null;$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');refresh()},
+      error_callback:function(err){$('gmsg').textContent=tr(err&&err.type==='popup_failed_to_open'?'Pop-ups are blocked. Allow pop-ups for this site and try again.':'The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.')}});
     tc.requestAccessToken({prompt:'',hint:em||undefined})})}
 var FOLDER_MIME='application/vnd.google-apps.folder';
 function slim(f){return {id:f.id,name:f.name}}
@@ -960,8 +985,11 @@ function hydrate(r){var fl=r._imgFiles||[];if(!fl.length)return;
   Promise.all(fl.map(function(f){return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSizes))}))
   .then(function(l){r._xs=l.map(function(x){return x[0]});r._imgs=l.map(function(x){return x[1]});r._lg=l.map(function(x){return x[2]});renderList()}).catch(function(){fl.forEach(function(f){delete imgCache[f.id]})})}
 function refresh(){
-  var root=cfgv().folder;status(tr('Loading from Drive…'));
-  listFiles("'"+root+"' in parents and trashed=false").then(function(rootFiles){
+  var root=cfgv().folder;status(tr('Loading from Drive…'));accessMsg='';
+  // Check the account can open the recipe folder first: otherwise Drive just returns an empty list
+  (ME?Promise.resolve():loadMe()).then(function(){return api('https://www.googleapis.com/drive/v3/files/'+root+'?fields=id&supportsAllDrives=true')
+    .catch(function(e){if(/^40[34]\b/.test(e.message))e.noAccess=true;throw e})})
+  .then(function(){return listFiles("'"+root+"' in parents and trashed=false")}).then(function(rootFiles){
     var folders=rootFiles.filter(function(f){return f.mimeType===FOLDER_MIME}),others=rootFiles.filter(function(f){return f.mimeType!==FOLDER_MIME});
     return Promise.all([Promise.all(folders.map(loadFolder)),loadLegacy(others)])
   }).then(function(res){
@@ -975,7 +1003,9 @@ function refresh(){
     var legacy=recipes.filter(function(r){return r._inRoot&&!r._multi});
     if(legacy.length){status(tr('Organizing {n} recipe(s) into folders…',{n:legacy.length}));
       return legacy.reduce(function(p,x){return p.then(function(){return migrate(x,root)})},Promise.resolve()).then(function(){status(tr('Synced: {n} recipe(s) from Drive',{n:recipes.length}))})}
-  }).catch(function(e){if(e.message!=='auth')status(tr('Could not load: {e}',{e:String(e.message).slice(0,140)}))})}
+  }).catch(function(e){if(e.message==='auth')return;
+    if(e.noAccess){accessMsg=tr('This Google account cannot open the recipe folder. Ask for the Google Drive folder to be shared with {e}.',{e:ME&&ME.email||'?'});recipes=[];renderList();status(accessMsg);return}
+    status(tr('Could not load: {e}',{e:String(e.message).slice(0,140)}))})}
 var imgCache={};
 function imgs(r){return (r._imgs||[]).concat(r.photos||[])}
 // Photo i of a recipe at a size that fits where it is shown: 'xs' thumbnails, 'md' cards and panels (default), 'lg' full-width heroes
@@ -1050,8 +1080,10 @@ $('sign').onclick=function(){TOKEN?refresh():signIn()};
 // Owner tools (padlock) are shown only when Google says the signed-in account is the owner.
 var OWNER='gisela.cookbook@gmail.com';
 function setOwner(me){lsSet('rb-owner',me?'1':'');$('lock').classList.toggle('hidden',!me);$('gcfgp').classList.toggle('hidden',!me)}
-function checkOwner(){api('https://www.googleapis.com/drive/v3/about?fields=user(emailAddress)').then(function(r){return r.json()})
-  .then(function(d){setOwner(((d.user&&d.user.emailAddress)||'').toLowerCase()===OWNER)}).catch(function(){})}
+// Who is signed in (name, email, photo), from Google Drive; also decides whether the padlock is shown
+function loadMe(){return api('https://www.googleapis.com/drive/v3/about?fields='+encodeURIComponent('user(displayName,emailAddress,photoLink)')).then(function(r){return r.json()})
+  .then(function(d){var u=d.user||{};ME={name:u.displayName||'',email:u.emailAddress||'',photo:u.photoLink||''};setOwner(ME.email.toLowerCase()===OWNER);renderMe()})
+  .catch(function(e){if(e.message==='auth')throw e})}
 $('gcfgp').classList.toggle('hidden',lsGet('rb-owner','')!=='1');
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('lockm').classList.add('hidden')});
 // Translate every recipe whose translations are missing or out of date, one at a time
@@ -1069,7 +1101,7 @@ $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim
 $('signbtn').onclick=function(){signIn()};
 $('gemail').onkeydown=function(e){if(e.key==='Enter')signIn()};
 $('gcfg').onclick=function(e){e.preventDefault();$('lock').onclick()};
-$('sout').onclick=function(){TOKEN=null;$('lock').classList.add('hidden');try{sessionStorage.removeItem('rb-tok')}catch(e){}recipes=[];renderList();$('sign').textContent=tr('Sign in with Google');$('signm').classList.remove('hidden')};
+$('sout').onclick=function(){TOKEN=null;ME=null;accessMsg='';renderMe();$('lock').classList.add('hidden');try{sessionStorage.removeItem('rb-tok')}catch(e){}recipes=[];renderList();$('sign').textContent=tr('Sign in with Google');$('signm').classList.remove('hidden')};
 $('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd=new FileReader();
   rd.onload=function(){var list;try{list=parseList(rd.result)}catch(e){alert(tr('This file is not a valid recipes JSON file.'));return}
     if(!TOKEN){alert(tr('Sign in with Google first.'));return}
@@ -1087,9 +1119,24 @@ $('lang').onchange=function(){LANG=this.value;lsSet('rb-lang',LANG);applyLang();
   if(b.contains('rv')&&viewId){var y=window.scrollY;openRecipe(viewId);window.scrollTo(0,y)}else if(b.contains('pv'))renderPlan();
   if(!$('form').classList.contains('hidden')){$('ftitle').textContent=tr(cur?'Edit recipe':'New recipe');renderCatPick()}
   if(!$('profm').classList.contains('hidden'))paintProf()};
+// ---- Account: person icon in the top bar showing who is signed in ----
+var ME=null,accessMsg='',PERSON='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+function meAvatar(){return ME.photo?'<img src="'+esc(ME.photo)+'" alt="" referrerpolicy="no-referrer">':'<span class="mei">'+esc((ME.name||ME.email||'?').charAt(0).toUpperCase())+'</span>'}
+function renderMe(){var b=$('me'),label=ME?tr('Signed in as')+' '+ME.email:tr('Not signed in');
+  b.innerHTML=ME?meAvatar():PERSON;b.classList.toggle('in',!!ME);b.title=label;b.setAttribute('aria-label',tr('Account')+': '+label)}
+function renderMeMenu(){var m=$('memenu');
+  m.innerHTML=ME?'<div class="mehd"><span class="mav">'+meAvatar()+'</span><span><small>'+tr('Signed in as')+'</small><b>'+esc(ME.name||ME.email)+'</b>'+(ME.name?'<small>'+esc(ME.email)+'</small>':'')+'</span></div>'+
+      (accessMsg?'<div class="mewarn">'+esc(accessMsg)+'</div>':'')+'<button type="button" class="btn ghost" id="meout">'+tr('Sign out')+'</button>'
+    :'<div class="mehd"><span class="mav">'+PERSON+'</span><b>'+tr('Not signed in')+'</b></div><button type="button" class="btn" id="mein">'+tr('Sign in with Google')+'</button>';
+  m.style.top=($('top').getBoundingClientRect().bottom+6)+'px'}
+$('me').onclick=function(e){e.stopPropagation();var m=$('memenu');if(m.classList.contains('hidden')){renderMeMenu();m.classList.remove('hidden')}else m.classList.add('hidden')};
+$('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein')return;$('memenu').classList.add('hidden');
+  if(id==='meout')$('sout').onclick();else $('signm').classList.remove('hidden')};
+document.addEventListener('click',function(){$('memenu').classList.add('hidden')});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('memenu').classList.add('hidden')});
 applyLang();load();renderList();updateTop();
 (function(){$('gemail').value=lsGet('rb-email','');
-  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent=tr('Refresh from Drive');checkOwner();refresh();return}}catch(e){}
+  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent=tr('Refresh from Drive');refresh();return}}catch(e){}
   $('signm').classList.remove('hidden')})();
 </script>
 </body>
