@@ -6,8 +6,8 @@
 <title>Gusto Cabinet</title>
 <meta name="theme-color" content="#f2b01e">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/gc-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/gc-apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gusto Cabinet">
@@ -478,7 +478,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zj (logo in the title colour)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zk (new app icon)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -908,7 +908,7 @@ function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=
   return {n:(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):''),k:pk?nf(pk*m.p)+' kcal':'',
     i:r?(rt(r).ings||[]).map(function(x){return scale(x,m.p/(+r.serv||1))}):[]}})}
 function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
-  Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/icon-192.png').catch(function(){return null})]).then(function(a){
+  Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/gc-192.png').catch(function(){return null})]).then(function(a){
     var logo=a[1],doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=12,y=0;
     var Y=[242,176,30],INK=[43,43,43],MUT=[125,120,110],CREAM=[253,243,216],PALE=[255,252,243],LINE=[230,222,200],OK=[60,154,95],OVER=[192,57,43];
     var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),g=goal(),dw=34,tw=28,cw=(W-2*M-dw-tw)/slots.length,LH=3.5;

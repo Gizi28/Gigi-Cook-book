@@ -1,8 +1,8 @@
 // Lets the recipe book be installed as an app and open without a connection.
 // The site's own files are always fetched fresh when online (so new versions show up at once);
 // the saved copies are only used offline. Google sign-in, Drive and translation requests are not touched.
-var CACHE='recipe-book-v3';
-var SHELL=['./','./index.html','./manifest.webmanifest','./icons/logo.png','./icons/icon-192.png','./icons/icon-512.png','./icons/maskable-512.png','./icons/apple-touch-icon.png'];
+var CACHE='recipe-book-v4';
+var SHELL=['./','./index.html','./manifest.webmanifest','./icons/logo.png','./icons/gc-192.png','./icons/gc-512.png','./icons/gc-maskable-512.png','./icons/gc-apple-touch-icon.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(SHELL)}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){
