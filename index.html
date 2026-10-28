@@ -307,30 +307,48 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .pcb{display:flex;align-items:center;gap:2px;font-size:12px;flex:none}
 .pcb button{width:22px;height:22px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);cursor:pointer;font-size:13px;line-height:1;padding:0}
 .pcx{display:block;min-width:0}
-.phr{display:none}
 #plan{padding-bottom:84px}
 .pfab{position:fixed;right:16px;bottom:16px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
 .pfab button{display:flex;align-items:center;height:50px;min-width:50px;padding:0 15px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:14px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
 .pfab svg{flex:none}
 .pfab .lbl{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .25s,margin .25s}
 .pfab button:hover .lbl,.pfab button:focus-visible .lbl{max-width:220px;margin-left:8px}
-@media (min-width:900px){
-  .pdays.week .pchip{flex-wrap:wrap;row-gap:3px}
-  .pdays.week .pct{flex-basis:calc(100% - 40px)}
-  .pdays.week .pcb{margin-left:auto}
-  .pdays.day{max-width:640px}
-}
-@media (min-width:900px) and (max-width:1099px){
-  .pdays.week{grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 8px}
-  .pdays.week .pday{grid-row:span var(--rr);grid-template-rows:subgrid;padding:8px}
-  .pdays.week .pci{display:none}
-}
-/* Big screens: the dishes scroll down on the left, the plan is a table on the right (days across, meals down) */
+/* Layout: on small screens the dishes are above the plan and the meal times below; on big screens the dishes move to the left */
+.pwrap{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"car" "nav" "sum" "tabs" "days" "times"}
+#pctl{display:contents}
+.pcarw{grid-area:car}
+#pdays{grid-area:days;min-width:0}
+#pctl .pnav{grid-area:nav}
+#pctl .psum{grid-area:sum}
+#pctl .ptabs{grid-area:tabs}
+#pctl .ptimes{grid-area:times;margin:14px 0 0}
+/* Week table: days across (scrolls sideways on small screens), meal times down */
+.pdays.week{grid-template-columns:96px repeat(7,minmax(150px,1fr));grid-template-rows:repeat(var(--rr),auto);gap:0;border:1px solid var(--line);border-radius:14px;overflow-x:auto;overscroll-behavior-x:contain;background:var(--surface)}
+.pdays.week .phr{display:grid;grid-row:1/-1;grid-template-rows:subgrid;background:var(--soft);font-weight:700;font-size:14px;position:sticky;left:0;z-index:2;border-right:1px solid var(--line)}
+.phr span{padding:10px 8px;border-top:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.phr span:first-child{border-top:0;background:var(--accent)}
+.phr small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;gap:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none}
+.pdays.week .phr+.pday{border-left:0}
+.pdays.week .pdh{padding:10px 8px;background:var(--accent);color:var(--accent-ink)}
+.pdays.week .pdt{flex-direction:column;align-items:flex-start;gap:2px}
+.pdays.week .pdt small{color:inherit;opacity:.75}
+.pdays.week .pday.today .pdh{box-shadow:inset 0 -4px 0 var(--accent-ink)}
+.pdays.week .pdh .ptoday{background:var(--accent-ink);color:var(--accent)}
+.pdays.week .pdh .pbar{background:rgba(0,0,0,.15)}
+.pdays.week .pdh .pbar i{background:var(--accent-ink)}
+.pdays.week .pdh .pbar.ok i{background:#2e7d4b}
+.pdays.week .pdh .pbar.over i{background:#b03021}
+.pdays.week .pslot{border:0;border-top:1px solid var(--line);border-radius:0;min-height:72px}
+.pdays.week .psl{display:none}
+.pdays.week .pchip{flex-wrap:wrap;row-gap:3px}
+.pdays.week .pct{flex-basis:calc(100% - 40px)}
+.pdays.week .pcb{margin-left:auto}
+@media (max-width:1400px){.pdays.week .pci{display:none}.pdays.week .pct{flex-basis:100%}}
+@media (min-width:900px){.pdays.day{max-width:640px}}
+/* Big screens: the dishes scroll down on the left */
 @media (min-width:1100px){
-  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". tabs" "car days" "car times";grid-template-rows:auto auto auto 1fr;column-gap:22px;align-items:start}
-  #pctl{display:contents}
-  .pcarw{grid-area:car}
-  #pdays{grid-area:days;min-width:0}
+  .pwrap{grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". tabs" "car days" "car times";grid-template-rows:auto auto auto 1fr;column-gap:22px;align-items:start}
   .pfab{right:28px;bottom:28px}
   .pfab button{height:58px;min-width:58px;padding:0 18px;font-size:15px}
   .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
@@ -342,30 +360,11 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   .pcard small{padding-bottom:0}
   .pghost{width:250px}
   .phint{margin-top:6px}
-  #pctl .pnav{grid-area:nav;margin:0 0 12px;justify-content:flex-end}
+  #pctl .pnav{margin:0 0 12px;justify-content:flex-end}
   #pctl .pnav .seg{margin-left:6px}
-  #pctl .psum{grid-area:sum;margin:0 0 12px;align-self:center}
-  #pctl .ptabs{grid-area:tabs}
-  #pctl .ptimes{grid-area:times;margin:14px 0 0}
-  .pdays.week{grid-template-columns:118px repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
-  .pdays.week .phr{display:grid;grid-row:1/-1;grid-template-rows:subgrid;background:var(--soft);font-weight:700;font-size:14px}
-  .phr span{padding:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
-  .phr span:first-child{border-top:0;background:var(--accent)}
-  .phr small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
-  .pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;gap:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none}
-  .pdays.week .pdh{padding:10px 8px;background:var(--accent);color:var(--accent-ink)}
-  .pdays.week .pdt{flex-direction:column;align-items:flex-start;gap:2px}
-  .pdays.week .pdt small{color:inherit;opacity:.75}
-  .pdays.week .pday.today .pdh{box-shadow:inset 0 -4px 0 var(--accent-ink)}
-  .pdays.week .pdh .ptoday{background:var(--accent-ink);color:var(--accent)}
-  .pdays.week .pdh .pbar{background:rgba(0,0,0,.15)}
-  .pdays.week .pdh .pbar i{background:var(--accent-ink)}
-  .pdays.week .pdh .pbar.ok i{background:#2e7d4b}
-  .pdays.week .pdh .pbar.over i{background:#b03021}
-  .pdays.week .pslot{border:0;border-top:1px solid var(--line);border-radius:0;min-height:72px}
-  .pdays.week .psl{display:none}
+  #pctl .psum{margin:0 0 12px;align-self:center}
+  .pdays.week{grid-template-columns:118px repeat(7,minmax(0,1fr))}
 }
-@media (min-width:1100px) and (max-width:1400px){.pdays.week .pci{display:none}}
 .hidden{display:none}
 </style>
 </head>
@@ -445,7 +444,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 v (meal times below the plan)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 w (phone plan table)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -775,7 +774,7 @@ function renderPlan(){var g=goal();
     '<div class="pfab"><button type="button" data-a="ics" title="'+tr('Add to calendar')+'" aria-label="'+tr('Add to calendar')+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg><span class="lbl">'+tr('Add to calendar')+'</span></button>'+
     '<button type="button" data-a="pdf" title="'+tr('Download PDF')+'" aria-label="'+tr('Download PDF')+'"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">'+tr('Download PDF')+'</span></button></div>';
   $('pcarw').style.top=$('top').offsetHeight+'px';
-  renderPlanCar();renderPlanDays()}
+  renderPlanCar();renderPlanDays();scrollToToday()}
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   var list=recipes.slice().sort(function(a,b){return rt(a).name.localeCompare(rt(b).name)}).filter(function(r){return !q||(r.name+' '+rt(r).name).toLowerCase().indexOf(q)>-1});
   $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
@@ -818,7 +817,7 @@ $('plan').onclick=function(e){if(pdJust)return;
     else if(a==='day')planDay=+b.dataset.i;
     else if(a==='slot'){var i=slotsOn.indexOf(b.dataset.s);if(i>-1)slotsOn.splice(i,1);else slotsOn.push(b.dataset.s);lsSet('rb-slots',JSON.stringify(slotsOn))}
     else if(a==='clear'){if(!confirm(tr('Remove all meals from this week?')))return;for(var d=0;d<7;d++)delete plan[dkey(pday(d))];savePlan()}
-    renderPlanDays();return}
+    renderPlanDays();if(a==='prev'||a==='next'||a==='today'||a==='mode')scrollToToday();return}
   var sl=e.target.closest('.pslot');if(sl&&pick){var id=pick;setPick(null);addMeal(sl.dataset.k,sl.dataset.s,id)}};
 $('plan').oninput=function(e){if(e.target.id==='psearch')renderPlanCar()};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pick)setPick(null)});
@@ -836,8 +835,12 @@ window.addEventListener('pointermove',function(e){if(!pdrag)return;var dx=e.clie
   pdrag.cx=e.clientX;pdrag.cy=e.clientY;pdrag.gh.style.left=e.clientX+'px';pdrag.gh.style.top=e.clientY+'px';pdHover()});
 function pdSlot(d){var el=document.elementFromPoint(d.cx,d.cy);return el&&el.closest('.pslot')}
 function pdHover(){var s=pdSlot(pdrag);document.querySelectorAll('.pslot.hov').forEach(function(x){if(x!==s)x.classList.remove('hov')});if(s)s.classList.add('hov')}
-function pdAuto(){if(!pdrag)return;var b=pdrag.v?$('top').offsetHeight:$('pcarw').getBoundingClientRect().bottom,y=pdrag.cy;
-  if(y>innerHeight-70)window.scrollBy(0,14);else if(y>b&&y<b+50)window.scrollBy(0,-14);else return;pdHover()}
+function pdAuto(){if(!pdrag)return;var b=pdrag.v?$('top').offsetHeight:$('pcarw').getBoundingClientRect().bottom,y=pdrag.cy,x=pdrag.cx,pd=$('pdays'),pr=pd.getBoundingClientRect(),moved=false;
+  // near the sides of the week table, scroll the days sideways
+  if(pd.scrollWidth>pd.clientWidth&&y>pr.top&&y<pr.bottom){if(x>pr.right-40){pd.scrollLeft+=12;moved=true}else if(x<pr.left+136){pd.scrollLeft-=12;moved=true}}
+  if(y>innerHeight-70)window.scrollBy(0,14);else if(y>b&&y<b+50)window.scrollBy(0,-14);else if(!moved)return;pdHover()}
+function scrollToToday(){var pd=$('pdays'),td=pd.querySelector('.pday.today'),h=pd.querySelector('.phr');
+  pd.scrollLeft=td&&h?td.getBoundingClientRect().left-pd.getBoundingClientRect().left+pd.scrollLeft-h.offsetWidth:0}
 function pdEnd(drop){if(!pdrag)return;clearInterval(pdTimer);var d=pdrag;pdrag=null;
   if(d.mode){pdJust=true;setTimeout(function(){pdJust=false},60)}
   if(d.mode!=='drag')return;
