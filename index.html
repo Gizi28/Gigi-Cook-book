@@ -49,7 +49,10 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 @media (max-width:899px){.blogo{height:36px}.top h1{font-size:28px}}
 @media (max-width:700px){.top .lg{display:none}.top .sm{display:inline}}
 #tside{display:contents}
-#lang{order:1}#theme{order:2}#planbtn{order:3}#lock{order:4}#add{order:5}#me{order:6}
+#lang{order:1}#theme{order:2}#planbtn{order:3}#lock{order:4}#add{order:5}#share{order:6}#me{order:7}
+#share{display:inline-flex;align-items:center;justify-content:center;padding:10px 12px;line-height:1}
+@media (max-width:520px){body.pv #tbtns #share{display:none}}
+.toast{position:fixed;left:50%;bottom:96px;z-index:70;transform:translateX(-50%);background:var(--accent-ink);color:var(--accent);padding:10px 18px;border-radius:999px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none}
 .tslog{font-size:13px;line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top #theme{padding:10px 12px;line-height:1}
 @media (max-width:520px){.top{padding-left:12px;padding-right:12px}body.pv .top h1{font-size:17px!important;letter-spacing:0!important}.blogo{height:25px}.brand{gap:6px}.top h1{font-size:20px;letter-spacing:.02em;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
@@ -415,7 +418,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><div class="brand"><span class="blogo" role="img" aria-label="Gusto Cabinet"></span><div class="btxt"><h1 data-t="Gusto Cabinet">Gusto Cabinet</h1><span class="tslog" data-t="The gourmet notebook">The gourmet notebook</span></div></div><span id="tbtns" style="display:flex;gap:6px;flex-wrap:wrap"><span id="tside"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><div class="brand"><span class="blogo" role="img" aria-label="Gusto Cabinet"></span><div class="btxt"><h1 data-t="Gusto Cabinet">Gusto Cabinet</h1><span class="tslog" data-t="The gourmet notebook">The gourmet notebook</span></div></div><span id="tbtns" style="display:flex;gap:6px;flex-wrap:wrap"><span id="tside"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="share" data-ta="Share" aria-label="Share" title="Share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div id="memenu" class="memenu hidden"></div>
 <div class="rhero lhero none" id="lhero"></div>
 <div class="wrap">
@@ -491,8 +494,11 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="cid" data-t="Google OAuth Client ID">Google OAuth Client ID</label><input type="text" id="cid">
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
+  <h3 class="sec" style="margin-top:20px" data-t="Add a person">Add a person</h3>
+  <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
+  <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zzb (two recipes per row on phones)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zzc (share link and access requests)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -501,6 +507,14 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <input type="text" id="gemail" placeholder="you@gmail.com" inputmode="email" autocomplete="email" data-ta="Google email" aria-label="Google email">
   <button class="btn" id="signbtn" data-t="Sign in with Google" style="width:100%;margin-top:12px">Sign in with Google</button>
   <p id="gmsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
+  <p id="reqp" style="font-size:14px;margin:12px 0 0"><a href="#" id="reqlink" data-t="New here? Ask for access" style="color:var(--accent-text);font-weight:700">New here? Ask for access</a></p>
+  <div id="reqf" class="hidden" style="text-align:left;margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+    <p style="margin-top:0;font-size:14px" data-t="Gusto Cabinet is private. Send your Gmail address to Gisela and she will give you access.">Gusto Cabinet is private. Send your Gmail address to Gisela and she will give you access.</p>
+    <label for="reqmail" data-t="Your Gmail address">Your Gmail address</label><input type="text" id="reqmail" placeholder="you@gmail.com" inputmode="email" autocomplete="email">
+    <label for="reqname" data-t="Your name (optional)">Your name (optional)</label><input type="text" id="reqname" autocomplete="name">
+    <button class="btn" id="reqsend" data-t="Send the request" style="width:100%;margin-top:12px">Send the request</button>
+    <p id="reqmsg" style="font-size:13px;color:var(--muted);margin-bottom:0"></p>
+  </div>
   <p id="gcfgp" style="font-size:12px;margin:10px 0 0"><a href="#" id="gcfg" data-t="Connection settings" style="color:var(--muted)">Connection settings</a></p>
 </div></div>
 <script>
@@ -533,7 +547,14 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
-  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Menu":"Menu","Show or hide the menu":"Afficher ou masquer le menu","Back to all recipes":"Retour à toutes les recettes","Download PDF":"Télécharger le PDF","Add to calendar":"Ajouter au calendrier","Nothing planned this week yet.":"Rien n'est encore prévu cette semaine.",
+  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Menu":"Menu","Show or hide the menu":"Afficher ou masquer le menu","Back to all recipes":"Retour à toutes les recettes","Share":"Partager","Link copied":"Lien copié","Copy this link:":"Copiez ce lien :",
+  "New here? Ask for access":"Nouveau ici ? Demandez l'accès","Ask for access":"Demander l'accès","Your Gmail address":"Votre adresse Gmail","Your name (optional)":"Votre nom (facultatif)","Send the request":"Envoyer la demande",
+  "Gusto Cabinet is private. Send your Gmail address to Gisela and she will give you access.":"Gusto Cabinet est privé. Envoyez votre adresse Gmail à Gisela et elle vous donnera l'accès.",
+  "Please enter a Gmail address (ending in @gmail.com).":"Indiquez une adresse Gmail (se terminant par @gmail.com).","Access request for Gusto Cabinet":"Demande d'accès à Gusto Cabinet",
+  "Hello Gisela,\n\nI would like to use Gusto Cabinet. Could you give me access?\n\nName: {n}\nGmail address: {e}\n\nThank you!":"Bonjour Gisela,\n\nJ'aimerais utiliser Gusto Cabinet. Pourriez-vous me donner l'accès ?\n\nNom : {n}\nAdresse Gmail : {e}\n\nMerci !",
+  "Your email app opened with the request: press Send there. If nothing opened, write to {o} with your Gmail address.":"Votre messagerie s'est ouverte avec la demande : appuyez sur Envoyer. Si rien ne s'est ouvert, écrivez à {o} avec votre adresse Gmail.",
+  "Add a person":"Ajouter une personne","Open Test users":"Ouvrir les utilisateurs test","Open the recipe folder":"Ouvrir le dossier des recettes",
+  "When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.":"Quand quelqu'un demande l'accès, il vous faut son adresse Gmail. Ensuite : 1) ajoutez-la dans Utilisateurs test sur Google Cloud, 2) partagez le dossier des recettes dans Google Drive avec la même adresse.","Download PDF":"Télécharger le PDF","Add to calendar":"Ajouter au calendrier","Nothing planned this week yet.":"Rien n'est encore prévu cette semaine.",
   "Could not create the PDF. Check your internet connection.":"Impossible de créer le PDF. Vérifiez votre connexion internet.","Total":"Total","{p}% of goal":"{p} % de l'objectif",
   "Weekly average: {k} kcal a day":"Moyenne de la semaine : {k} kcal par jour","Calories are estimated from the ingredients.":"Les calories sont estimées à partir des ingrédients.","Day total: {k} kcal":"Total du jour : {k} kcal",
   "Clear week":"Vider la semaine","Day":"Jour","Week":"Semaine","Meal times:":"Repas :","This week: {n} day planned · average {k} kcal a day":"Cette semaine : {n} jour planifié · moyenne {k} kcal par jour",
@@ -585,7 +606,14 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
-  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Menu":"Menú","Show or hide the menu":"Mostrar u ocultar el menú","Back to all recipes":"Volver a todas las recetas","Download PDF":"Descargar PDF","Add to calendar":"Añadir al calendario","Nothing planned this week yet.":"Todavía no hay nada planificado esta semana.",
+  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Menu":"Menú","Show or hide the menu":"Mostrar u ocultar el menú","Back to all recipes":"Volver a todas las recetas","Share":"Compartir","Link copied":"Enlace copiado","Copy this link:":"Copia este enlace:",
+  "New here? Ask for access":"¿Eres nuevo? Pide acceso","Ask for access":"Pedir acceso","Your Gmail address":"Tu dirección de Gmail","Your name (optional)":"Tu nombre (opcional)","Send the request":"Enviar la solicitud",
+  "Gusto Cabinet is private. Send your Gmail address to Gisela and she will give you access.":"Gusto Cabinet es privado. Envía tu dirección de Gmail a Gisela y ella te dará acceso.",
+  "Please enter a Gmail address (ending in @gmail.com).":"Escribe una dirección de Gmail (que termine en @gmail.com).","Access request for Gusto Cabinet":"Solicitud de acceso a Gusto Cabinet",
+  "Hello Gisela,\n\nI would like to use Gusto Cabinet. Could you give me access?\n\nName: {n}\nGmail address: {e}\n\nThank you!":"Hola Gisela,\n\nMe gustaría usar Gusto Cabinet. ¿Podrías darme acceso?\n\nNombre: {n}\nDirección de Gmail: {e}\n\n¡Gracias!",
+  "Your email app opened with the request: press Send there. If nothing opened, write to {o} with your Gmail address.":"Tu aplicación de correo se abrió con la solicitud: pulsa Enviar. Si no se abrió nada, escribe a {o} con tu dirección de Gmail.",
+  "Add a person":"Añadir a una persona","Open Test users":"Abrir usuarios de prueba","Open the recipe folder":"Abrir la carpeta de recetas",
+  "When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.":"Cuando alguien pide acceso, necesitas su dirección de Gmail. Después: 1) añádela en Usuarios de prueba en Google Cloud, 2) comparte la carpeta de recetas en Google Drive con la misma dirección.","Download PDF":"Descargar PDF","Add to calendar":"Añadir al calendario","Nothing planned this week yet.":"Todavía no hay nada planificado esta semana.",
   "Could not create the PDF. Check your internet connection.":"No se pudo crear el PDF. Revisa tu conexión a internet.","Total":"Total","{p}% of goal":"{p} % del objetivo",
   "Weekly average: {k} kcal a day":"Promedio semanal: {k} kcal al día","Calories are estimated from the ingredients.":"Las calorías se estiman a partir de los ingredientes.","Day total: {k} kcal":"Total del día: {k} kcal",
   "Clear week":"Vaciar semana","Day":"Día","Week":"Semana","Meal times:":"Comidas:","This week: {n} day planned · average {k} kcal a day":"Esta semana: {n} día planificado · promedio {k} kcal al día",
@@ -1134,10 +1162,22 @@ function signIn(){
   $('gmsg').textContent='';
   loadGsi(function(){
     var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
-      callback:function(r){if(r.error){$('gmsg').textContent=r.error==='access_denied'?tr('Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.'):tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
+      callback:function(r){if(r.error){if(r.error==='access_denied')openReq(em);$('gmsg').textContent=r.error==='access_denied'?tr('Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.'):tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
         setToken(r);ME=null;$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');refresh()},
       error_callback:function(err){$('gmsg').textContent=tr(err&&err.type==='popup_failed_to_open'?'Pop-ups are blocked. Allow pop-ups for this site and try again.':'The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.')}});
     tc.requestAccessToken({prompt:'',hint:em||undefined})})}
+// ---- New people ask Gisela for access by email (she needs their Gmail address to add them) ----
+function openReq(em){$('signm').classList.remove('hidden');$('reqf').classList.remove('hidden');$('reqp').classList.add('hidden');if(em&&!$('reqmail').value)$('reqmail').value=em;$('reqmsg').textContent=''}
+$('reqlink').onclick=function(e){e.preventDefault();openReq(($('gemail').value||'').trim())};
+$('reqsend').onclick=function(){var em=($('reqmail').value||'').trim(),nm=($('reqname').value||'').trim();
+  if(!/^[^@\s]+@(gmail|googlemail)\.com$/i.test(em)){$('reqmsg').textContent=tr('Please enter a Gmail address (ending in @gmail.com).');return}
+  location.href='mailto:'+OWNER+'?subject='+encodeURIComponent(tr('Access request for Gusto Cabinet'))+'&body='+encodeURIComponent(tr('Hello Gisela,\n\nI would like to use Gusto Cabinet. Could you give me access?\n\nName: {n}\nGmail address: {e}\n\nThank you!',{n:nm||'-',e:em}));
+  $('reqmsg').textContent=tr('Your email app opened with the request: press Send there. If nothing opened, write to {o} with your Gmail address.',{o:OWNER})};
+// ---- Sharing the site link ----
+function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
+$('share').onclick=function(e){e.stopPropagation();var url=location.origin+location.pathname;
+  if(navigator.share){navigator.share({title:'Gusto Cabinet',text:tr('The gourmet notebook'),url:url}).catch(function(){});return}
+  if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast(tr('Link copied'))},function(){prompt(tr('Copy this link:'),url)});else prompt(tr('Copy this link:'),url)};
 var FOLDER_MIME='application/vnd.google-apps.folder';
 function slim(f){return {id:f.id,name:f.name}}
 function numKey(n){var m=n.replace(/\.[^.]+$/,'').match(/_(\d+)$/);return m?+m[1]:0}
@@ -1287,7 +1327,7 @@ $('trall').onclick=function(){if(!TOKEN){alert(tr('Sign in with Google first.'))
   (function next(){if(i>=n){status(tr('All recipes are translated.'));return}var r=todo[i++];status(tr('Translating recipes: {i} of {n}…',{i:i,n:n}));
     translateRecipe(r).then(function(){return driveSave(r)}).then(function(){reshow(r);next()}).catch(trFailed)})()};
 ['sign','exp','imp','sout','trall'].forEach(function(i){$(i).addEventListener('click',function(){$('lockm').classList.add('hidden')})});
-$('lock').onclick=function(){var c=cfgv();$('cid').value=c.cid;$('fold').value=c.folder;$('mmemail').value=lsGet('rb-mmemail','');$('lockm').classList.remove('hidden')};
+$('lock').onclick=function(){var c=cfgv();$('openfold').href=c.folder?'https://drive.google.com/drive/folders/'+encodeURIComponent(c.folder):'https://drive.google.com/';$('cid').value=c.cid;$('fold').value=c.folder;$('mmemail').value=lsGet('rb-mmemail','');$('lockm').classList.remove('hidden')};
 $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
 $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
   var before=JSON.stringify(cfgv());lsSet('rb-mmemail',$('mmemail').value.trim());
@@ -1322,7 +1362,7 @@ function renderMe(){var b=$('me'),label=ME?tr('Signed in as')+' '+ME.email:tr('N
   b.innerHTML=ME?meAvatar():PERSON;b.classList.toggle('in',!!ME);b.title=label;b.setAttribute('aria-label',tr('Account')+': '+label)}
 function renderMeMenu(){var m=$('memenu');
   m.innerHTML=ME?'<div class="mehd"><span class="mav">'+meAvatar()+'</span><span><small>'+tr('Signed in as')+'</small><b>'+esc(ME.name||ME.email)+'</b>'+(ME.name?'<small>'+esc(ME.email)+'</small>':'')+'</span></div>'+
-      (accessMsg?'<div class="mewarn">'+esc(accessMsg)+'</div>':'')+'<button type="button" class="btn ghost" id="meout">'+tr('Sign out')+'</button>'
+      (accessMsg?'<div class="mewarn">'+esc(accessMsg)+'</div><button type="button" class="btn" id="mereq">'+tr('Ask for access')+'</button>':'')+'<button type="button" class="btn ghost" id="meout">'+tr('Sign out')+'</button>'
     :'<div class="mehd"><span class="mav">'+PERSON+'</span><b>'+tr('Not signed in')+'</b></div><button type="button" class="btn" id="mein">'+tr('Sign in with Google')+'</button>';
   if(canInstall())m.innerHTML+='<button type="button" class="btn ghost" id="meinst">📲 '+tr('Install the app')+'</button>';
   var b=$('me').getBoundingClientRect();
@@ -1331,8 +1371,8 @@ function renderMeMenu(){var m=$('memenu');
   else{m.style.bottom='auto';m.style.left='auto';m.style.right='12px';m.style.top=(b.bottom+8)+'px'}}
 if(window.ResizeObserver)new ResizeObserver(function(){document.body.style.setProperty('--tbh',$('tside').offsetHeight+'px')}).observe($('tside'));
 $('me').onclick=function(e){e.stopPropagation();var m=$('memenu');if(m.classList.contains('hidden')){renderMeMenu();m.classList.remove('hidden')}else m.classList.add('hidden')};
-$('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein'&&id!=='meinst')return;$('memenu').classList.add('hidden');
-  if(id==='meout')$('sout').onclick();else if(id==='mein')$('signm').classList.remove('hidden');else installApp()};
+$('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein'&&id!=='meinst'&&id!=='mereq')return;$('memenu').classList.add('hidden');
+  if(id==='meout')$('sout').onclick();else if(id==='mein')$('signm').classList.remove('hidden');else if(id==='mereq')openReq(ME&&ME.email);else installApp()};
 // ---- Installing as an app (home-screen / desktop icon) ----
 var installEvt=null,IOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function isInstalled(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
