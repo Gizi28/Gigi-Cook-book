@@ -40,6 +40,10 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 #lock.hidden{display:none}
 .ltools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .top h1{cursor:pointer}
+.brand{display:flex;flex-direction:column;min-width:0}
+#tside{display:contents}
+#lang{order:1}#theme{order:2}#planbtn{order:3}#lock{order:4}#add{order:5}#me{order:6}
+.tslog{font-size:13px;line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top #theme{padding:10px 12px;line-height:1}
 @media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:30px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
@@ -100,8 +104,6 @@ body.lv .wrap{padding-top:18px}
 .lhero .rcat{font-weight:700}
 .rhero.none{color:var(--accent-ink)}
 .rhero.none::after{display:none}
-.hslog{position:absolute;z-index:1;left:0;right:0;top:46%;transform:translateY(-50%);padding:0 16px;text-align:center;font-size:clamp(16px,1.8vw,22px);font-weight:600;line-height:1.2;letter-spacing:.02em;color:var(--accent);text-shadow:0 2px 4px rgba(0,0,0,.5),0 4px 28px rgba(0,0,0,.6);pointer-events:none}
-.rhero.none .hslog{color:var(--accent-ink);text-shadow:none}
 .rhero .emo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:.5}
 .rback{position:absolute;z-index:2;top:calc(78px + env(safe-area-inset-top,0px));left:14px;background:rgba(255,255,255,.92);color:#2b2b2b;border:0;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
 .rcap{position:absolute;z-index:1;left:0;right:0;bottom:0;max-width:1320px;margin:0 auto;padding:0 14px 22px}
@@ -203,6 +205,14 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
   body.ccol #cats .cats{padding:0 8px 12px}
   body.ccol #cats .cat{justify-content:center;padding:10px 0}
+  /* With the category sidebar, the top bar buttons sit at the bottom of the sidebar */
+  body.lv.hascats .top,body.rv.hascats .top{z-index:47}
+  body.lv.hascats #cats,body.rv.hascats #cats{padding-bottom:var(--tbh,0px)}
+  body.lv.hascats #tside,body.rv.hascats #tside{display:flex;flex-wrap:wrap;gap:6px;position:fixed;left:0;bottom:0;width:var(--cw);box-sizing:border-box;padding:10px 10px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink);border-top:1px solid var(--line);border-right:1px solid var(--line);transition:width .25s}
+  body.lv.hascats #tside .btn,body.rv.hascats #tside .btn{background:var(--soft);color:var(--ink)}
+  body.ccol.lv.hascats #tside,body.ccol.rv.hascats #tside{flex-direction:column;align-items:center;padding-left:0;padding-right:0}
+  body.ccol.lv.hascats #tside .btn,body.ccol.rv.hascats #tside .btn{flex:none;width:44px;height:40px;padding:0;display:flex;align-items:center;justify-content:center}
+  body.ccol.lv.hascats #tside #me,body.ccol.rv.hascats #tside #me{height:44px}
 }
 @media (min-width:1100px){
   /* leave room for the "Other recipes" tab that sticks out of its panel */
@@ -371,7 +381,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><h1 data-t="Gusto Cabinet">Gusto Cabinet</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><div class="brand"><h1 data-t="Gusto Cabinet">Gusto Cabinet</h1><span class="tslog" data-t="The gourmet notebook">The gourmet notebook</span></div><span id="tbtns" style="display:flex;gap:6px;flex-wrap:wrap"><span id="tside"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div id="memenu" class="memenu hidden"></div>
 <div class="rhero lhero none" id="lhero"></div>
 <div class="wrap">
@@ -446,7 +456,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 z (Gusto Cabinet)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zb (plan and add in the top bar)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="Gusto Cabinet">Gusto Cabinet</h3>
@@ -728,7 +738,7 @@ function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
   if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
   var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&pic(r,0,'lg');
   $('lhero').className='rhero lhero'+(ph?'':' none');
-  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="hslog">'+tr('The gourmet notebook')+'</div><div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
+  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
     (r?'<button type="button" class="rcat" id="herogo">'+esc(tr('Featured: {n} →',{n:rt(r).name}))+'</button>':'')+'</div>'}
 $('lhero').onclick=function(e){if(e.target.closest('#herogo')){factor=1;openRecipe(heroId)}};
 function renderList(){
@@ -1267,7 +1277,10 @@ function renderMeMenu(){var m=$('memenu');
       (accessMsg?'<div class="mewarn">'+esc(accessMsg)+'</div>':'')+'<button type="button" class="btn ghost" id="meout">'+tr('Sign out')+'</button>'
     :'<div class="mehd"><span class="mav">'+PERSON+'</span><b>'+tr('Not signed in')+'</b></div><button type="button" class="btn" id="mein">'+tr('Sign in with Google')+'</button>';
   if(canInstall())m.innerHTML+='<button type="button" class="btn ghost" id="meinst">📲 '+tr('Install the app')+'</button>';
-  m.style.top=($('top').getBoundingClientRect().bottom+6)+'px'}
+  var b=$('me').getBoundingClientRect();
+  if(b.top>innerHeight/2){m.style.top='auto';m.style.right='auto';m.style.bottom=(innerHeight-b.bottom)+'px';m.style.left=(b.right+10)+'px'}
+  else{m.style.bottom='auto';m.style.left='auto';m.style.right='12px';m.style.top=(b.bottom+8)+'px'}}
+if(window.ResizeObserver)new ResizeObserver(function(){document.body.style.setProperty('--tbh',$('tside').offsetHeight+'px')}).observe($('tside'));
 $('me').onclick=function(e){e.stopPropagation();var m=$('memenu');if(m.classList.contains('hidden')){renderMeMenu();m.classList.remove('hidden')}else m.classList.add('hidden')};
 $('memenu').onclick=function(e){e.stopPropagation();var id=e.target.id;if(id!=='meout'&&id!=='mein'&&id!=='meinst')return;$('memenu').classList.add('hidden');
   if(id==='meout')$('sout').onclick();else if(id==='mein')$('signm').classList.remove('hidden');else installApp()};
