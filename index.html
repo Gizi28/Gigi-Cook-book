@@ -8,10 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f4f4;--surface:#fff;--ink:#2b2b2b;--muted:#767676;--line:#e4e4e4;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#8a5a00;--soft:#fdf3d8;
+:root{--bg:#ececec;--surface:#fff;--ink:#2b2b2b;--muted:#767676;--line:#e4e4e4;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#8a5a00;--soft:#fdf3d8;
 box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161616;--surface:#222;--ink:#f0f0f0;--muted:#a0a0a0;--line:#383838;--accent:#f2b84b;--accent-ink:#161616;--accent-text:#f2b84b;--soft:#3a3020}}
-:root[data-theme="dark"]{--bg:#161616;--surface:#222;--ink:#f0f0f0;--muted:#a0a0a0;--line:#383838;--accent:#f2b84b;--accent-ink:#161616;--accent-text:#f2b84b;--soft:#3a3020}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}}
+:root[data-theme="dark"]{--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
@@ -20,10 +20,13 @@ button,input,textarea,select{font:inherit;color:inherit}
 .top.clear{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;box-shadow:none}
 .top h1{margin:0;font:700 34px/1 'Caveat','Segoe Script','Bradley Hand',cursive}
 .wrap{max-width:760px;margin:0 auto;padding:calc(84px + env(safe-area-inset-top,0px)) 14px 80px}
-body{--fw:0px}
+body{--fw:0px;--cw:0px}
 body.rv .wrap{max-width:none;padding:0 0 80px}
 .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;font-weight:700}
 .top .btn{background:var(--accent-ink);color:var(--accent)}
+#add .sm{display:none}
+.top #theme{padding:10px 12px;line-height:1}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:25px;white-space:nowrap}.top .btn,.top #theme{padding:8px 9px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:4px!important}#add .lg{display:none}#add .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -92,6 +95,7 @@ textarea{min-height:110px;resize:vertical}
 .cpick.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .rgrid{display:grid;gap:14px}
 .rgrid .panel{margin-bottom:0}
+.rgrid>*{min-width:0}
 #view>.rgrid,#view>.actions{width:100%;max-width:1320px;margin-left:auto;margin-right:auto;padding-left:14px;padding-right:14px}
 #view>.rgrid{margin-top:16px}
 .rsteps{max-width:900px}
@@ -105,17 +109,17 @@ textarea{min-height:110px;resize:vertical}
 @media (min-width:1100px){
   body.rv{--fw:260px}
   body.rv.fcol{--fw:0px}
-  .top{left:var(--fw);transition:background .25s,color .25s,box-shadow .25s,left .25s}
+  .top{left:calc(var(--fw) + var(--cw));transition:background .25s,color .25s,box-shadow .25s,left .25s}
   #view>.rgrid,#view>.actions{margin-left:var(--fw);margin-right:0;max-width:none;width:calc(100% - var(--fw));transition:margin-left .25s,width .25s}
-  .feed{grid-column:auto;grid-row:auto;position:fixed;left:0;top:0;bottom:0;width:260px;z-index:45;margin:0;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 12px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;transition:transform .25s;box-shadow:2px 0 12px rgba(0,0,0,.12)}
+  .feed{grid-column:auto;grid-row:auto;position:fixed;left:var(--cw);top:0;bottom:0;width:260px;z-index:45;margin:0;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 12px;border-radius:0;border-width:0 1px 0 0;display:flex;flex-direction:column;transition:transform .25s,left .25s;box-shadow:2px 0 12px rgba(0,0,0,.12)}
   body.rv.fcol .feed{transform:translateX(-100%);box-shadow:none}
-  .ftab{display:flex;position:absolute;left:100%;top:140px;width:38px;height:178px;flex-direction:column;align-items:center;padding:10px 0;gap:12px}
-  .fbody{display:flex;flex-direction:column;min-height:0;flex:1}
-  .flist{display:grid;overflow:auto;min-height:0;gap:4px;align-content:start;scroll-snap-type:none}
-  .fitem{flex:none;flex-direction:row;align-items:center;padding:8px;border:0;background:transparent;border-radius:10px;gap:10px;overflow:visible}
-  .fitem.cur{background:var(--accent)}
-  .fth{flex:0 0 56px;width:56px;height:56px;aspect-ratio:auto;border-radius:8px}
-  .ftx{padding:0}
+  .feed .ftab{display:flex;position:absolute;left:100%;top:140px;width:38px;height:178px;flex-direction:column;align-items:center;padding:10px 0;gap:12px}
+  .feed .fbody{display:flex;flex-direction:column;min-height:0;flex:1}
+  .feed .flist{display:grid;overflow:auto;min-height:0;gap:4px;align-content:start;scroll-snap-type:none}
+  .feed .fitem{flex:none;flex-direction:row;align-items:center;padding:8px;border:0;background:transparent;border-radius:10px;gap:10px;overflow:visible}
+  .feed .fitem.cur{background:var(--accent)}
+  .feed .fth{flex:0 0 56px;width:56px;height:56px;aspect-ratio:auto;border-radius:8px}
+  .feed .ftx{padding:0}
 }
 .tmr{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted);margin:-4px 0 14px}
 .tmr b{color:var(--ink)}
@@ -137,6 +141,34 @@ textarea{min-height:110px;resize:vertical}
 .ftab .fi::before{content:'−';font-size:22px;font-weight:700;line-height:1}
 body.fcol .ftab .fi::before{content:'+'}
 .ftab .ft{writing-mode:vertical-rl;transform:rotate(180deg);font-size:14px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+/* Category bar (recipe list and recipe pages): fixed at the bottom on small screens, sidebar on big screens */
+#cats{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none}
+body.hascats.lv #cats,body.hascats.rv #cats{display:block}
+#cats .chd{display:none}
+#cats .cats{margin:0;border-radius:0;border-width:1px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 10px rgba(0,0,0,.12)}
+#cats .cat{flex:1 0 84px;min-width:84px;padding:8px 6px;font-size:13px}
+#cats .cat .ic{font-size:22px}
+body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
+@media (min-width:900px){
+  body.lv.hascats,body.rv.hascats{--cw:230px}
+  body.lv.hascats.ccol,body.rv.hascats.ccol{--cw:68px}
+  .top{left:calc(var(--fw) + var(--cw));transition:background .25s,color .25s,box-shadow .25s,left .25s}
+  body.lv.hascats .wrap{padding-left:calc(var(--cw) + 14px);padding-bottom:80px;max-width:calc(760px + var(--cw));transition:padding-left .25s,max-width .25s}
+  body.rv.hascats .wrap{padding-left:var(--cw);padding-bottom:80px;transition:padding-left .25s}
+  body.hascats.lv #cats,body.hascats.rv #cats{right:auto;top:0;width:var(--cw);z-index:46;background:var(--surface);border-right:1px solid var(--line);box-shadow:2px 0 12px rgba(0,0,0,.12);padding-top:calc(14px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;overflow:hidden;transition:width .25s}
+  #cats .chd{display:flex;flex:none;align-items:center;justify-content:space-between;gap:6px;padding:0 10px 10px 20px}
+  #cats .chd b{font:700 30px/1 'Caveat','Segoe Script','Bradley Hand',cursive;color:var(--accent-text);white-space:nowrap}
+  .ctog{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;font-size:18px;font-weight:700;line-height:1}
+  #cats .cats{flex:1;min-height:0;flex-direction:column;overflow-x:hidden;overflow-y:auto;border:0;box-shadow:none;padding:0 10px 12px;gap:2px}
+  #cats .cat{flex:none;min-width:0;flex-direction:row;justify-content:flex-start;gap:12px;border:0;border-radius:10px;padding:10px 12px;font-size:15px;text-align:left;white-space:nowrap}
+  #cats .cat .ic{font-size:24px}
+  #cats .cat:hover{background:var(--soft)}
+  #cats .cat.on{background:var(--accent);color:var(--accent-ink)}
+  body.ccol #cats .chd{justify-content:center;padding:0 0 10px}
+  body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
+  body.ccol #cats .cats{padding:0 8px 12px}
+  body.ccol #cats .cat{justify-content:center;padding:10px 0}
+}
 .fsel{flex:1;min-width:0}
 .flist{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
 .flist::-webkit-scrollbar{display:none}
@@ -181,12 +213,11 @@ body.fcol .ftab .fi::before{content:'+'}
 .hidden{display:none}
 </style>
 </head>
-<body>
-<div class="top" id="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="set">Settings</button><button class="btn" id="lock" aria-label="Google connection settings" style="display:inline-flex;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add">Add recipe</button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<body class="lv">
+<div class="top" id="top"><h1>My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="theme" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="set">Settings</button><button class="btn" id="lock" aria-label="Google connection settings" style="display:inline-flex;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add"><span class="lg">Add recipe</span><span class="sm">+ Add</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div class="wrap">
   <div id="list">
     <div id="status" style="color:var(--muted);font-size:13px;margin:0 0 8px">Not signed in. Tap “Sign in with Google”.</div>
-    <div id="cats"></div>
     <input id="search" type="text" placeholder="Search recipes or ingredients" aria-label="Search recipes">
     <div id="grid" class="grid"></div>
   </div>
@@ -233,6 +264,7 @@ body.fcol .ftab .fi::before{content:'+'}
     </div>
   </form>
 </div>
+<nav id="cats" aria-label="Categories"></nav>
 
 <div id="sheet" class="overlay bottom hidden"><div class="sheet">
   <button class="xbtn" id="sclose" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -240,7 +272,7 @@ body.fcol .ftab .fi::before{content:'+'}
   <button class="btn ghost" id="sout">Sign out</button>
   <button class="btn ghost" id="exp">Export JSON</button>
   <button class="btn ghost" id="imp">Import</button>
-  <small style="color:var(--muted);text-align:center">Version 2026-10-28 f (slide bar)</small>
+  <small style="color:var(--muted);text-align:center">Version 2026-10-28 h (categories everywhere, themes)</small>
   </div></div>
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec">Google connection</h3>
@@ -265,18 +297,24 @@ function persist(){return true}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function updateTop(){$('top').classList.toggle('clear',document.body.classList.contains('rv')&&window.scrollY<60)}
 window.addEventListener('scroll',updateTop,{passive:true});
-function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
+function show(w){['list','view','form','json'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();document.body.classList.toggle('fcol',feedCol);window.scrollTo(0,0);updateTop()}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
 
 var DEFCATS=[['Starter','🥗'],['Main course','🍽️'],['Dessert','🍰'],['Italian','🍝'],['Peruvian','🌶️'],['Japanese','🍣'],['Other','✨']],catFilter='',catPick=[];
 function catIcon(c){var d=DEFCATS.filter(function(x){return x[0]===c})[0];return d?d[1]:'🏷️'}
-function catTiles(list,active,noAll){var h=list.map(function(c){return '<button class="cat'+(c===active?' on':'')+'" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(c)+'</button>'});
-  if(!noAll)h.unshift('<button class="cat'+(active===''?' on':'')+'" data-c=""><span class="ic">📖</span>All</button>');
+function catTiles(list,active,noAll){var h=list.map(function(c){return '<button class="cat'+(c===active?' on':'')+'" data-c="'+esc(c)+'" title="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span><span class="cl">'+esc(c)+'</span></button>'});
+  if(!noAll)h.unshift('<button class="cat'+(active===''?' on':'')+'" data-c="" title="All"><span class="ic">📖</span><span class="cl">All</span></button>');
   return '<div class="cats">'+h.join('')+'</div>'}
 function usedCats(){var u=[];DEFCATS.forEach(function(d){if(recipes.some(function(r){return (r.cats||[]).indexOf(d[0])>-1}))u.push(d[0])});
   recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(u.indexOf(c)<0)u.push(c)})});return u}
-function renderCats(){var u=usedCats();if(catFilter&&u.indexOf(catFilter)<0)catFilter='';$('cats').innerHTML=u.length?catTiles(u,catFilter):''}
+function isDark(){var t=document.documentElement.dataset.theme;return t?t==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches}
+function applyTheme(t){if(t)document.documentElement.dataset.theme=t;$('theme').textContent=isDark()?'☀️':'🌙'}
+applyTheme(lsGet('rb-theme',''));
+$('theme').onclick=function(){var t=isDark()?'light':'dark';lsSet('rb-theme',t);applyTheme(t)};
+var catCol=lsGet('rb-ccol','')==='1';document.body.classList.toggle('ccol',catCol);
+function renderCats(){var u=usedCats();if(catFilter&&u.indexOf(catFilter)<0)catFilter='';document.body.classList.toggle('hascats',u.length>0);
+  $('cats').innerHTML=u.length?'<div class="chd"><b>Categories</b><button type="button" class="ctog" aria-label="Collapse or expand categories">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catFilter):''}
 function allCats(){var a=DEFCATS.map(function(x){return x[0]});recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(a.indexOf(c)<0)a.push(c)})});catPick.forEach(function(c){if(a.indexOf(c)<0)a.push(c)});return a}
 function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(c)+'</button>'}).join('')}
 function renderList(){
@@ -331,6 +369,7 @@ function openRecipe(id){
    '<aside class="panel feed" id="feed"></aside></div>'+
    '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
   show('view');
+  $('cats').querySelectorAll('.cat').forEach(function(b){b.classList.toggle('on',(r.cats||[]).indexOf(b.dataset.c)>-1)});
   paintFeed(r);
   $('view').querySelectorAll('.cat,.rcat').forEach(function(b){b.onclick=function(){catFilter=b.dataset.c;renderList();show('list')}});
   var mc=$('mcar');
@@ -591,7 +630,8 @@ $('impfile').onchange=function(){var f=$('impfile').files[0];if(!f)return;var rd
     list.forEach(function(r){var i=recipes.findIndex(function(x){return x.id===r.id});if(i>-1){r._fid=recipes[i]._fid;r._multi=recipes[i]._multi;r._folder=recipes[i]._folder;r._folderName=recipes[i]._folderName;r._inRoot=recipes[i]._inRoot;recipes[i]=r}else recipes.push(r);driveSave(r)});
     persist();renderList()};
   rd.readAsText(f);$('impfile').value=''};
-$('cats').onclick=function(e){var b=e.target.closest('.cat');if(!b)return;catFilter=b.dataset.c;renderList()};
+$('cats').onclick=function(e){var t=e.target.closest('.ctog');if(t){catCol=!catCol;lsSet('rb-ccol',catCol?'1':'');document.body.classList.toggle('ccol',catCol);t.textContent=catCol?'»':'«';return}
+  var b=e.target.closest('.cat');if(!b)return;catFilter=b.dataset.c;renderList();if(document.body.classList.contains('rv'))show('list')};
 $('catpick').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c,i=catPick.indexOf(c);if(i>-1)catPick.splice(i,1);else catPick.push(c);renderCatPick()};
 $('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);$('newcat').value='';renderCatPick()};
 load();renderList();
