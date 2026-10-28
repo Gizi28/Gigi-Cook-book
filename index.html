@@ -119,10 +119,12 @@ body.lv .wrap{padding-top:18px}
 .rhero .emo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:.5}
 /* Home tab on recipe pages: a yellow tab fixed at the top left, like the Menu tab; the title moves right to make room */
 .htab{display:none}
-body.rv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-area-inset-top,0px));left:var(--cw);width:38px;height:46px;padding:0;align-items:center;justify-content:center;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
-body.rv .top .brand{margin-left:34px}
+body.rv .htab,body.pv .htab,body.fv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-area-inset-top,0px));left:var(--cw);width:38px;height:46px;padding:0;align-items:center;justify-content:center;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
+body.rv .top .brand,body.pv .top .brand,body.fv .top .brand{margin-left:34px}
 @media (min-width:900px){body.lv.hascats .top .brand{margin-left:34px}}
-@media (max-width:520px){body.rv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand{margin-left:26px}}
+@media (max-width:520px){body.rv .htab,body.pv .htab,body.fv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand,body.pv .top .brand,body.fv .top .brand{margin-left:26px}}
+/* Meal plan on phones: keep the floating PDF / calendar buttons above the bottom bar */
+@media (max-width:899px){body.pv.hascats .pfab{bottom:150px}body.pv.hascats.cdown .pfab{bottom:16px}}
 /* Going home: the page changes while the big warm yellow GC logo zooms out over it for 1 second */
 .splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;color:var(--accent);filter:drop-shadow(0 2px 14px rgba(0,0,0,.45));pointer-events:none;animation:splash 1s ease-in-out forwards}
 .splash .logom{width:min(70vw,640px);animation:dezoom 1s cubic-bezier(.3,0,.2,1) forwards}
@@ -183,14 +185,14 @@ body.rv .top .brand{margin-left:34px}
 .ringimg{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block;margin-bottom:12px}
 /* Category bar (recipe list and recipe pages): fixed at the bottom on small screens, sidebar on big screens */
 #cats{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none}
-body.hascats.lv #cats,body.hascats.rv #cats{display:block}
+body.hascats.sb #cats{display:block}
 #cats .chd{display:none}
 #cats .cats{margin:0;border-radius:0;border-width:1px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 10px rgba(0,0,0,.12)}
 #cats .cat{position:relative;flex:1 0 84px;min-width:84px;margin:0;padding:8px 6px;font-size:13px;font-weight:400}
 #cats .cat.on{font-weight:700;background:var(--accent);color:var(--accent-ink)}
 #cats .cat .ic{font-size:22px}
 #cats .cat input{position:absolute;top:6px;left:6px;width:15px;height:15px;margin:0;accent-color:var(--accent-ink);cursor:pointer}
-body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
+body.sb.hascats .wrap{padding-bottom:110px}
 #catsin{display:contents}
 .cpull{display:none}
 /* Small screens: the bottom bar (tools + categories) slides down out of the way with its tab */
@@ -203,19 +205,21 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   #tslot #tside{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink);border-top:1px solid var(--line)}
   #tslot #tside .btn{background:var(--soft);color:var(--ink);padding:8px 12px}
   #tslot #tside #me{padding:0}
-  body.hascats.lv #cats,body.hascats.rv #cats{display:flex;flex-direction:column}
+  body.hascats.sb #cats{display:flex;flex-direction:column}
   #tslot{order:2}
   #tslot:not(:empty)~#catsin .cats{padding-bottom:0}
-  body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:170px}
-  body.cdown.lv.hascats .wrap,body.cdown.rv.hascats .wrap{padding-bottom:50px}
+  body.sb.hascats .wrap{padding-bottom:170px}
+  body.cdown.sb.hascats .wrap{padding-bottom:50px}
 }
 @media (min-width:900px){
-  body.lv.hascats,body.rv.hascats{--cw:230px}
-  body.lv.hascats.ccol,body.rv.hascats.ccol{--cw:68px}
+  body.sb.hascats{--cw:230px}
+  body.sb.hascats.ccol{--cw:68px}
   .top{left:calc(var(--fw) + var(--cw));transition:background .25s,color .25s,box-shadow .25s,left .25s}
   body.lv.hascats .wrap{padding-left:calc(var(--cw) + 52px);padding-bottom:80px;max-width:calc(760px + var(--cw));transition:padding-left .25s,max-width .25s}
   body.rv.hascats .wrap{padding-left:var(--cw);padding-bottom:80px;transition:padding-left .25s}
-  body.hascats.lv #cats,body.hascats.rv #cats{right:auto;top:0;width:var(--cw);z-index:46;background:var(--surface);border-right:1px solid var(--line);box-shadow:2px 0 12px rgba(0,0,0,.12);padding-top:calc(14px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;overflow:hidden;transition:width .25s}
+  body.pv.hascats .wrap{padding-left:calc(var(--cw) + 52px);padding-bottom:80px;max-width:calc(1500px + var(--cw));transition:padding-left .25s,max-width .25s}
+  body.fv.hascats .wrap{padding-left:calc(var(--cw) + 52px);padding-bottom:80px;max-width:calc(760px + var(--cw));transition:padding-left .25s,max-width .25s}
+  body.hascats.sb #cats{right:auto;top:0;width:var(--cw);z-index:46;background:var(--surface);border-right:1px solid var(--line);box-shadow:2px 0 12px rgba(0,0,0,.12);padding-top:calc(14px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;overflow:hidden;transition:width .25s}
   #cats .chd{display:flex;flex:none;align-items:center;justify-content:space-between;gap:6px;padding:0 10px 10px 20px}
   #cats .chd b{font:700 30px/1 'Caveat','Segoe Script','Bradley Hand',cursive;color:var(--accent-text);white-space:nowrap}
   .ctog{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;font-size:18px;font-weight:700;line-height:1}
@@ -234,16 +238,16 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   body.ccol #cats .cats{padding:0 8px 12px}
   body.ccol #cats .cat{justify-content:center;padding:10px 0}
   /* With the category sidebar, the top bar buttons sit at the bottom of the sidebar */
-  body.lv.hascats .top,body.rv.hascats .top{z-index:47}
-  body.lv.hascats #cats,body.rv.hascats #cats{padding-bottom:var(--tbh,0px)}
-  body.lv.hascats #tside,body.rv.hascats #tside{display:flex;flex-wrap:wrap;gap:6px;position:fixed;left:0;bottom:0;width:var(--cw);box-sizing:border-box;padding:10px 10px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink);border-top:1px solid var(--line);border-right:1px solid var(--line);transition:width .25s}
-  body.lv.hascats #tside .btn,body.rv.hascats #tside .btn{background:var(--soft);color:var(--ink)}
-  body.ccol.lv.hascats #tside,body.ccol.rv.hascats #tside{flex-direction:column;align-items:center;padding-left:0;padding-right:0}
-  body.ccol.lv.hascats #tside .btn,body.ccol.rv.hascats #tside .btn{flex:none;width:44px;height:40px;padding:0;display:flex;align-items:center;justify-content:center}
-  body.ccol.lv.hascats #tside #me,body.ccol.rv.hascats #tside #me{height:44px}
+  body.sb.hascats .top{z-index:47}
+  body.sb.hascats #cats{padding-bottom:var(--tbh,0px)}
+  body.sb.hascats #tside{display:flex;flex-wrap:wrap;gap:6px;position:fixed;left:0;bottom:0;width:var(--cw);box-sizing:border-box;padding:10px 10px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink);border-top:1px solid var(--line);border-right:1px solid var(--line);transition:width .25s}
+  body.sb.hascats #tside .btn{background:var(--soft);color:var(--ink)}
+  body.ccol.sb.hascats #tside{flex-direction:column;align-items:center;padding-left:0;padding-right:0}
+  body.ccol.sb.hascats #tside .btn{flex:none;width:44px;height:40px;padding:0;display:flex;align-items:center;justify-content:center}
+  body.ccol.sb.hascats #tside #me{height:44px}
   /* The sidebar is a yellow menu (categories + settings) that slides away with its "Menu" tab */
-  body.lv.hascats.mcol,body.rv.hascats.mcol{--cw:0px}
-  body.hascats.lv #cats,body.hascats.rv #cats{background:var(--accent);color:var(--accent-ink);border-right:0;box-shadow:2px 0 12px rgba(0,0,0,.18)}
+  body.sb.hascats.mcol{--cw:0px}
+  body.hascats.sb #cats{background:var(--accent);color:var(--accent-ink);border-right:0;box-shadow:2px 0 12px rgba(0,0,0,.18)}
   body.mcol #cats{box-shadow:none}
   #cats .chd b,#cats .cat{color:var(--accent-ink)}
   body.hascats #cats .cats{background:transparent}
@@ -251,10 +255,10 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   #cats .cat.on{background:var(--accent-ink);color:var(--accent)}
   #cats .cat input{accent-color:var(--accent-ink)}
   .ctog{background:var(--accent-ink);color:var(--accent)}
-  body.lv.hascats #tside,body.rv.hascats #tside{background:var(--accent);color:var(--accent-ink);border-top:1px solid rgba(0,0,0,.15);border-right:0}
-  body.lv.hascats #tside .btn,body.rv.hascats #tside .btn{background:rgba(0,0,0,.12);color:var(--accent-ink)}
+  body.sb.hascats #tside{background:var(--accent);color:var(--accent-ink);border-top:1px solid rgba(0,0,0,.15);border-right:0}
+  body.sb.hascats #tside .btn{background:rgba(0,0,0,.12);color:var(--accent-ink)}
   body.mcol #tside{visibility:hidden}
-  body.hascats.lv .mtab,body.hascats.rv .mtab{display:flex;position:fixed;left:var(--cw);top:calc(84px + env(safe-area-inset-top,0px));z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
+  body.hascats.sb .mtab{display:flex;position:fixed;left:var(--cw);top:calc(84px + env(safe-area-inset-top,0px));z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
   .mtab .fi::before{content:'−';font-size:22px;font-weight:700;line-height:1}
   body.mcol .mtab .fi::before{content:'+'}
   .mtab .ft{writing-mode:vertical-rl;transform:rotate(180deg);font-size:14px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
@@ -417,7 +421,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .hidden{display:none}
 </style>
 </head>
-<body class="lv">
+<body class="lv sb">
 <div class="top" id="top"><div class="brand"><span class="blogo" role="img" aria-label="Gusto Cabinet"></span><div class="btxt"><h1 data-t="Gusto Cabinet">Gusto Cabinet</h1><span class="tslog" data-t="The gourmet notebook">The gourmet notebook</span></div></div><span id="tbtns" style="display:flex;gap:6px;flex-wrap:wrap"><span id="tside"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="share" data-ta="Share" aria-label="Share" title="Share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div id="memenu" class="memenu hidden"></div>
 <div class="rhero lhero none" id="lhero"></div>
@@ -498,7 +502,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zzc (share link and access requests)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zzd (menu on every page)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -661,7 +665,9 @@ function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;doc
   $('sign').textContent=tr(TOKEN?'Refresh from Drive':'Sign in with Google');renderMe();if(!$('memenu').classList.contains('hidden'))renderMeMenu()}
 function updateTop(){var b=document.body.classList;$('top').classList.toggle('clear',(b.contains('rv')||b.contains('lv'))&&window.scrollY<60)}
 window.addEventListener('scroll',updateTop,{passive:true});
-function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');if(w==='list')renderCats();window.scrollTo(0,0);placeTools();updateTop()}
+function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');document.body.classList.toggle('fv',w==='form');
+  // pages that carry the yellow Menu (categories + settings) and the Home tab
+  document.body.classList.toggle('sb',w==='list'||w==='view'||w==='plan'||w==='form');if(w==='list')renderCats();window.scrollTo(0,0);placeTools();updateTop()}
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 // Calorie estimate: [names, kcal per 100 g, grams per piece, grams per ml]
 // Names are English, Spanish and French (singular is enough: plurals contain it); the longest matching name wins
@@ -808,7 +814,7 @@ var catCol=lsGet('rb-ccol','')==='1';document.body.classList.toggle('ccol',catCo
 $('htab').onclick=goHome;
 $('mtab').onclick=function(){var c=!document.body.classList.contains('mcol');document.body.classList.toggle('mcol',c);lsSet('rb-mcol',c?'1':'')};document.body.classList.toggle('cdown',lsGet('rb-cdown','')==='1');
 // On small screens the language, theme, padlock and account buttons live in the bottom bar (when it is shown), otherwise in the top bar
-function placeTools(){var b=document.body.classList,inBar=innerWidth<900&&b.contains('hascats')&&(b.contains('lv')||b.contains('rv')),t=$('tside');
+function placeTools(){var b=document.body.classList,inBar=innerWidth<900&&b.contains('hascats')&&b.contains('sb'),t=$('tside');
   if(inBar){if(t.parentNode!==$('tslot'))$('tslot').appendChild(t)}else if(t.parentNode!==$('tbtns'))$('tbtns').insertBefore(t,$('tbtns').firstChild)}
 window.addEventListener('resize',placeTools);var smallMq=window.matchMedia('(max-width:899px)');if(smallMq.addEventListener)smallMq.addEventListener('change',placeTools);
 function renderCats(){var u=usedCats();catSel=catSel.filter(function(c){return u.indexOf(c)>-1});document.body.classList.toggle('hascats',u.length>0);
@@ -1348,7 +1354,7 @@ $('cats').onclick=function(e){if(e.target.closest('.cpull')){var dn=!document.bo
 };
 $('cats').onchange=function(e){var i=e.target,c=i.dataset.c;if(c==null)return;
   if(!c)catSel=[];else if(i.checked){if(catSel.indexOf(c)<0)catSel.push(c)}else catSel=catSel.filter(function(x){return x!==c});
-  renderList();if(document.body.classList.contains('rv'))show('list')};
+  renderList();if(!document.body.classList.contains('lv'))show('list')};
 $('catpick').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c,i=catPick.indexOf(c);if(i>-1)catPick.splice(i,1);else catPick.push(c);renderCatPick()};
 $('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);$('newcat').value='';renderCatPick()};
 $('lang').onchange=function(){LANG=this.value;lsSet('rb-lang',LANG);applyLang();var b=document.body.classList;renderList();
