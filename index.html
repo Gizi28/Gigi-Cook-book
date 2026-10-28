@@ -367,7 +367,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="cid">Google OAuth Client ID</label><input type="text" id="cid">
   <label for="fold">Drive folder link</label><input type="text" id="fold">
   <div class="actions"><button class="btn" id="lsave">Save</button><button class="btn ghost" id="lclose">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 m (hero, yellow feed)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 n (image sizes)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px">My Recipe Book</h3>
@@ -467,7 +467,7 @@ function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return
 var heroId=null;
 function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
   if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
-  var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&imgs(r)[0];
+  var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&pic(r,0,'lg');
   $('lhero').className='rhero lhero'+(ph?'':' none');
   $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">What shall we cook today?</h2>'+
     (r?'<button type="button" class="rcat" id="herogo">Featured: '+esc(r.name)+' →</button>':'')+'</div>'}
@@ -480,7 +480,7 @@ function renderList(){
   if(!items.length){$('grid').innerHTML='<div class="empty">'+(recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
-    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+imgs(r)[0]+'" alt="">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
+    return '<button class="card" data-id="'+r.id+'"><div class="ph">'+(imgs(r)[0]?'<img src="'+pic(r,0,'md')+'" alt="" loading="lazy" decoding="async">':'🍝')+'</div><div class="t"><h3>'+esc(r.name)+'</h3><p>'+(t?fmt(t)+' · ':'')+esc(r.diff||'Easy')+'</p></div></button>'}).join('');
 }
 $('grid').onclick=function(e){var c=e.target.closest('.card');if(c){factor=1;openRecipe(c.dataset.id)}};
 $('search').oninput=renderList;
@@ -518,8 +518,8 @@ function renderPlan(){var g=goal();
   renderPlanCar();renderPlanDays()}
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   var list=recipes.slice().sort(function(a,b){return a.name.localeCompare(b.name)}).filter(function(r){return !q||r.name.toLowerCase().indexOf(q)>-1});
-  $('pcar').innerHTML=list.length?list.map(function(r){var im=imgs(r)[0],k=portionKcal(r);
-    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false">':'🍝')+'</span><b>'+esc(r.name)+'</b><small>'+(k?nf(k)+' kcal / portion':'kcal unknown')+'</small></button>'}).join('')
+  $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
+    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><b>'+esc(r.name)+'</b><small>'+(k?nf(k)+' kcal / portion':'kcal unknown')+'</small></button>'}).join('')
     :'<div class="phint" style="padding:16px">'+(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
 function renderPlanDays(){
   var days=planMode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
@@ -537,7 +537,7 @@ function renderPlanDays(){
     return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">Today</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
-        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+s[1]+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&imgs(r)[0];
+        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+s[1]+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,'xs');
           return '<div class="pchip" data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?r.name:'Removed recipe')+'</b><small>'+(pk?nf(pk*m.p)+' kcal':'kcal unknown')+'</small></span>'+
             '<span class="pcb"><button type="button" data-a="minus" aria-label="Fewer portions">−</button><span title="Portions">'+m.p+'</span><button type="button" data-a="plus" aria-label="More portions">+</button><button type="button" data-a="del" aria-label="Remove from plan">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
 
@@ -605,7 +605,7 @@ function paintFeed(r){var f=$('feed');if(!f)return;
   var opts=[['same','Same categories'],['all','All recipes']].concat(usedCats().map(function(c){return ['c:'+c,c]}));
   f.innerHTML='<button type="button" class="ftab" id="ftab" aria-label="Show or hide other recipes"><span class="fi"></span><span class="ft">Other recipes</span></button><div class="fbody"><div class="fhead"><button type="button" class="fsel" id="fsel">'+esc(feedLabel(r))+' ▾</button><div class="fmenu hidden" id="fmenu">'+
     opts.map(function(o){return '<button type="button" data-v="'+esc(o[0])+'"'+(o[0]===feedSel?' class="on"':'')+'>'+(o[0].slice(0,2)==='c:'?catIcon(o[1])+' ':'')+esc(o[1])+'</button>'}).join('')+'</div></div>'+
-    '<div class="flist">'+(list.length?list.map(function(x){var im=imgs(x)[0],t=(+x.prep||0)+(+x.cook||0)+(+x.rest||0);
+    '<div class="flist">'+(list.length?list.map(function(x){var im=pic(x,0,'xs'),t=(+x.prep||0)+(+x.cook||0)+(+x.rest||0);
       return '<button type="button" class="fitem'+(x.id===r.id?' cur':'')+'" data-id="'+esc(x.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="ftx"><b>'+esc(x.name)+'</b><small>'+(t?fmt(t)+' · ':'')+esc(x.diff||'Easy')+'</small></span></button>'}).join(''):'<div class="empty" style="padding:16px">No recipes in this category.</div>')+'</div></div>';
   $('ftab').onclick=function(){setFeedCol(!feedCol)};
   $('fsel').onclick=function(e){e.stopPropagation();$('fmenu').classList.toggle('hidden')};
@@ -621,7 +621,7 @@ function openRecipe(id){
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
   var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
   $('view').innerHTML=
-   '<div class="rhero'+(ph[0]?'':' none')+'">'+(ph[0]?'<img src="'+ph[0]+'" alt="">':'<span class="emo">🍝</span>')+
+   '<div class="rhero'+(ph[0]?'':' none')+'">'+(ph[0]?'<img src="'+pic(r,0,'lg')+'" alt="">':'<span class="emo">🍝</span>')+
    '<button class="rback" id="back">← Back</button>'+
    '<div class="rcap"><h2 class="name">'+esc(r.name)+'</h2><div class="tags">'+esc(r.diff||'Easy')+' · '+esc(r.cost||'Cheap')+'</div>'+(r.cats&&r.cats.length?rcatHtml(r.cats):'')+'</div></div>'+
    '<div class="rgrid"><div class="panel ring">'+(ph[0]?'<img class="ringimg" src="'+ph[0]+'" alt="">':'')+'<h3 class="sec">Ingredients</h3>'+
@@ -630,7 +630,7 @@ function openRecipe(id){
    '<div class="rsteps">'+
    ((r.steps||total)?'<div class="panel"><h3 class="sec">Preparation</h3>'+tmrHtml(r,total)+(r.steps||'').split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>Step '+(i+1)+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
    (r.tip?'<div class="tip"><b>Tips and notes</b><br>'+esc(r.tip)+'</div>':'')+'</div>'+
-   (nm?'<div class="panel rmedia"><h3 class="sec">Videos and photos</h3><div class="car v" id="mcar">'+vv.map(function(v,i){return '<div class="vslide" data-i="'+i+'"><div class="vload">Loading…</div></div>'}).join('')+ph.slice(1).map(function(p){return '<img src="'+p+'" alt="">'}).join('')+'</div>'+dotsHtml(nm)+'</div>':'')+
+   (nm?'<div class="panel rmedia"><h3 class="sec">Videos and photos</h3><div class="car v" id="mcar">'+vv.map(function(v,i){return '<div class="vslide" data-i="'+i+'"><div class="vload">Loading…</div></div>'}).join('')+ph.slice(1).map(function(p,i){return '<img src="'+pic(r,i+1,'md')+'" alt="" loading="lazy" decoding="async">'}).join('')+'</div>'+dotsHtml(nm)+'</div>':'')+
    '<aside class="panel feed" id="feed"></aside></div>'+
    '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">Edit</button><button class="btn danger" id="del">Delete</button></div>';
   show('view');
@@ -684,10 +684,11 @@ $('file').onchange=function(){
   Array.prototype.forEach.call($('file').files,function(f){
     var rd=new FileReader();
     rd.onload=function(){var im=new Image();
-      im.onload=function(){var m=DB&&!ASSETS?480:800,s=Math.min(1,m/Math.max(im.width,im.height));
+      // Keep uploads sharp enough for full-width heroes; smaller copies are made when the site loads them
+      im.onload=function(){var m=DB&&!ASSETS?480:2048,s=Math.min(1,m/Math.max(im.width,im.height));
         var c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
-        c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-        if(ASSETS){c.toBlob(function(b){ASSETS.upload(b).then(function(a){photos.push(a.url);renderPhotos()},function(){photos.push(c.toDataURL('image/jpeg',.6));renderPhotos()})},'image/jpeg',.75)}else{photos.push(c.toDataURL('image/jpeg',DB?.55:.72));renderPhotos()}};
+        var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,0,0,c.width,c.height);
+        if(ASSETS){c.toBlob(function(b){ASSETS.upload(b).then(function(a){photos.push(a.url);renderPhotos()},function(){photos.push(c.toDataURL('image/jpeg',.6));renderPhotos()})},'image/jpeg',.75)}else{photos.push(c.toDataURL('image/jpeg',DB?.55:.86));renderPhotos()}};
       im.src=rd.result};
     rd.readAsDataURL(f)});
   $('file').value='';
@@ -791,8 +792,8 @@ function migrate(x,root){
     return ids.reduce(function(p,id){return p.then(function(){return moveFile(id,d.id,root)})},Promise.resolve()).then(function(){x._folder=d.id;x._folderName=name;x._inRoot=false})
   }).catch(function(e){if(e.message==='auth')throw e})}
 function hydrate(r){var fl=r._imgFiles||[];if(!fl.length)return;
-  Promise.all(fl.map(function(f){return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSmall))}))
-  .then(function(urls){r._imgs=urls;renderList()}).catch(function(){fl.forEach(function(f){delete imgCache[f.id]})})}
+  Promise.all(fl.map(function(f){return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSizes))}))
+  .then(function(l){r._xs=l.map(function(x){return x[0]});r._imgs=l.map(function(x){return x[1]});r._lg=l.map(function(x){return x[2]});renderList()}).catch(function(){fl.forEach(function(f){delete imgCache[f.id]})})}
 function refresh(){
   var root=cfgv().folder;status('Loading from Drive…');
   listFiles("'"+root+"' in parents and trashed=false").then(function(rootFiles){
@@ -812,10 +813,18 @@ function refresh(){
   }).catch(function(e){if(e.message!=='auth')status('Could not load: '+String(e.message).slice(0,140))})}
 var imgCache={};
 function imgs(r){return (r._imgs||[]).concat(r.photos||[])}
-function toSmall(blob){return new Promise(function(res,rej){var u=URL.createObjectURL(blob),im=new Image();
-  im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
-    c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.8))};
-  im.onerror=rej;im.src=u})}
+// Photo i of a recipe at a size that fits where it is shown: 'xs' thumbnails, 'md' cards and panels (default), 'lg' full-width heroes
+function pic(r,i,size){var a=size==='xs'?r._xs:size==='lg'?r._lg:null;return (a&&a[i])||imgs(r)[i]}
+// Each Drive photo is downloaded once and turned into the three sizes [xs, md, lg]
+var SIZES=[[240,.7],[720,.8],[1920,.86]];
+function scaled(im,blob,max,q){var w=im.naturalWidth,h=im.naturalHeight,s=Math.min(1,max/Math.max(w,h));
+  if(s===1&&max===1920&&/^image\/(jpeg|png|webp)$/.test(blob.type))return Promise.resolve(URL.createObjectURL(blob));
+  var c=document.createElement('canvas');c.width=Math.round(w*s);c.height=Math.round(h*s);
+  var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,0,0,c.width,c.height);
+  return new Promise(function(res){c.toBlob(function(b){res(b?URL.createObjectURL(b):c.toDataURL('image/jpeg',q))},'image/jpeg',q)})}
+function toSizes(blob){return new Promise(function(res,rej){var u=URL.createObjectURL(blob),im=new Image();
+  im.onload=function(){Promise.all(SIZES.map(function(z){return scaled(im,blob,z[0],z[1])})).then(function(l){URL.revokeObjectURL(u);res(l)},rej)};
+  im.onerror=function(){URL.revokeObjectURL(u);rej()};im.src=u})}
 function safeName(t,id){var x=String(t).replace(/[\\\/:*?"<>|]/g,'').replace(/\s+/g,' ').trim();return x||String(id).replace(/[^\w-]/g,'_')}
 function upload(method,fid,meta,ctype,data){
   var bd='rb'+Date.now()+Math.random().toString(36).slice(2,6);
