@@ -116,12 +116,15 @@ body.lv .wrap{padding-top:18px}
 .htab{display:none}
 body.rv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-area-inset-top,0px));left:var(--cw);width:38px;height:46px;padding:0;align-items:center;justify-content:center;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
 body.rv .top .brand{margin-left:34px}
+@media (min-width:900px){body.lv.hascats .top .brand{margin-left:34px}}
 @media (max-width:520px){body.rv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand{margin-left:26px}}
-/* Going home turns the recipe like a book page: it swings off to the right, then the main page swings in */
-#view.leaving{transform-origin:right var(--oy,50vh);animation:pageout .55s ease-in forwards}
-@keyframes pageout{to{transform:perspective(1800px) rotateY(88deg);opacity:.35}}
-body.entering #lhero,body.entering #list{transform-origin:left center;animation:pagein .65s ease-out}
-@keyframes pagein{from{transform:perspective(1800px) rotateY(-88deg);opacity:.35}to{transform:none;opacity:1}}
+/* Going home: a warm yellow panel with the logo slides across like a sidebar, then opens onto the main page */
+.wipe{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);transform:translateX(-100%);transition:transform .45s cubic-bezier(.65,0,.35,1);box-shadow:8px 0 30px rgba(0,0,0,.35)}
+.wipe.in{transform:none}
+.wipe.out{transform:translateX(100%)}
+.wipe .logom{width:min(220px,50vw)}
+/* Main page: the welcome line and featured dish sit at the bottom right of the picture */
+.lhero .rcap{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
 .htab svg{flex:none}
 .rcap{position:absolute;z-index:1;left:0;right:0;bottom:0;max-width:1320px;margin:0 auto;padding:0 14px 22px}
 .rcap .name{font-family:'Caveat','Segoe Script','Bradley Hand',cursive;font-weight:700;font-size:clamp(40px,7vw,68px);line-height:1;margin:0 0 6px;text-shadow:0 2px 10px rgba(0,0,0,.45)}
@@ -216,7 +219,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   body.ccol #cats .cat input{display:none}
   body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:52px}
   body.rv.hascats .rcap{padding-left:52px}
-  .lhero .rcap{padding-left:52px}
+  .lhero .rcap{padding-left:52px;padding-right:36px}
   body.ccol #cats .chd{justify-content:center;padding:0 0 10px}
   body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
   body.ccol #cats .cats{padding:0 8px 12px}
@@ -483,7 +486,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zq (home tab at the top, page turn)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zr (yellow slide home)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -982,10 +985,11 @@ function tmrHtml(r,total){var a=[['Prep',r.prep],['Cooking',r.cook],['Rest',r.re
   return '<div class="tmr">'+a.map(function(x){return '<span>'+tr(x[0])+' <b>'+fmt(x[1])+'</b></span>'}).join('')+'</div>'}
 function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return '<button type="button" class="rcat" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(catName(c))+'</button>'}).join('')+'</div>'}
 function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
-function goHome(){var v=$('view');
+function goHome(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){show('list');return}
-  v.style.setProperty('--oy',(window.scrollY+innerHeight/2)+'px');v.classList.add('leaving');
-  setTimeout(function(){v.classList.remove('leaving');document.body.classList.add('entering');show('list');setTimeout(function(){document.body.classList.remove('entering')},700)},540)}
+  var w=document.createElement('div');w.className='wipe';w.innerHTML='<span class="logom"></span>';document.body.appendChild(w);
+  requestAnimationFrame(function(){requestAnimationFrame(function(){w.classList.add('in')})});
+  setTimeout(function(){show('list');w.classList.add('out');setTimeout(function(){w.remove()},500)},560)}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;var L=rt(r);
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
