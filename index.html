@@ -118,8 +118,8 @@ body.rv .htab{display:flex;position:fixed;z-index:48;top:calc(16px + env(safe-ar
 body.rv .top .brand{margin-left:34px}
 @media (min-width:900px){body.lv.hascats .top .brand{margin-left:34px}}
 @media (max-width:520px){body.rv .htab{top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:38px}body.rv .top .brand{margin-left:26px}}
-/* Going home: the page changes behind a warm yellow screen where the big GC logo zooms out for 2 seconds */
-.splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);pointer-events:none;animation:splash 2s ease-in-out forwards}
+/* Going home: the page changes while the big warm yellow GC logo zooms out over it for 2 seconds */
+.splash{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;color:var(--accent);filter:drop-shadow(0 2px 14px rgba(0,0,0,.45));pointer-events:none;animation:splash 2s ease-in-out forwards}
 .splash .logom{width:min(70vw,640px);animation:dezoom 2s cubic-bezier(.3,0,.2,1) forwards}
 @keyframes splash{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
 @keyframes dezoom{from{transform:scale(1.2)}to{transform:scale(.35)}}
@@ -486,7 +486,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zv (logo splash)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zw (yellow logo splash)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
