@@ -112,7 +112,13 @@ body.lv .wrap{padding-top:18px}
 .rhero.none{color:var(--accent-ink)}
 .rhero.none::after{display:none}
 .rhero .emo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:.5}
-.rback{position:absolute;z-index:2;top:calc(78px + env(safe-area-inset-top,0px));left:14px;background:rgba(255,255,255,.92);color:#2b2b2b;border:0;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
+/* Home tab on recipe pages: a small yellow tab on the left edge of the picture (it scrolls away with it, so it never covers text) */
+.rback{position:absolute;z-index:2;top:calc(92px + env(safe-area-inset-top,0px));left:0;width:32px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);border:0;border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.25);cursor:pointer;transition:width .2s}
+.rback:hover{width:38px}
+/* Going home: the recipe is pushed off to the right and the main page slides in from the left */
+#view.leaving{transform:translateX(100%);transition:transform .28s ease-in}
+body.entering #lhero,body.entering #list{animation:pushin .35s ease-out}
+@keyframes pushin{from{transform:translateX(-100%)}to{transform:none}}
 .rcap{position:absolute;z-index:1;left:0;right:0;bottom:0;max-width:1320px;margin:0 auto;padding:0 14px 22px}
 .rcap .name{font-family:'Caveat','Segoe Script','Bradley Hand',cursive;font-weight:700;font-size:clamp(40px,7vw,68px);line-height:1;margin:0 0 6px;text-shadow:0 2px 10px rgba(0,0,0,.45)}
 .rhero.none .name{text-shadow:none}
@@ -206,7 +212,6 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   body.ccol #cats .cat input{display:none}
   body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:52px}
   body.rv.hascats .rcap{padding-left:52px}
-  body.rv.hascats .rback{left:52px}
   .lhero .rcap{padding-left:52px}
   body.ccol #cats .chd{justify-content:center;padding:0 0 10px}
   body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
@@ -233,7 +238,7 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   body.lv.hascats #tside,body.rv.hascats #tside{background:var(--accent);color:var(--accent-ink);border-top:1px solid rgba(0,0,0,.15);border-right:0}
   body.lv.hascats #tside .btn,body.rv.hascats #tside .btn{background:rgba(0,0,0,.12);color:var(--accent-ink)}
   body.mcol #tside{visibility:hidden}
-  body.hascats.lv .mtab,body.hascats.rv .mtab{display:flex;position:fixed;left:var(--cw);top:45vh;z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
+  body.hascats.lv .mtab,body.hascats.rv .mtab{display:flex;position:fixed;left:var(--cw);bottom:80px;z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:var(--accent);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
   .mtab .fi::before{content:'−';font-size:22px;font-weight:700;line-height:1}
   body.mcol .mtab .fi::before{content:'+'}
   .mtab .ft{writing-mode:vertical-rl;transform:rotate(180deg);font-size:14px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
@@ -243,7 +248,6 @@ body.lv.hascats .wrap,body.rv.hascats .wrap{padding-bottom:110px}
   /* leave room for the "Menu" tab that sticks out of the sidebar */
   body.rv #view>.rgrid,body.rv #view>.actions,body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:62px}
   body.rv .rcap,body.rv.hascats .rcap{padding-left:62px}
-  body.rv .rback,body.rv.hascats .rback{left:62px}
 }
 .fth{width:100%;aspect-ratio:16/10;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden}
 .fth img{width:100%;height:100%;object-fit:cover;display:block}
@@ -474,7 +478,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zn (top buttons on the right)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zp (small home tab)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -515,7 +519,7 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
-  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Menu":"Menu","Show or hide the menu":"Afficher ou masquer le menu","Download PDF":"Télécharger le PDF","Add to calendar":"Ajouter au calendrier","Nothing planned this week yet.":"Rien n'est encore prévu cette semaine.",
+  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Menu":"Menu","Show or hide the menu":"Afficher ou masquer le menu","Back to all recipes":"Retour à toutes les recettes","Download PDF":"Télécharger le PDF","Add to calendar":"Ajouter au calendrier","Nothing planned this week yet.":"Rien n'est encore prévu cette semaine.",
   "Could not create the PDF. Check your internet connection.":"Impossible de créer le PDF. Vérifiez votre connexion internet.","Total":"Total","{p}% of goal":"{p} % de l'objectif",
   "Weekly average: {k} kcal a day":"Moyenne de la semaine : {k} kcal par jour","Calories are estimated from the ingredients.":"Les calories sont estimées à partir des ingrédients.","Day total: {k} kcal":"Total du jour : {k} kcal",
   "Clear week":"Vider la semaine","Day":"Jour","Week":"Semaine","Meal times:":"Repas :","This week: {n} day planned · average {k} kcal a day":"Cette semaine : {n} jour planifié · moyenne {k} kcal par jour",
@@ -567,7 +571,7 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
-  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Menu":"Menú","Show or hide the menu":"Mostrar u ocultar el menú","Download PDF":"Descargar PDF","Add to calendar":"Añadir al calendario","Nothing planned this week yet.":"Todavía no hay nada planificado esta semana.",
+  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Menu":"Menú","Show or hide the menu":"Mostrar u ocultar el menú","Back to all recipes":"Volver a todas las recetas","Download PDF":"Descargar PDF","Add to calendar":"Añadir al calendario","Nothing planned this week yet.":"Todavía no hay nada planificado esta semana.",
   "Could not create the PDF. Check your internet connection.":"No se pudo crear el PDF. Revisa tu conexión a internet.","Total":"Total","{p}% of goal":"{p} % del objetivo",
   "Weekly average: {k} kcal a day":"Promedio semanal: {k} kcal al día","Calories are estimated from the ingredients.":"Las calorías se estiman a partir de los ingredientes.","Day total: {k} kcal":"Total del día: {k} kcal",
   "Clear week":"Vaciar semana","Day":"Día","Week":"Semana","Meal times:":"Comidas:","This week: {n} day planned · average {k} kcal a day":"Esta semana: {n} día planificado · promedio {k} kcal al día",
@@ -972,13 +976,17 @@ function tmrHtml(r,total){var a=[['Prep',r.prep],['Cooking',r.cook],['Rest',r.re
   return '<div class="tmr">'+a.map(function(x){return '<span>'+tr(x[0])+' <b>'+fmt(x[1])+'</b></span>'}).join('')+'</div>'}
 function rcatHtml(list){return '<div class="rcats">'+list.map(function(c){return '<button type="button" class="rcat" data-c="'+esc(c)+'"><span class="ic">'+catIcon(c)+'</span>'+esc(catName(c))+'</button>'}).join('')+'</div>'}
 function dotsHtml(n){return n>1?'<div class="dots">'+Array(n+1).join('<i></i>').replace('<i>','<i class="on">')+'</div>':''}
+function goHome(){var v=$('view');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){show('list');return}
+  v.classList.add('leaving');
+  setTimeout(function(){v.classList.remove('leaving');document.body.classList.add('entering');show('list');setTimeout(function(){document.body.classList.remove('entering')},400)},280)}
 function openRecipe(id){
   var r=recipes.find(function(x){return x.id===id});if(!r)return;viewId=id;var L=rt(r);
   var ph=imgs(r), vv=r._vids||[], nm=vv.length+Math.max(0,ph.length-1), base=+r.serv||0, total=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
   var f=base?factor:1, n=base?Math.round(base*factor*100)/100:0;
   $('view').innerHTML=
    '<div class="rhero'+(ph[0]?'':' none')+'">'+(ph[0]?'<img src="'+pic(r,0,'lg')+'" alt="">':'<span class="emo">🍝</span>')+
-   '<button class="rback" id="back">'+tr('← Back')+'</button>'+
+   '<button type="button" class="rback" id="back" title="'+tr('Back to all recipes')+'" aria-label="'+tr('Back to all recipes')+'"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>'+
    '<div class="rcap"><h2 class="name">'+esc(L.name)+'</h2><div class="tags">'+esc(tr(r.diff||'Easy'))+' · '+esc(tr(r.cost||'Cheap'))+(L.auto?' · 🌐 '+tr('Translated automatically'):'')+'</div>'+(r.cats&&r.cats.length?rcatHtml(r.cats):'')+'</div></div>'+
    '<div class="rgrid"><div class="panel ring">'+(ph[0]?'<img class="ringimg" src="'+ph[0]+'" alt="">':'')+'<h3 class="sec">'+tr('Ingredients')+'</h3>'+
    (base?'<div class="srv"><span>'+tr('For')+'</span><button id="minus" aria-label="'+tr('Fewer servings')+'">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="'+tr('More servings')+'">+</button><span>'+tr('people')+'</span></div>':'')+kcalHtml(r,f)+
@@ -1011,7 +1019,7 @@ function openRecipe(id){
     new IntersectionObserver(function(es,o){if(es[0].isIntersecting&&!started){started=true;o.disconnect();
       vv.reduce(function(p,_,i){return p.then(function(){return loadVid(i)})},Promise.resolve())}},{rootMargin:'200px'}).observe(mc);
   }
-  $('back').onclick=function(){show('list')};
+  $('back').onclick=goHome;
   $('edit').onclick=function(){openForm(r)};
   $('del').onclick=function(){if(!TOKEN){$('signm').classList.remove('hidden');return}if(confirm(tr('Delete “{n}”?',{n:r.name}))){recipes=recipes.filter(function(x){return x.id!==r.id});if(TOKEN){if(r._folder)driveTrash(r._folder);else if(r._fid&&!r._multi){driveTrash(r._fid);(r._imgFiles||[]).concat(r._vids||[]).forEach(function(f){driveTrash(f.id,true)})}}persist();renderList();show('list')}};
   if($('minus')){var paint=function(){$('srvn').textContent=Math.round(base*factor*100)/100;if($('kcalbox'))$('kcalbox').outerHTML=kcalHtml(r,factor);$('ingl').innerHTML=L.ings.map(function(i){return '<li><input type="checkbox" aria-label="'+esc(tr('Got it'))+'"><span>'+esc(scale(i,factor))+'</span></li>'}).join('');bindIng()};
