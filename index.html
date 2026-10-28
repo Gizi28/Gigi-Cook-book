@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My Recipe Book (Google Drive)</title>
+<title>Gusto &amp; Co</title>
 <meta name="theme-color" content="#f2b01e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Recipe Book">
+<meta name="apple-mobile-web-app-title" content="Gusto &amp; Co">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@ body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:16px/
 button,input,textarea,select{font:inherit;color:inherit}
 .top{position:fixed;top:0;left:0;right:0;z-index:40;background:var(--accent);color:var(--accent-ink);padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .25s,color .25s,box-shadow .25s}
 .top.clear{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;box-shadow:none}
-.top h1{margin:0;font:700 34px/1 'Caveat','Segoe Script','Bradley Hand',cursive}
+.top h1{margin:0;font:700 46px/1 'Caveat','Segoe Script','Bradley Hand',cursive}
 .wrap{max-width:760px;margin:0 auto;padding:calc(84px + env(safe-area-inset-top,0px)) 14px 80px}
 body{--fw:0px;--cw:0px}
 body.rv .wrap{max-width:none;padding:0 0 80px}
@@ -41,7 +41,7 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .ltools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .top h1{cursor:pointer}
 .top #theme{padding:10px 12px;line-height:1}
-@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:22px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}.top h1{font-size:30px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -100,6 +100,8 @@ body.lv .wrap{padding-top:18px}
 .lhero .rcat{font-weight:700}
 .rhero.none{color:var(--accent-ink)}
 .rhero.none::after{display:none}
+.hslog{position:absolute;z-index:1;left:0;right:0;top:46%;transform:translateY(-50%);padding:0 16px;text-align:center;font-size:clamp(22px,3vw,36px);font-weight:600;line-height:1.2;letter-spacing:.02em;color:var(--accent);text-shadow:0 2px 4px rgba(0,0,0,.5),0 4px 28px rgba(0,0,0,.6);pointer-events:none}
+.rhero.none .hslog{color:var(--accent-ink);text-shadow:none}
 .rhero .emo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:.5}
 .rback{position:absolute;z-index:2;top:calc(78px + env(safe-area-inset-top,0px));left:14px;background:rgba(255,255,255,.92);color:#2b2b2b;border:0;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
 .rcap{position:absolute;z-index:1;left:0;right:0;bottom:0;max-width:1320px;margin:0 auto;padding:0 14px 22px}
@@ -369,7 +371,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 </style>
 </head>
 <body class="lv">
-<div class="top" id="top"><h1 data-t="My Recipe Book">My Recipe Book</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
+<div class="top" id="top"><h1 data-t="Gusto & Co">Gusto &amp; Co</h1><span style="display:flex;gap:6px;flex-wrap:wrap"><select id="lang" class="btn langsel" data-ta="Language" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="es">ES</option></select><button class="btn" id="theme" data-ta="Switch light or dark mode" aria-label="Switch light or dark mode">🌙</button><button class="btn" id="planbtn" data-ta="Meal plan" aria-label="Meal plan"><span class="lg" data-t="Meal plan">Meal plan</span><span class="sm">📅</span></button><button class="btn hidden" id="lock" data-ta="Owner tools" aria-label="Owner tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button><button class="btn" id="add" data-ta="Add recipe" aria-label="Add recipe"><span class="lg" data-t="Add recipe">Add recipe</span><span class="sm">+</span></button><button class="btn" id="me" data-ta="Account" aria-label="Account"></button></span></div><input type="file" id="impfile" accept=".json,application/json" class="hidden">
 <div id="memenu" class="memenu hidden"></div>
 <div class="rhero lhero none" id="lhero"></div>
 <div class="wrap">
@@ -444,10 +446,10 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 w (phone plan table)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 y (bigger title)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
-  <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
+  <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="Gusto & Co">Gusto &amp; Co</h3>
   <p style="margin-top:0" data-t="Sign in with your Google email to open the recipes.">Sign in with your Google email to open the recipes.</p>
   <input type="text" id="gemail" placeholder="you@gmail.com" inputmode="email" autocomplete="email" data-ta="Google email" aria-label="Google email">
   <button class="btn" id="signbtn" data-t="Sign in with Google" style="width:100%;margin-top:12px">Sign in with Google</button>
@@ -464,7 +466,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return
 
 // ---- Languages: English text is the key; French and Spanish translations below ----
 var TR={fr:{
-  "My Recipe Book":"Mon livre de recettes","Meal plan":"Planning repas","Switch light or dark mode":"Mode clair ou sombre","Owner tools":"Outils d'administration","Language":"Langue",
+  "Good taste, good company":"Le goût du partage","Meal plan":"Planning repas","Switch light or dark mode":"Mode clair ou sombre","Owner tools":"Outils d'administration","Language":"Langue",
   "Add recipe":"Ajouter une recette","Not signed in. Tap “Sign in with Google”.":"Non connecté. Touchez « Se connecter avec Google ».","Search recipes or ingredients":"Rechercher une recette ou un ingrédient",
   "Recipes as JSON":"Recettes en JSON","This is all your data. You can edit it here and apply it, or copy it as a backup.":"Voici toutes vos données. Vous pouvez les modifier ici et les appliquer, ou les copier comme sauvegarde.",
   "Apply changes":"Appliquer les modifications","Close":"Fermer","New recipe":"Nouvelle recette","Edit recipe":"Modifier la recette","Name":"Nom","Servings":"Portions","Difficulty":"Difficulté",
@@ -516,7 +518,7 @@ var TR={fr:{
   "Install the app":"Installer l'application","On iPhone or iPad: tap the Share button, then “Add to Home Screen”.":"Sur iPhone ou iPad : touchez le bouton Partager, puis « Sur l'écran d'accueil ».",
   "Starter":"Entrée","Main course":"Plat principal","Dessert":"Dessert","Italian":"Italien","Peruvian":"Péruvien","Japanese":"Japonais","Other":"Autre"
 },es:{
-  "My Recipe Book":"Mi libro de recetas","Meal plan":"Plan de comidas","Switch light or dark mode":"Modo claro u oscuro","Owner tools":"Herramientas de administración","Language":"Idioma",
+  "Good taste, good company":"Tu gusto, tu comparte","Meal plan":"Plan de comidas","Switch light or dark mode":"Modo claro u oscuro","Owner tools":"Herramientas de administración","Language":"Idioma",
   "Add recipe":"Añadir receta","Not signed in. Tap “Sign in with Google”.":"No has iniciado sesión. Toca «Iniciar sesión con Google».","Search recipes or ingredients":"Buscar recetas o ingredientes",
   "Recipes as JSON":"Recetas en JSON","This is all your data. You can edit it here and apply it, or copy it as a backup.":"Estos son todos tus datos. Puedes editarlos aquí y aplicarlos, o copiarlos como copia de seguridad.",
   "Apply changes":"Aplicar cambios","Close":"Cerrar","New recipe":"Nueva receta","Edit recipe":"Editar receta","Name":"Nombre","Servings":"Porciones","Difficulty":"Dificultad",
@@ -577,7 +579,7 @@ var LANG=(function(){var l=lsGet('rb-lang','')||String(navigator.language||'en')
 function tr(s,v){var r=(TR[LANG]&&TR[LANG][s])||s;if(v)Object.keys(v).forEach(function(k){r=r.split('{'+k+'}').join(v[k])});return r}
 // Built-in category names are shown translated; the English name is what recipes store
 function catName(c){return DEFCATS.some(function(d){return d[0]===c})?tr(c):c}
-function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;document.title=tr('My Recipe Book');DAYN=DAYS[LANG];MON=MONS[LANG];
+function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;document.title='Gusto & Co';DAYN=DAYS[LANG];MON=MONS[LANG];
   document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=tr(e.dataset.t)});
   document.querySelectorAll('[data-tp]').forEach(function(e){e.placeholder=tr(e.dataset.tp)});
   document.querySelectorAll('[data-ta]').forEach(function(e){e.setAttribute('aria-label',tr(e.dataset.ta))});
@@ -726,7 +728,7 @@ function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
   if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
   var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&pic(r,0,'lg');
   $('lhero').className='rhero lhero'+(ph?'':' none');
-  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
+  $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="hslog">'+tr('Good taste, good company')+'</div><div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
     (r?'<button type="button" class="rcat" id="herogo">'+esc(tr('Featured: {n} →',{n:rt(r).name}))+'</button>':'')+'</div>'}
 $('lhero').onclick=function(e){if(e.target.closest('#herogo')){factor=1;openRecipe(heroId)}};
 function renderList(){
@@ -865,7 +867,7 @@ function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));r
     function font(st,sz,c){doc.setFont('helvetica',st);doc.setFontSize(sz);col('setTextColor',c||INK)}
     function head(){if(logo)doc.addImage(logo,'PNG',M,8,17,17);
       font('bold',22);doc.text(tr('Meal plan'),M+21,16);
-      font('normal',10,MUT);doc.text(tr('My Recipe Book')+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
+      font('normal',10,MUT);doc.text('Gusto & Co  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
       if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
       col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
       y=33;col('setFillColor',Y);doc.rect(M,y,W-2*M,11,'F');font('bold',10);
