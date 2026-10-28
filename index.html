@@ -306,15 +306,45 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .pct small{color:var(--muted);font-size:11px}
 .pcb{display:flex;align-items:center;gap:2px;font-size:12px;flex:none}
 .pcb button{width:22px;height:22px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);cursor:pointer;font-size:13px;line-height:1;padding:0}
+.pcx{display:block;min-width:0}
+.pmain{min-width:0}
+.phr{display:none}
+.pexp{display:flex;flex-wrap:wrap;gap:6px}
 @media (min-width:900px){
-  .pdays.week{grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 8px}
-  .pdays.week .pday{grid-row:span var(--rr);grid-template-rows:subgrid;padding:8px}
   .pdays.week .pchip{flex-wrap:wrap;row-gap:3px}
   .pdays.week .pct{flex-basis:calc(100% - 40px)}
   .pdays.week .pcb{margin-left:auto}
   .pdays.day{max-width:640px}
 }
-@media (min-width:900px) and (max-width:1250px){.pdays.week .pci{display:none}}
+@media (min-width:900px) and (max-width:1099px){
+  .pdays.week{grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 8px}
+  .pdays.week .pday{grid-row:span var(--rr);grid-template-rows:subgrid;padding:8px}
+  .pdays.week .pci{display:none}
+}
+/* Big screens: the dishes scroll down on the left, the plan is a table on the right (days down, meals across) */
+@media (min-width:1100px){
+  .pwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px;align-items:start}
+  .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+  .pcar{flex-direction:column;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 2px 2px;gap:8px}
+  .pcard{flex:none;flex-direction:row;align-items:center}
+  .pcard .fth{flex:0 0 64px;width:64px;height:52px;aspect-ratio:auto}
+  .pcx{flex:1;padding:4px 0}
+  .pcard b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;padding-top:0}
+  .pcard small{padding-bottom:0}
+  .pghost{width:250px}
+  .phint{margin-top:6px}
+  .pdays.week{grid-template-columns:128px repeat(var(--nc),minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .pdays.week .phr{display:grid;grid-column:1/-1;grid-template-columns:subgrid;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:14px;text-align:center}
+  .phr span{padding:9px 6px;border-left:1px solid rgba(0,0,0,.1)}
+  .phr span:first-child{border-left:0}
+  .phr small{display:block;font-weight:400;font-size:11px;opacity:.75}
+  .pdays.week .pday{grid-column:1/-1;grid-template-columns:subgrid;gap:0;padding:0;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none}
+  .pdays.week .pdh{padding:10px;background:var(--soft);display:flex;flex-direction:column;justify-content:center}
+  .pdays.week .pday.today .pdh{box-shadow:inset 4px 0 0 var(--accent)}
+  .pdays.week .pdt{flex-direction:column;align-items:flex-start;gap:2px}
+  .pdays.week .pslot{border:0;border-left:1px solid var(--line);border-radius:0;min-height:64px}
+  .pdays.week .psl{display:none}
+}
 .hidden{display:none}
 </style>
 </head>
@@ -394,7 +424,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 r (installable app)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 s (meal plan PDF + calendar)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <h3 class="sec" style="font:700 40px/1 'Caveat','Segoe Script',cursive;margin-bottom:10px" data-t="My Recipe Book">My Recipe Book</h3>
@@ -434,6 +464,9 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
+  "Download PDF":"Télécharger le PDF","Add to calendar":"Ajouter au calendrier","Nothing planned this week yet.":"Rien n'est encore prévu cette semaine.",
+  "Could not create the PDF. Check your internet connection.":"Impossible de créer le PDF. Vérifiez votre connexion internet.","Total":"Total","{p}% of goal":"{p} % de l'objectif",
+  "Weekly average: {k} kcal a day":"Moyenne de la semaine : {k} kcal par jour","Calories are estimated from the ingredients.":"Les calories sont estimées à partir des ingrédients.","Day total: {k} kcal":"Total du jour : {k} kcal",
   "Clear week":"Vider la semaine","Day":"Jour","Week":"Semaine","Meal times:":"Repas :","This week: {n} day planned · average {k} kcal a day":"Cette semaine : {n} jour planifié · moyenne {k} kcal par jour",
   "This week: {n} days planned · average {k} kcal a day":"Cette semaine : {n} jours planifiés · moyenne {k} kcal par jour","Today":"Aujourd'hui","Removed recipe":"Recette supprimée","Fewer portions":"Moins de portions",
   "Portions":"Portions","More portions":"Plus de portions","Remove from plan":"Retirer du planning","Remove all meals from this week?":"Retirer tous les repas de cette semaine ?",
@@ -483,6 +516,9 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
+  "Download PDF":"Descargar PDF","Add to calendar":"Añadir al calendario","Nothing planned this week yet.":"Todavía no hay nada planificado esta semana.",
+  "Could not create the PDF. Check your internet connection.":"No se pudo crear el PDF. Revisa tu conexión a internet.","Total":"Total","{p}% of goal":"{p} % del objetivo",
+  "Weekly average: {k} kcal a day":"Promedio semanal: {k} kcal al día","Calories are estimated from the ingredients.":"Las calorías se estiman a partir de los ingredientes.","Day total: {k} kcal":"Total del día: {k} kcal",
   "Clear week":"Vaciar semana","Day":"Día","Week":"Semana","Meal times:":"Comidas:","This week: {n} day planned · average {k} kcal a day":"Esta semana: {n} día planificado · promedio {k} kcal al día",
   "This week: {n} days planned · average {k} kcal a day":"Esta semana: {n} días planificados · promedio {k} kcal al día","Today":"Hoy","Removed recipe":"Receta eliminada","Fewer portions":"Menos porciones",
   "Portions":"Porciones","More portions":"Más porciones","Remove from plan":"Quitar del plan","Remove all meals from this week?":"¿Quitar todas las comidas de esta semana?",
@@ -713,28 +749,30 @@ function setPick(id){pick=id;document.body.classList.toggle('picking',!!id);if($
 function renderPlan(){var g=goal();
   $('plan').innerHTML='<div class="phead"><h2>'+tr('Meal plan')+'</h2><div class="pgoal">🎯 '+(g?tr('Daily goal')+' <b>'+nf(g)+' kcal</b>':tr('No daily goal yet'))+
     ' <button type="button" class="btn ghost btn-s" data-a="prof">'+tr(g?'Change':'Set my goal')+'</button></div></div>'+
-    '<div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="'+tr('Search dishes')+'" aria-label="'+tr('Search dishes')+'"><div class="pcar" id="pcar"></div>'+
-    '<div class="phint">'+tr('Drag a dish onto a meal, or tap a dish and then tap a meal.')+'</div></div><div id="pctl"></div><div id="pdays"></div>';
+    '<div class="pwrap"><div class="pcarw" id="pcarw"><input type="text" id="psearch" placeholder="'+tr('Search dishes')+'" aria-label="'+tr('Search dishes')+'"><div class="pcar" id="pcar"></div>'+
+    '<div class="phint">'+tr('Drag a dish onto a meal, or tap a dish and then tap a meal.')+'</div></div><div class="pmain"><div id="pctl"></div><div id="pdays"></div></div></div>';
   $('pcarw').style.top=$('top').offsetHeight+'px';
   renderPlanCar();renderPlanDays()}
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   var list=recipes.slice().sort(function(a,b){return rt(a).name.localeCompare(rt(b).name)}).filter(function(r){return !q||(r.name+' '+rt(r).name).toLowerCase().indexOf(q)>-1});
   $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
-    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><b>'+esc(rt(r).name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></button>'}).join('')
+    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><span class="pcx"><b>'+esc(rt(r).name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></span></button>'}).join('')
     :'<div class="phint" style="padding:16px">'+tr(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
+function shownSlots(keys){return SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})})}
 function renderPlanDays(){
   var days=planMode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
-  var shown=SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})});
+  var shown=shownSlots(keys);
   var tots=[0,1,2,3,4,5,6].map(function(i){return dayTotal(dkey(pday(i)))}),used=tots.filter(function(t){return t>0});
   $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="'+tr('Previous week')+'">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
     '<button type="button" class="ibtn" data-a="next" aria-label="'+tr('Next week')+'">›</button><button type="button" class="btn ghost btn-s" data-a="today">'+tr('This week')+'</button>'+
     '<button type="button" class="btn ghost btn-s" data-a="clear">'+tr('Clear week')+'</button>'+
+    '<span class="pexp"><button type="button" class="btn btn-s" data-a="pdf">⬇ '+tr('Download PDF')+'</button><button type="button" class="btn btn-s" data-a="ics">📅 '+tr('Add to calendar')+'</button></span>'+
     '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span></div>'+
     (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
     '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
     (used.length?'<div class="psum">'+tr(used.length>1?'This week: {n} days planned · average {k} kcal a day':'This week: {n} day planned · average {k} kcal a day',{n:used.length,k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'</div>':'');
-  var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);
-  pd.innerHTML=days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
+  var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);pd.style.setProperty('--nc',shown.length);
+  pd.innerHTML=(planMode==='week'?'<div class="phr"><span>'+tr('Day')+'</span>'+shown.map(function(s){return '<span>'+tr(s[1])+'<small>'+s[2]+'</small></span>'}).join('')+'</div>':'')+days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
     return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">'+tr('Today')+'</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
@@ -750,6 +788,8 @@ $('plan').onclick=function(e){if(pdJust)return;
       if(a==='plus')arr[j].p+=.5;else if(a==='minus'){if(arr[j].p>.5)arr[j].p-=.5}else if(a==='del')arr.splice(j,1);
       cleanDay(k);savePlan();renderPlanDays();return}
     if(a==='prof'){openProf();return}
+    if(a==='pdf'){planPdf();return}
+    if(a==='ics'){planIcs();return}
     if(a==='prev'||a==='next')planWeek.setDate(planWeek.getDate()+(a==='prev'?-7:7));
     else if(a==='today'){planWeek=monday(new Date());planDay=(new Date().getDay()+6)%7}
     else if(a==='mode'){planMode=b.dataset.m;lsSet('rb-pmode',planMode)}
@@ -761,19 +801,20 @@ $('plan').onclick=function(e){if(pdJust)return;
 $('plan').oninput=function(e){if(e.target.id==='psearch')renderPlanCar()};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pick)setPick(null)});
 
-// Drag a dish card onto a meal. On touch screens a sideways swipe scrolls the carousel instead.
+// Drag a dish card onto a meal. On touch screens a swipe along the list (sideways, or down on big screens) scrolls it instead.
 var pdrag=null,pdJust=false,pdTimer=null;
-$('plan').addEventListener('pointerdown',function(e){var c=e.target.closest('.pcard');if(!c||e.button>0)return;
-  pdrag={id:c.dataset.id,el:c,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,t:e.pointerType,mode:'',sl:$('pcar').scrollLeft}});
+function carVert(){return getComputedStyle($('pcar')).flexDirection==='column'}
+$('plan').addEventListener('pointerdown',function(e){var c=e.target.closest('.pcard');if(!c||e.button>0)return;var v=carVert();
+  pdrag={id:c.dataset.id,el:c,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,t:e.pointerType,mode:'',v:v,sl:v?$('pcar').scrollTop:$('pcar').scrollLeft}});
 window.addEventListener('pointermove',function(e){if(!pdrag)return;var dx=e.clientX-pdrag.x,dy=e.clientY-pdrag.y;
   if(!pdrag.mode){if(Math.abs(dx)<6&&Math.abs(dy)<6)return;
-    pdrag.mode=pdrag.t!=='mouse'&&Math.abs(dx)>Math.abs(dy)?'scroll':'drag';
+    pdrag.mode=pdrag.t!=='mouse'&&(pdrag.v?Math.abs(dy)>Math.abs(dx):Math.abs(dx)>Math.abs(dy))?'scroll':'drag';
     if(pdrag.mode==='drag'){pdrag.gh=pdrag.el.cloneNode(true);pdrag.gh.classList.add('pghost');pdrag.gh.classList.remove('pick');document.body.appendChild(pdrag.gh);document.body.classList.add('dragging');pdTimer=setInterval(pdAuto,30)}}
-  if(pdrag.mode==='scroll'){$('pcar').scrollLeft=pdrag.sl-dx;return}
+  if(pdrag.mode==='scroll'){if(pdrag.v)$('pcar').scrollTop=pdrag.sl-dy;else $('pcar').scrollLeft=pdrag.sl-dx;return}
   pdrag.cx=e.clientX;pdrag.cy=e.clientY;pdrag.gh.style.left=e.clientX+'px';pdrag.gh.style.top=e.clientY+'px';pdHover()});
 function pdSlot(d){var el=document.elementFromPoint(d.cx,d.cy);return el&&el.closest('.pslot')}
 function pdHover(){var s=pdSlot(pdrag);document.querySelectorAll('.pslot.hov').forEach(function(x){if(x!==s)x.classList.remove('hov')});if(s)s.classList.add('hov')}
-function pdAuto(){if(!pdrag)return;var b=$('pcarw').getBoundingClientRect().bottom,y=pdrag.cy;
+function pdAuto(){if(!pdrag)return;var b=pdrag.v?$('top').offsetHeight:$('pcarw').getBoundingClientRect().bottom,y=pdrag.cy;
   if(y>innerHeight-70)window.scrollBy(0,14);else if(y>b&&y<b+50)window.scrollBy(0,-14);else return;pdHover()}
 function pdEnd(drop){if(!pdrag)return;clearInterval(pdTimer);var d=pdrag;pdrag=null;
   if(d.mode){pdJust=true;setTimeout(function(){pdJust=false},60)}
@@ -782,6 +823,64 @@ function pdEnd(drop){if(!pdrag)return;clearInterval(pdTimer);var d=pdrag;pdrag=n
   if(s){setPick(null);addMeal(s.dataset.k,s.dataset.s,d.id)}}
 window.addEventListener('pointerup',function(){pdEnd(true)});
 window.addEventListener('pointercancel',function(){pdEnd(false)});
+
+// ---- The week's plan as a PDF (with the logo and colours) and as calendar events ----
+function planEmpty(){for(var i=0;i<7;i++)if(plan[dkey(pday(i))])return false;return true}
+function loadJs(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function dataUrl(u){return fetch(u).then(function(r){return r.blob()}).then(function(b){return new Promise(function(ok){var f=new FileReader();f.onload=function(){ok(f.result)};f.readAsDataURL(b)})})}
+function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=recById(m.id),pk=r?portionKcal(r):0;
+  return {n:(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):''),k:pk?nf(pk*m.p)+' kcal':''}})}
+function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
+  Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/icon-192.png').catch(function(){return null})]).then(function(a){
+    var logo=a[1],doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=12,y=0;
+    var Y=[242,176,30],INK=[43,43,43],MUT=[125,120,110],CREAM=[253,243,216],PALE=[255,252,243],LINE=[230,222,200],OK=[60,154,95],OVER=[192,57,43];
+    var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),g=goal(),dw=34,tw=28,cw=(W-2*M-dw-tw)/slots.length,LH=3.5;
+    function col(f,c){doc[f](c[0],c[1],c[2])}
+    function font(st,sz,c){doc.setFont('helvetica',st);doc.setFontSize(sz);col('setTextColor',c||INK)}
+    function head(){if(logo)doc.addImage(logo,'PNG',M,8,17,17);
+      font('bold',22);doc.text(tr('Meal plan'),M+21,16);
+      font('normal',10,MUT);doc.text(tr('My Recipe Book')+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
+      if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
+      col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
+      y=33;col('setFillColor',Y);doc.rect(M,y,W-2*M,11,'F');font('bold',10);
+      doc.text(tr('Day'),M+dw/2,y+7,{align:'center'});
+      slots.forEach(function(s,j){doc.text(tr(s[1])+'  '+s[2],M+dw+cw*j+cw/2,y+7,{align:'center',maxWidth:cw-2})});
+      doc.text(tr('Total'),W-M-tw/2,y+7,{align:'center'});y+=11}
+    head();
+    keys.forEach(function(k,i){
+      var cells=slots.map(function(s){return mealList(k,s[0]).map(function(m){font('bold',9);m.l=doc.splitTextToSize(m.n,cw-4);return m})});
+      var h=Math.max(15,4+Math.max.apply(null,cells.map(function(c){return c.reduce(function(a,m){return a+(m.l.length+(m.k?1:0))*LH+1},0)})));
+      if(y+h>H-14){doc.addPage();head()}
+      col('setFillColor',i%2?PALE:[255,255,255]);doc.rect(M,y,W-2*M,h,'F');
+      col('setFillColor',CREAM);doc.rect(M,y,dw,h,'F');
+      font('bold',10);doc.text(DAYN[i]+' '+fmtD(pday(i)),M+3,y+6);
+      cells.forEach(function(c,j){var x=M+dw+cw*j,yy=y+5.5;
+        c.forEach(function(m){font('bold',9);m.l.forEach(function(t){doc.text(t,x+2,yy);yy+=LH});
+          if(m.k){font('normal',8,MUT);doc.text(m.k,x+2,yy);yy+=LH}yy+=1})});
+      var t=dayTotal(k);font('bold',11);doc.text(t?nf(t)+' kcal':'–',W-M-tw/2,y+7,{align:'center'});
+      if(g&&t){var p=Math.round(t/g*100);font('normal',8,p>110?OVER:p>=90?OK:MUT);doc.text(tr('{p}% of goal',{p:p}),W-M-tw/2,y+11.5,{align:'center'})}
+      col('setDrawColor',LINE);doc.setLineWidth(.2);doc.rect(M,y,W-2*M,h);
+      for(var j=0;j<=slots.length;j++)doc.line(M+dw+cw*j,y,M+dw+cw*j,y+h);
+      y+=h});
+    var used=keys.map(dayTotal).filter(function(t){return t>0});
+    if(used.length){font('bold',11);doc.text(tr('Weekly average: {k} kcal a day',{k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+(g?'  ·  '+tr('Daily goal')+': '+nf(g)+' kcal':''),M,Math.min(y+8,H-9))}
+    font('normal',8,MUT);doc.text(tr('Calories are estimated from the ingredients.'),W-M,H-6,{align:'right'});
+    doc.save('meal-plan-'+keys[0]+'.pdf')
+  }).catch(function(){alert(tr('Could not create the PDF. Check your internet connection.'))})}
+function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n')}
+function icsFold(l){var o='';while(l.length>70){o+=l.slice(0,70)+'\r\n ';l=l.slice(70)}return o+l}
+function planIcs(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
+  var g=goal(),now=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',
+    L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Gigi Cook Book//Meal plan//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:'+icsEsc(tr('Meal plan'))];
+  for(var i=0;i<7;i++){var d=pday(i),k=dkey(d),tot=dayTotal(k);if(!plan[k])continue;
+    SLOTS.forEach(function(s){var ms=mealList(k,s[0]);if(!ms.length)return;
+      var hm=s[2].split(':'),st=new Date(d),en;st.setHours(+hm[0],+hm[1]);en=new Date(st.getTime()+30*60000);
+      function ts(x){return dkey(x).replace(/-/g,'')+'T'+pad2(x.getHours())+pad2(x.getMinutes())+'00'}
+      L.push('BEGIN:VEVENT','UID:'+k+'-'+s[0]+'@gizi28.github.io','DTSTAMP:'+now,'DTSTART:'+ts(st),'DTEND:'+ts(en),
+        'SUMMARY:'+icsEsc(tr(s[1])+': '+ms.map(function(m){return m.n}).join(', ')),
+        'DESCRIPTION:'+icsEsc(ms.map(function(m){return '• '+m.n+(m.k?' – '+m.k:'')}).join('\n')+'\n\n'+tr('Day total: {k} kcal',{k:nf(tot)})+(g?' / '+nf(g):'')),'END:VEVENT')})}
+  L.push('END:VCALENDAR');
+  download('meal-plan-'+dkey(pday(0))+'.ics',L.map(icsFold).join('\r\n')+'\r\n','text/calendar')}
 
 function openProf(){pf=prof?Object.assign({},prof):{};$('ptgt').value=prof&&prof.target||'';paintProf();$('profm').classList.remove('hidden')}
 function paintProf(){['sex','age','act'].forEach(function(f){$('pf-'+f).querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.v===pf[f])})});
@@ -923,7 +1022,7 @@ $('save').onclick=function(){
   factor=1;renderList();openRecipe(rec.id);
 };
 
-function download(name,text){var b=new Blob([text],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+function download(name,text,type){var b=new Blob([text],{type:type||'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),tip:String(r.tip||''),kcal:+r.kcal||0,lang:String(r.lang||''),tr:r.tr&&typeof r.tr==='object'?r.tr:null,cats:Array.isArray(r.cats)?r.cats.map(String):[]}:null}
 function parseList(t,fb){var d=JSON.parse(t);if(!Array.isArray(d)){if(d&&Array.isArray(d.recipes))d=d.recipes;else if(d&&d.name)d=[d];else throw new Error('x')}return d.map(function(x,i){return clean(x,fb?fb+'-'+i:null)}).filter(Boolean)}
 $('exp').onclick=function(){download('recipes.json',JSON.stringify(recipes.map(strip),null,2))};
