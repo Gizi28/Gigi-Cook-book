@@ -44,6 +44,10 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .blogo,.logom{display:block;flex:none;aspect-ratio:758/408;background:currentColor;-webkit-mask:url(icons/logo.png) center/contain no-repeat;mask:url(icons/logo.png) center/contain no-repeat}
 .blogo{height:46px}
 .btxt{display:flex;flex-direction:column;min-width:0}
+.btxt h1{overflow:hidden;text-overflow:ellipsis}
+#tbtns{flex:none;flex-wrap:nowrap!important;margin-left:auto}
+@media (max-width:899px){.blogo{height:36px}.top h1{font-size:28px}}
+@media (max-width:700px){.top .lg{display:none}.top .sm{display:inline}}
 #tside{display:contents}
 #lang{order:1}#theme{order:2}#planbtn{order:3}#lock{order:4}#add{order:5}#me{order:6}
 .tslog{font-size:13px;line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -470,7 +474,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zm (centred recipe title)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-28 zn (top buttons on the right)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
