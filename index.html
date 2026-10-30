@@ -54,6 +54,10 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 @media (max-width:520px){body.pv #tbtns #share,body.fv #tbtns #share{display:none}}
 .scanbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:12px;border:1.5px dashed var(--accent);border-radius:12px;background:var(--soft)}
 .scanbox small{flex:1 1 220px;color:var(--muted);font-size:13px}
+.scanbox .btn{display:inline-flex;align-items:center;gap:6px}
+.scanbox .btn.busy{opacity:.6;pointer-events:none}
+/* visually hidden but still a real file input, so phones open the camera / gallery from the label */
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0;opacity:0}
 .toast{position:fixed;left:50%;bottom:96px;z-index:70;transform:translateX(-50%);background:var(--accent-ink);color:var(--accent);padding:10px 18px;border-radius:999px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none}
 .tslog{font-size:13px;line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top #theme{padding:10px 12px;line-height:1}
@@ -444,8 +448,8 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <form id="form" class="hidden panel" onsubmit="return false">
     <h3 class="sec" id="ftitle">New recipe</h3>
     <div id="scanbox" class="scanbox">
-      <button class="btn" type="button" id="scanbtn">📷 <span data-t="Scan a recipe">Scan a recipe</span></button>
-      <input type="file" id="scanfile" accept="image/*" class="hidden">
+      <label class="btn" for="scanfile" id="scanbtn" role="button" tabindex="0">📷 <span data-t="Scan a recipe">Scan a recipe</span></label>
+      <input type="file" id="scanfile" accept="image/*" class="vh">
       <small id="scanmsg" data-t="Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.">Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.</small>
     </div>
     <label for="name" data-t="Name">Name</label>
@@ -509,7 +513,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-30 a (scan a recipe)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-30 b (scan button fix)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -1118,19 +1122,21 @@ $('photos').onclick=function(e){var b=e.target.closest('button');if(b){photos.sp
 $('addphoto').onclick=function(){$('file').click()};
 // ---- Scan a recipe: read the text of a photo on the device and fill in the form (the photo itself is never kept) ----
 var TESS_JS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
-$('scanbtn').onclick=function(){$('scanfile').click()};
-$('scanfile').onchange=function(){var f=this.files[0];this.value='';if(f)scanRecipe(f)};
+$('scanbtn').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();$('scanfile').click()}};
+$('scanfile').onchange=function(){var f=this.files&&this.files[0];if(f&&!$('scanbtn').classList.contains('busy'))scanRecipe(f);this.value=''};
 function shrinkForScan(f){return new Promise(function(ok,no){var u=URL.createObjectURL(f),im=new Image();
   im.onload=function(){var s=Math.min(1,2000/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);
     c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c)};
   im.onerror=function(){URL.revokeObjectURL(u);no(new Error('image'))};im.src=u})}
-function scanRecipe(f){var msg=$('scanmsg'),btn=$('scanbtn');btn.disabled=true;msg.textContent=tr('Getting the text reader ready… (slower the first time)');
+function scanRecipe(f){var msg=$('scanmsg'),btn=$('scanbtn');btn.classList.add('busy');msg.textContent=tr('Getting the text reader ready… (slower the first time)');
   Promise.all([window.Tesseract?0:loadJs(TESS_JS),shrinkForScan(f)]).then(function(a){
-    return Tesseract.createWorker(['eng','fra','spa'],1,{logger:function(m){if(m.status==='recognizing text')msg.textContent=tr('Reading the photo… {p}%',{p:Math.round(m.progress*100)})}})
-      .then(function(w){return w.recognize(a[1]).then(function(r){w.terminate();return r.data.text})})})
+    return Tesseract.createWorker(['eng','fra','spa'],1,{logger:function(m){
+        if(m.status==='recognizing text')msg.textContent=tr('Reading the photo… {p}%',{p:Math.round(m.progress*100)});
+        else if(/loading|initializ/.test(m.status||'')&&m.progress)msg.textContent=tr('Getting the text reader ready… (slower the first time)')+' '+Math.round(m.progress*100)+'%'}})
+      .then(function(w){return w.recognize(a[1]).then(function(r){w.terminate();return r.data.text},function(e){w.terminate();throw e})})})
   .then(function(text){msg.textContent=fillFromText(text)?tr('Done: check the recipe below, then save it. The photo was not kept.'):tr('No text could be read. Try a sharper, well-lit photo taken straight on.')})
-  .catch(function(){msg.textContent=tr('The photo could not be read. Check your internet connection and try again.')})
-  .then(function(){btn.disabled=false})}
+  .catch(function(e){msg.textContent=tr('The photo could not be read. Check your internet connection and try again.')+(e&&e.message?' ('+e.message+')':'')})
+  .then(function(){btn.classList.remove('busy')})}
 // Sort the lines into name, ingredients, steps and tips, using the usual headings in English, French and Spanish
 function parseRecipeText(text){
   var ING=/^(ingr[eé]dients?|ingredientes?)\b\s*:?\s*/i,STP=/^(pr[eé]paration|preparaci[oó]n|m[eé]thode|method|directions|instructions|steps|[eé]tapes|pasos|elaboraci[oó]n|procedure|proc[eé]d[eé])\b\s*:?\s*/i,
@@ -1142,9 +1148,11 @@ function parseRecipeText(text){
     p={name:'',ings:[],steps:[],tips:[],serv:0,prep:0,cook:0},sec='',pre=[],sawIng=false;
   function mins(m){return m[3].toLowerCase()==='h'?+m[2]*60:+m[2]}
   lines.forEach(function(l){var m;
-    if((m=l.match(PREP))&&/\d/.test(l)&&l.length<40){p.prep=mins(m);return}
-    if((m=l.match(COOK))&&l.length<40){p.cook=mins(m);return}
-    if(!p.serv&&(m=l.match(SRV))&&l.length<40){p.serv=+(m[1]||m[2]);return}
+    // times and servings only from short lines outside the steps (a step like "Bake 30 minutes" stays a step)
+    if(sec!=='s'&&l.length<40&&!/[.!]$/.test(l)){
+      if((m=l.match(PREP))&&m.index===0){p.prep=mins(m);return}
+      if((m=l.match(COOK))&&m.index===0){p.cook=mins(m);return}
+      if(!sec&&!p.serv&&(m=l.match(SRV))){p.serv=+(m[1]||m[2]);return}}
     if(ING.test(l)){sec='i';sawIng=true;l=l.replace(ING,'');if(!l)return}
     else if(STP.test(l)){sec='s';l=l.replace(STP,'');if(!l)return}
     else if(TIP.test(l)){sec='t';l=l.replace(TIP,'');if(!l)return}
