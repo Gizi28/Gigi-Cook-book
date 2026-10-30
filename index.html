@@ -54,6 +54,11 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 @media (max-width:520px){body.pv #tbtns #share,body.fv #tbtns #share{display:none}}
 .scanbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:12px;border:1.5px dashed var(--accent);border-radius:12px;background:var(--soft)}
 .scanbox small{flex:1 1 220px;color:var(--muted);font-size:13px}
+.linkrow{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px;padding-top:12px;border-top:1.5px dashed var(--accent)}
+.linkrow b{flex:1 1 100%;font-size:15px}
+.linkrow input{flex:1 1 200px;margin:0}
+.linkrow small{flex:1 1 100%;color:var(--muted);font-size:13px}
+.linkrow small:empty{display:none}
 /* framing the recipe on the photo before reading it */
 .cropov{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(0,0,0,.85)}
 .cropdlg{width:100%;max-width:960px;text-align:center;color:#fff}
@@ -117,7 +122,7 @@ ul.ing li.done span{text-decoration:line-through;color:var(--muted)}
 .step b{color:var(--accent-text);display:block;margin-bottom:2px}
 .tip{background:var(--soft);border-radius:10px;padding:12px 14px}
 label{display:block;font-weight:700;margin:14px 0 6px;font-size:14px}
-input[type=text],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+input[type=text],input[type=url],input[type=password],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 textarea{min-height:110px;resize:vertical}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row{display:flex;gap:8px;margin-bottom:8px}
@@ -467,6 +472,12 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
       <span class="btn filebtn" id="scanbtn"><span data-t="Take a photo">Take a photo</span><input type="file" id="scancam" accept="image/*" capture="environment" data-ta="Take a photo" aria-label="Take a photo"></span>
       <span class="btn ghost filebtn"><span data-t="Choose a photo">Choose a photo</span><input type="file" id="scanfile" accept="image/*" data-ta="Choose a photo" aria-label="Choose a photo"></span>
       <small id="scanmsg" data-t="Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.">Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.</small>
+      <div class="linkrow">
+        <b>🔗 <span data-t="From a website">From a website</span></b>
+        <input type="url" id="linkin" inputmode="url" autocomplete="off" data-tp="Paste the link of a recipe page" data-ta="Paste the link of a recipe page" placeholder="Paste the link of a recipe page" aria-label="Paste the link of a recipe page">
+        <button type="button" class="btn" id="linkbtn" data-t="Get the recipe">Get the recipe</button>
+        <small id="linkmsg"></small>
+      </div>
     </div>
     <label for="name" data-t="Name">Name</label>
     <input type="text" id="name" placeholder="Spaghetti carbonara">
@@ -529,7 +540,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 c (free photo reader only)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 d (recipe from a website link)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -578,7 +589,7 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
-  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","Step 1 of 2: frame the ingredients, then tap Next.":"Étape 1 sur 2 : encadrez les ingrédients, puis touchez Suivant.","Next":"Suivant","Step 2 of 2: frame the steps (preparation), then tap Read.":"Étape 2 sur 2 : encadrez les étapes (préparation), puis touchez Lire.","Read":"Lire","No steps":"Pas d'étapes","Reading the ingredients… {p}%":"Lecture des ingrédients… {p} %","Reading the steps… {p}%":"Lecture des étapes… {p} %","Read this part":"Lire cette partie","Whole photo":"Toute la photo","Drag the corners to keep only the recipe, then tap Read this part.":"Faites glisser les coins pour ne garder que la recette, puis touchez « Lire cette partie ».","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
+  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","From a website":"Depuis un site web","Paste the link of a recipe page":"Collez le lien d'une page de recette","Get the recipe":"Récupérer la recette","Getting the recipe from the page…":"Récupération de la recette depuis la page…","Done: check the recipe below, then save it.":"Terminé : vérifiez la recette ci-dessous, puis enregistrez-la.","This link does not look like a web page address.":"Ce lien ne ressemble pas à l'adresse d'une page web.","No recipe was found on this page.":"Aucune recette n'a été trouvée sur cette page.","The page could not be opened. Check the link and your internet connection.":"La page n'a pas pu être ouverte. Vérifiez le lien et votre connexion internet.","Step 1 of 2: frame the ingredients, then tap Next.":"Étape 1 sur 2 : encadrez les ingrédients, puis touchez Suivant.","Next":"Suivant","Step 2 of 2: frame the steps (preparation), then tap Read.":"Étape 2 sur 2 : encadrez les étapes (préparation), puis touchez Lire.","Read":"Lire","No steps":"Pas d'étapes","Reading the ingredients… {p}%":"Lecture des ingrédients… {p} %","Reading the steps… {p}%":"Lecture des étapes… {p} %","Read this part":"Lire cette partie","Whole photo":"Toute la photo","Drag the corners to keep only the recipe, then tap Read this part.":"Faites glisser les coins pour ne garder que la recette, puis touchez « Lire cette partie ».","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Prenez ou choisissez la photo d'une recette : son texte remplit le formulaire ci-dessous. La photo n'est pas conservée.",
   "Getting the text reader ready… (slower the first time)":"Préparation du lecteur de texte… (plus lent la première fois)","Reading the photo… {p}%":"Lecture de la photo… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Terminé : vérifiez la recette ci-dessous, puis enregistrez-la. La photo n'a pas été conservée.",
@@ -642,7 +653,7 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
-  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","Step 1 of 2: frame the ingredients, then tap Next.":"Paso 1 de 2: enmarca los ingredientes y luego toca Siguiente.","Next":"Siguiente","Step 2 of 2: frame the steps (preparation), then tap Read.":"Paso 2 de 2: enmarca los pasos (preparación) y luego toca Leer.","Read":"Leer","No steps":"Sin pasos","Reading the ingredients… {p}%":"Leyendo los ingredientes… {p} %","Reading the steps… {p}%":"Leyendo los pasos… {p} %","Read this part":"Leer esta parte","Whole photo":"Toda la foto","Drag the corners to keep only the recipe, then tap Read this part.":"Arrastra las esquinas para dejar solo la receta y luego toca «Leer esta parte».","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
+  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","From a website":"Desde un sitio web","Paste the link of a recipe page":"Pega el enlace de una página de receta","Get the recipe":"Obtener la receta","Getting the recipe from the page…":"Obteniendo la receta de la página…","Done: check the recipe below, then save it.":"Listo: revisa la receta de abajo y guárdala.","This link does not look like a web page address.":"Este enlace no parece la dirección de una página web.","No recipe was found on this page.":"No se encontró ninguna receta en esta página.","The page could not be opened. Check the link and your internet connection.":"No se pudo abrir la página. Revisa el enlace y tu conexión a internet.","Step 1 of 2: frame the ingredients, then tap Next.":"Paso 1 de 2: enmarca los ingredientes y luego toca Siguiente.","Next":"Siguiente","Step 2 of 2: frame the steps (preparation), then tap Read.":"Paso 2 de 2: enmarca los pasos (preparación) y luego toca Leer.","Read":"Leer","No steps":"Sin pasos","Reading the ingredients… {p}%":"Leyendo los ingredientes… {p} %","Reading the steps… {p}%":"Leyendo los pasos… {p} %","Read this part":"Leer esta parte","Whole photo":"Toda la foto","Drag the corners to keep only the recipe, then tap Read this part.":"Arrastra las esquinas para dejar solo la receta y luego toca «Leer esta parte».","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Haz o elige una foto de una receta: su texto rellena el formulario de abajo. La foto no se guarda.",
   "Getting the text reader ready… (slower the first time)":"Preparando el lector de texto… (más lento la primera vez)","Reading the photo… {p}%":"Leyendo la foto… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Listo: revisa la receta de abajo y guárdala. La foto no se ha guardado.",
@@ -1237,14 +1248,16 @@ function parseRecipeText(text){
     STPW='pr[eé]paration|preparaci[oó]n|m[eé]thode|method|directions|instructions|steps|[eé]tapes|pasos|elaboraci[oó]n|procedure|proc[eé]d[eé]|'+RECW,
     REC=new RegExp('^('+RECW+')\\b','i'),
     TIPW='tips?|notes?|astuces?|conseils?|consejos?|remarques?|notas?',
-    ING=new RegExp('^('+INGW+')\\b\\s*:?\\s*','i'),STP=new RegExp('^('+STPW+')\\b\\s*:?\\s*','i'),TIP=new RegExp('^('+TIPW+')\\b\\s*:?\\s*','i'),
+    // headings may start with an article: "Los ingredientes", "La elaboración", "Les étapes", "The method"
+    ART='(?:(?:los|las|les|the|la|el|le|l[\'’])\\s*)?',
+    ING=new RegExp('^'+ART+'('+INGW+')\\b\\s*:?\\s*','i'),STP=new RegExp('^'+ART+'('+STPW+')\\b\\s*:?\\s*','i'),TIP=new RegExp('^'+ART+'('+TIPW+')\\b\\s*:?\\s*','i'),
     PREP=/(prep(?:aration)?|pr[eé]paration|preparaci[oó]n)\D{0,15}(\d{1,3})\s*(min|h)/i,COOK=/(cook(?:ing)?|cuisson|cocci[oó]n|baking|bake|horno)\D{0,15}(\d{1,3})\s*(min|h)/i,
     SRV=/(?:serves|servings?|for|pour|para|yield)\D{0,12}(\d{1,2})|(\d{1,2})\s*(?:servings|portions?|personnes|personas|people|persons|parts)/i,
     QTY=/^(\d|½|¼|¾|⅓|une?\s|a\s|an\s|some\s|pinch|pinc[eé]e|pizca|un\s|una\s|des\s|du\s|de\s)/i,
     // steps are numbered 1) 2) 3)… or lettered A) B) C)…
     STEPNUM=/^(((step|[eé]tape|paso)\s*)?\d{1,2}|[a-h])\s*[).:-]\s*(?!\d)\S/i,
     BUL='(?:[•*·©°»«›‹>]|ee?|o|==+|—|–|-)',
-    p={name:'',ings:[],steps:[],tips:[],serv:0,prep:0,cook:0},sec='',pre=[],sawIng=false,lines=[];
+    p={name:'',ings:[],steps:[],tips:[],serv:0,prep:0,cook:0},sec='',pre=[],sawIng=false,sawStp=false,lines=[];
   function mins(m){return m[3].toLowerCase()==='h'?+m[2]*60:+m[2]}
   function letters(s){return (s.match(/[A-Za-zÀ-ÿ]/g)||[]).length}
   // text in capitals (common in screenshots and cards) is turned into normal sentence case
@@ -1272,17 +1285,20 @@ function parseRecipeText(text){
     // "Ingrédients (20 crêpes)": the number in brackets is how many it makes
     if(ING.test(l)){sec='i';sawIng=true;l=l.replace(ING,'');if(/^\(/.test(l)){if(!p.serv&&(m=l.match(/\d{1,3}/)))p.serv=+m[0];return}if(letters(l)<2)return}
     // "Recette" / "Recipe" is a heading only when it stands alone (not "Recette des crêpes")
-    else if(STP.test(l)&&(l.length<30||/^\S+\s*:/.test(l))&&!(REC.test(l)&&letters(l.replace(STP,''))>0)){sec='s';l=l.replace(STP,'');if(letters(l)<2)return}
+    else if(STP.test(l)&&(l.length<30||/^\S+\s*:/.test(l))&&!(REC.test(l)&&letters(l.replace(STP,''))>0)){sec='s';sawStp=true;l=l.replace(STP,'');if(letters(l)<2)return}
     else if(TIP.test(l)&&(l.length<30||/^\S+\s*:/.test(l))){sec='t';l=l.replace(TIP,'');if(letters(l)<2)return}
     // after the ingredients, a numbered/lettered line or a long sentence starts the steps
-    else if(sec==='i'&&(STEPNUM.test(l)||(l.length>60&&/[.!]$/.test(l))))sec='s';
+    else if(sec==='i'&&(STEPNUM.test(l)||(l.length>60&&/[.!]$/.test(l)&&p.ings.length>0&&l.split(',').length<3)))sec='s';
     if(sec==='i')p.ings.push(l);else if(sec==='s')p.steps.push(l);else if(sec==='t')p.tips.push(l);
     else if(!p.name&&letters(l)>=4&&!STEPNUM.test(l)&&!QTY.test(l))p.name=l;else pre.push(l)});
   // without headings: numbered/lettered lines and long sentences are steps; short lines with a bullet or a quantity are ingredients
   if(!sawIng)pre.forEach(function(l){var b=l.replace(new RegExp('^.{0,10}?'+BUL+'\\s+'),'');
     (!STEPNUM.test(l)&&l.length<=60&&(QTY.test(b)||/^\s*[•*·»«o-]\s/.test(l))?p.ings:p.steps).push(l)});
-  else p.steps=pre.filter(function(l){return letters(l)>=4}).concat(p.steps);
+  else p.steps=(sawStp?[]:pre.filter(function(l){return letters(l)>=4})).concat(p.steps);   // with a steps heading, text before the ingredients is only an introduction
   // ingredients: split lines that hold several items ("4 eggs • 500 g milk"), drop bullets and stray symbols
+  // a list written on one line ("1 kg patatas, 6 huevos, sal, aceite") becomes one ingredient per item
+  p.ings=[].concat.apply([],p.ings.map(function(l){var parts=l.replace(/\.+$/,'').split(/\s*[,;]\s*/);
+    return parts.length>=3&&parts.every(function(x){return x.length<45})?parts:[l]}));
   var ings=[];p.ings.forEach(function(l){l.split(new RegExp('\\s+'+BUL+'+\\s+(?=\\d)')).forEach(function(s){
     // drop specks read before the bullet ("ze <> * 500g…"), the bullet itself and stray letters before the quantity
     s=s.replace(/^.{0,10}?[*•·»«]\s*(?=\S)/,'').replace(new RegExp('^(\\s*'+BUL+'\\s+)+'),'').replace(/^[•*·©°»«›‹>\-–—\s]+/,'').replace(/^(?:[^\s\d]{1,3}\s+)+(?=\d)/,'')
@@ -1298,13 +1314,90 @@ function parseRecipeText(text){
   // drop specks after the last sentence ("… cuisson ! 5") and read "40eufs" (4 OEUFS) as "4 oeufs"
   p.steps=st.map(function(s){return cap(s.replace(/[\s¿\/\\|*•<>=~_-]+$/,'').replace(/([.!?])\s+\S{1,4}$/,'$1'))});
   p.ings=p.ings.map(function(s){return cap(s.replace(/^(\d+)0([a-zà-ÿ]{4,})/i,'$1 o$2'))});p.tips=p.tips.map(cap);p.name=cap(p.name);return p}
-function fillFromText(text){var p=parseRecipeText(text||'');if(!p.name&&!p.ings.length&&!p.steps.length)return false;
+function fillFromText(text){var p=parseRecipeText(text||'');if(!p.name&&!p.ings.length&&!p.steps.length)return false;fillRecipe(p);return true}
+// ---- Getting a recipe from a web page link ----
+// A web page can't be read straight from another site, so if the direct try fails the page is fetched
+// through a free public relay. Most recipe sites describe the recipe for search engines (schema.org "Recipe");
+// that is read first, then the page's microdata, then its plain text with the same sorting as a scan.
+var RELAYS=[{f:function(u){return u}},
+  {f:function(u){return 'https://r.jina.ai/'+u},h:{'X-Return-Format':'html'},page:true},   // returns the page's HTML, works with most recipe sites
+  {f:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u)}},
+  {f:function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u)}}];
+function fetchVia(u,blob){var list=RELAYS.filter(function(r){return !(blob&&r.page)}),i=0;
+  function next(){if(i>=list.length)return Promise.reject(new Error('fetch'));
+    var ctl=window.AbortController?new AbortController():null,tm=ctl&&setTimeout(function(){ctl.abort()},20000),R=list[i++],o={};
+    if(ctl)o.signal=ctl.signal;if(R.h)o.headers=R.h;
+    return fetch(R.f(u),o).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error(r.status);return blob?r.blob():r.text()})
+      .then(function(x){if(!blob&&!/<html|<body|<head/i.test(x.slice(0,4000)))throw new Error('not html');return x}).catch(function(){clearTimeout(tm);return next()})}
+  return next()}
+// page text without tags; decoded twice because some sites encode accents twice ("&amp;eacute;")
+function htmlText(s){var d=document.createElement('textarea');d.innerHTML=String(s==null?'':s).replace(/<[^>]+>/g,' ');var v=d.value;
+  if(/&[a-z0-9#]+;|<[a-z\/]/i.test(v)){d.innerHTML=v.replace(/<[^>]+>/g,' ');v=d.value}return v.replace(/\s+/g,' ').trim()}
+function isoMinutes(s){var m=/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/i.exec(String(s||''));return m?(+m[1]||0)*1440+(+m[2]||0)*60+(+m[3]||0):0}
+function findRecipeLd(j){if(!j||typeof j!=='object')return null;
+  if(Array.isArray(j)){for(var i=0;i<j.length;i++){var r=findRecipeLd(j[i]);if(r)return r}return null}
+  var t=j['@type'];if(t==='Recipe'||(Array.isArray(t)&&t.indexOf('Recipe')>-1))return j;
+  return findRecipeLd(j['@graph'])||findRecipeLd(j.mainEntity)||findRecipeLd(j.mainEntityOfPage)}
+function ldSteps(x,out){out=out||[];if(!x)return out;
+  if(typeof x==='string'){x.split(/<br\s*\/?>|<\/p>|\r?\n/i).map(htmlText).filter(Boolean).forEach(function(s){out.push(s)});return out}
+  if(Array.isArray(x)){x.forEach(function(y){ldSteps(y,out)});return out}
+  if(x.itemListElement)return ldSteps(x.itemListElement,out);           // a section of steps
+  var t=htmlText(x.text||x.name||'');if(t)out.push(t);return out}
+function recipeFromHtml(html,base){var doc=new DOMParser().parseFromString(html,'text/html'),R=null,p,img='';
+  // some sites write slightly broken JSON (line breaks inside texts, trailing commas): tidy it before giving up
+  doc.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){if(R)return;var t=s.textContent,j=null;
+    try{j=JSON.parse(t)}catch(e){try{j=JSON.parse(t.replace(/[\u0000-\u001f]+/g,' ').replace(/,\s*([}\]])/g,'$1'))}catch(e2){}}
+    R=findRecipeLd(j)});
+  if(R){var y=R.recipeYield;if(Array.isArray(y))y=y[0];var prep=isoMinutes(R.prepTime),cook=isoMinutes(R.cookTime),tot=isoMinutes(R.totalTime);
+    p={name:htmlText(R.name),serv:+(String(y||'').match(/\d+/)||[0])[0],prep:prep,cook:cook||(tot>prep?tot-prep:0),
+      ings:[].concat(R.recipeIngredient||R.ingredients||[]).map(htmlText).filter(Boolean),
+      steps:ldSteps(R.recipeInstructions).filter(function(s,i,a){return i===0||s!==a[i-1]}),tips:[]};   // some sites list each step twice
+    img=R.image;if(Array.isArray(img))img=img[0];if(img&&typeof img==='object')img=img.url||img.contentUrl||''}
+  else{var box=doc.querySelector('[itemtype*="schema.org/Recipe"]');
+    if(box){var q=function(s){return Array.prototype.map.call(box.querySelectorAll(s),function(e){return htmlText(e.getAttribute('content')||e.innerHTML)}).filter(Boolean)};
+      p={name:(q('[itemprop="name"]')[0]||''),serv:+((q('[itemprop="recipeYield"]')[0]||'').match(/\d+/)||[0])[0],prep:0,cook:0,
+        ings:q('[itemprop="recipeIngredient"],[itemprop="ingredients"]'),steps:[].concat.apply([],q('[itemprop="recipeInstructions"]').map(function(s){return ldSteps(s)})),tips:[]};
+      var im=box.querySelector('[itemprop="image"]');img=im&&(im.getAttribute('src')||im.getAttribute('content'))||''}}
+  if(!p||(!p.ings.length&&!p.steps.length)){
+    // no recipe description: read the main text of the page like a scan
+    var main=doc.querySelector('article')||doc.querySelector('main')||doc.body;if(!main)return null;
+    main.querySelectorAll('script,style,noscript,nav,header,footer,aside,form,iframe,svg').forEach(function(e){e.remove()});
+    var text=main.innerHTML.replace(/<(br|\/p|\/li|\/h\d|\/div|\/tr|\/dd|\/dt)[^>]*>/gi,'\n').split('\n').map(htmlText).filter(Boolean).join('\n');
+    // only trust it when it really looks like a recipe: an ingredients heading, 2+ ingredients and a step
+    p=parseRecipeText(text);if(!/ingr[eé]dient|ingrediente/i.test(text)||p.ings.length<2||!p.steps.length)return null;
+    p.name='';   // the page's own title (below) names the dish better than the first line of its text
+  }
+  if(!p.name){var og=doc.querySelector('meta[property="og:title"]');p.name=htmlText(og&&og.getAttribute('content')||(doc.title||'')).replace(/\s*[|–—-]\s*[^|–—-]+$/,'')}
+  if(!img){var oi=doc.querySelector('meta[property="og:image"]');img=oi&&oi.getAttribute('content')||''}
+  try{p.image=img?new URL(img,base).href:''}catch(e){p.image=''}
+  return p}
+function importFromLink(u){var msg=$('linkmsg'),btn=$('linkbtn');u=(u||'').trim();
+  if(!/^https?:\/\/\S+\.\S+/i.test(u)){msg.textContent=tr('This link does not look like a web page address.');return}
+  btn.disabled=true;msg.textContent=tr('Getting the recipe from the page…');
+  fetchVia(u).then(function(html){var p=recipeFromHtml(html,u);
+      if(!p){msg.textContent=tr('No recipe was found on this page.');return}
+      fillRecipe(p);msg.textContent=tr('Done: check the recipe below, then save it.');
+      // the dish's photo from the page is added to the recipe's photos (remove it in Photos if you don't want it)
+      if(p.image)fetchVia(p.image,true).then(function(b){if(/^image\//.test(b.type))addPhotoFile(new File([b],'photo.jpg',{type:b.type}))},function(){})},
+    function(){msg.textContent=tr('The page could not be opened. Check the link and your internet connection.')})
+  .then(function(){btn.disabled=false})}
+$('linkbtn').onclick=function(){importFromLink($('linkin').value)};
+$('linkin').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();importFromLink(this.value)}};
+// A page shared to the installed app (Android "Share → Gusto Cabinet") opens a new recipe and imports it
+function sharedLink(){var l=null;try{l=sessionStorage.getItem('rb-shared')}catch(e){}
+  if(!l||!TOKEN)return;try{sessionStorage.removeItem('rb-shared')}catch(e){}
+  openForm(null);$('linkin').value=l;importFromLink(l)}
+(function(){var q=new URLSearchParams(location.search),s=q.get('url')||q.get('text')||'',m=s.match(/https?:\/\/\S+/);
+  if(m){try{sessionStorage.setItem('rb-shared',m[0])}catch(e){}history.replaceState(null,'',location.pathname)}})();
+function fillRecipe(p){
   if(p.name)$('name').value=p.name;if(p.serv)$('serv').value=p.serv;if(p.prep)$('prep').value=p.prep;if(p.cook)$('cook').value=p.cook;
   $('ings').innerHTML='';(p.ings.length?p.ings:['','','']).forEach(ingRow);
-  $('steps').value=p.steps.join('\n');if(p.tips.length)$('tip').value=p.tips.join(' ');
-  return true}
+  $('steps').value=p.steps.join('\n');if(p.tips.length)$('tip').value=p.tips.join(' ')}
 $('file').onchange=function(){
-  Array.prototype.forEach.call($('file').files,function(f){
+  Array.prototype.forEach.call($('file').files,addPhotoFile);
+  $('file').value='';
+};
+function addPhotoFile(f){
     var rd=new FileReader();
     rd.onload=function(){var im=new Image();
       // Keep uploads sharp enough for full-width heroes; smaller copies are made when the site loads them
@@ -1313,9 +1406,7 @@ $('file').onchange=function(){
         var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,0,0,c.width,c.height);
         if(ASSETS){c.toBlob(function(b){ASSETS.upload(b).then(function(a){photos.push(a.url);renderPhotos()},function(){photos.push(c.toDataURL('image/jpeg',.6));renderPhotos()})},'image/jpeg',.75)}else{photos.push(c.toDataURL('image/jpeg',DB?.55:.86));renderPhotos()}};
       im.src=rd.result};
-    rd.readAsDataURL(f)});
-  $('file').value='';
-};
+    rd.readAsDataURL(f)}
 $('adding').onclick=function(){ingRow('').querySelector('input').focus()};
 
 function openForm(r){
@@ -1329,7 +1420,7 @@ function openForm(r){
   photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();catPick=r&&r.cats?r.cats.slice():[];renderCatPick();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
-  $('scanbox').classList.toggle('hidden',!!r);$('scanmsg').textContent=tr('Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.');
+  $('scanbox').classList.toggle('hidden',!!r);$('linkmsg').textContent='';$('linkin').value='';$('scanmsg').textContent=tr('Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.');
   show('form');
 }
 $('add').onclick=function(){if(!TOKEN){openForm(null);return}logoSplash(function(){openForm(null)},'#form>*')};
@@ -1374,7 +1465,7 @@ function signIn(){
   loadGsi(function(){
     var tc=google.accounts.oauth2.initTokenClient({client_id:c.cid,scope:'https://www.googleapis.com/auth/drive',
       callback:function(r){if(r.error){if(r.error==='access_denied')openReq(em);$('gmsg').textContent=r.error==='access_denied'?tr('Google blocked the sign-in for this account. Its email must be added as a test user in Google Cloud, or the app must be published.'):tr('Sign-in failed: {e}. Ask the owner to add your email.',{e:r.error});return}
-        setToken(r);ME=null;$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');refresh()},
+        setToken(r);ME=null;$('signm').classList.add('hidden');$('sign').textContent=tr('Refresh from Drive');refresh();sharedLink()},
       error_callback:function(err){$('gmsg').textContent=tr(err&&err.type==='popup_failed_to_open'?'Pop-ups are blocked. Allow pop-ups for this site and try again.':'The Google window was closed. If Google said “Access blocked”, this email must be added as a test user in Google Cloud.')}});
     tc.requestAccessToken({prompt:'',hint:em||undefined})})}
 // ---- New people ask Gisela for access by email (she needs their Gmail address to add them) ----
@@ -1596,7 +1687,7 @@ document.addEventListener('click',function(){$('memenu').classList.add('hidden')
 document.addEventListener('keydown',function(e){if(e.key==='Escape')$('memenu').classList.add('hidden')});
 applyLang();load();renderList();updateTop();
 (function(){$('gemail').value=lsGet('rb-email','');
-  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent=tr('Refresh from Drive');refresh();return}}catch(e){}
+  try{var t=JSON.parse(sessionStorage.getItem('rb-tok')||'null');if(t&&t.e>Date.now()){TOKEN=t.t;$('sign').textContent=tr('Refresh from Drive');refresh();sharedLink();return}}catch(e){}
   $('signm').classList.remove('hidden')})();
 </script>
 </body>
