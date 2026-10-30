@@ -540,7 +540,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 e (reworded steps from websites)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 f (phone Back button goes home)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -715,7 +715,15 @@ function updateTop(){var b=document.body.classList;$('top').classList.toggle('cl
 window.addEventListener('scroll',updateTop,{passive:true});
 function show(w){['list','view','form','json','plan'].forEach(function(i){$(i).classList.toggle('hidden',i!==w)});document.body.classList.toggle('rv',w==='view');document.body.classList.toggle('pv',w==='plan');document.body.classList.toggle('lv',w==='list');document.body.classList.toggle('fv',w==='form');
   // pages that carry the yellow Menu (categories + settings) and the Home tab
-  document.body.classList.toggle('sb',w==='list'||w==='view'||w==='plan'||w==='form');if(w==='list')renderCats();window.scrollTo(0,0);placeTools();updateTop()}
+  document.body.classList.toggle('sb',w==='list'||w==='view'||w==='plan'||w==='form');if(w==='list')renderCats();window.scrollTo(0,0);placeTools();updateTop();
+  // one history step for every page away from home, so the phone's Back button returns to the main page instead of quitting
+  var away=history.state&&history.state.gc;
+  if(w!=='list'&&!away)history.pushState({gc:1},'');
+  else if(w==='list'&&away){backSkip=true;history.back()}}
+var backSkip=false;if(history.state&&history.state.gc)history.replaceState(null,'');
+window.addEventListener('popstate',function(){if(backSkip){backSkip=false;return}
+  document.querySelectorAll('.overlay:not(.hidden):not(.gate)').forEach(function(m){m.classList.add('hidden')});
+  if(!document.body.classList.contains('lv'))goHome()});
 function fmt(m){m=+m||0;if(!m)return '–';return m>=60?Math.floor(m/60)+' h'+(m%60?' '+m%60:''):m+' min'}
 // Calorie estimate: [names, kcal per 100 g, grams per piece, grams per ml]
 // Names are English, Spanish and French (singular is enough: plurals contain it); the longest matching name wins
