@@ -54,6 +54,17 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 @media (max-width:520px){body.pv #tbtns #share,body.fv #tbtns #share{display:none}}
 .scanbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:12px;border:1.5px dashed var(--accent);border-radius:12px;background:var(--soft)}
 .scanbox small{flex:1 1 220px;color:var(--muted);font-size:13px}
+/* framing the recipe on the photo before reading it */
+.cropov{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(0,0,0,.85)}
+.cropdlg{width:100%;max-width:960px;text-align:center;color:#fff}
+.cropdlg p{margin:0 0 10px;font-size:14px}
+.cropwrap{position:relative;display:inline-block;max-width:100%;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.cropwrap img{display:block;max-width:100%;max-height:68vh;pointer-events:none;-webkit-user-drag:none}
+.cropbox{position:absolute;border:2px solid var(--accent);box-shadow:0 0 0 9999px rgba(0,0,0,.5);cursor:move}
+.cropbox i{position:absolute;width:26px;height:26px;margin:-13px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.cropbox i[data-h=nw]{left:0;top:0;cursor:nwse-resize}.cropbox i[data-h=ne]{right:0;top:0;cursor:nesw-resize}
+.cropbox i[data-h=sw]{left:0;bottom:0;cursor:nesw-resize}.cropbox i[data-h=se]{right:0;bottom:0;cursor:nwse-resize}
+.cropdlg .actions{justify-content:center;margin-top:12px}
 .scanbox b{flex:1 1 100%;font-size:15px}
 .scanbox .btn{display:inline-flex;align-items:center;gap:6px}
 /* the file input itself covers the button, so the tap goes straight to the phone's camera / gallery */
@@ -518,7 +529,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-30 f (two-column recipe cards)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-30 g (crop before scanning)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -567,7 +578,7 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
-  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
+  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","Read this part":"Lire cette partie","Whole photo":"Toute la photo","Drag the corners to keep only the recipe, then tap Read this part.":"Faites glisser les coins pour ne garder que la recette, puis touchez « Lire cette partie ».","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Prenez ou choisissez la photo d'une recette : son texte remplit le formulaire ci-dessous. La photo n'est pas conservée.",
   "Getting the text reader ready… (slower the first time)":"Préparation du lecteur de texte… (plus lent la première fois)","Reading the photo… {p}%":"Lecture de la photo… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Terminé : vérifiez la recette ci-dessous, puis enregistrez-la. La photo n'a pas été conservée.",
@@ -631,7 +642,7 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
-  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
+  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","Read this part":"Leer esta parte","Whole photo":"Toda la foto","Drag the corners to keep only the recipe, then tap Read this part.":"Arrastra las esquinas para dejar solo la receta y luego toca «Leer esta parte».","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Haz o elige una foto de una receta: su texto rellena el formulario de abajo. La foto no se guarda.",
   "Getting the text reader ready… (slower the first time)":"Preparando el lector de texto… (más lento la primera vez)","Reading the photo… {p}%":"Leyendo la foto… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Listo: revisa la receta de abajo y guárdala. La foto no se ha guardado.",
@@ -1128,10 +1139,35 @@ $('addphoto').onclick=function(){$('file').click()};
 // ---- Scan a recipe: read the text of a photo on the device and fill in the form (the photo itself is never kept) ----
 var TESS_JS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
 $('scancam').onchange=$('scanfile').onchange=function(){var f=this.files&&this.files[0];if(f&&!$('scanbox').classList.contains('busy'))scanRecipe(f);this.value=''};
-function shrinkForScan(f){return new Promise(function(ok,no){var u=URL.createObjectURL(f),im=new Image();
-  // big photos are reduced and small screenshots enlarged (small text reads badly), then turned grey with more contrast
-  im.onload=function(){var mx=Math.max(im.naturalWidth,im.naturalHeight),s=mx>2200?2200/mx:mx<1600?1600/mx:1,c=document.createElement('canvas'),x;c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);
-    x=c.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+// Let the person frame just the recipe before reading: resolves {x,y,w,h} as fractions of the photo, or null if cancelled
+function pickArea(f){return new Promise(function(ok){var u=URL.createObjectURL(f),ov=document.createElement('div'),R={x:.04,y:.04,w:.92,h:.92},drag=null,MIN=.08;
+  ov.className='cropov';
+  ov.innerHTML='<div class="cropdlg"><p>'+tr('Drag the corners to keep only the recipe, then tap Read this part.')+'</p>'+
+    '<div class="cropwrap"><img alt=""><div class="cropbox"><i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i></div></div>'+
+    '<div class="actions"><button type="button" class="btn" data-a="read">'+tr('Read this part')+'</button><button type="button" class="btn ghost" data-a="all">'+tr('Whole photo')+'</button><button type="button" class="btn ghost" data-a="cancel">'+tr('Cancel')+'</button></div></div>';
+  document.body.appendChild(ov);
+  var wrap=ov.querySelector('.cropwrap'),box=ov.querySelector('.cropbox'),img=ov.querySelector('img');
+  function paint(){box.style.left=R.x*100+'%';box.style.top=R.y*100+'%';box.style.width=R.w*100+'%';box.style.height=R.h*100+'%'}
+  function done(r){URL.revokeObjectURL(u);ov.remove();document.removeEventListener('keydown',key);ok(r)}
+  function key(e){if(e.key==='Escape')done(null)}
+  function pt(e){var b=wrap.getBoundingClientRect();return {x:Math.max(0,Math.min(1,(e.clientX-b.left)/b.width)),y:Math.max(0,Math.min(1,(e.clientY-b.top)/b.height))}}
+  wrap.addEventListener('pointerdown',function(e){var p=pt(e),h=e.target.dataset.h||(e.target===box?'move':'');
+    if(!h){R={x:p.x,y:p.y,w:0,h:0};h='se'}                      // pressing outside the frame draws a new one
+    drag={h:h,p:p,R:{x:R.x,y:R.y,w:R.w,h:R.h}};wrap.setPointerCapture(e.pointerId);e.preventDefault()});
+  wrap.addEventListener('pointermove',function(e){if(!drag)return;var p=pt(e),dx=p.x-drag.p.x,dy=p.y-drag.p.y,o=drag.R,x0=o.x,y0=o.y,x1=o.x+o.w,y1=o.y+o.h;
+    if(drag.h==='move'){R.x=Math.max(0,Math.min(1-o.w,o.x+dx));R.y=Math.max(0,Math.min(1-o.h,o.y+dy));paint();return}
+    if(/w/.test(drag.h))x0=Math.min(x0+dx,x1-MIN);else x1=Math.max(x1+dx,x0+MIN);
+    if(/n/.test(drag.h))y0=Math.min(y0+dy,y1-MIN);else y1=Math.max(y1+dy,y0+MIN);
+    x0=Math.max(0,x0);y0=Math.max(0,y0);x1=Math.min(1,x1);y1=Math.min(1,y1);R={x:x0,y:y0,w:x1-x0,h:y1-y0};paint()});
+  wrap.addEventListener('pointerup',function(){drag=null;if(R.w<MIN||R.h<MIN)R={x:.04,y:.04,w:.92,h:.92};paint()});
+  ov.querySelector('.actions').onclick=function(e){var a=e.target.closest('[data-a]');if(!a)return;
+    a=a.dataset.a;done(a==='read'?R:a==='all'?{x:0,y:0,w:1,h:1}:null)};
+  document.addEventListener('keydown',key);img.src=u;paint()})}
+function shrinkForScan(f,rect){return new Promise(function(ok,no){var u=URL.createObjectURL(f),im=new Image();
+  // only the framed part is read; big photos are reduced and small screenshots enlarged (small text reads badly), then turned grey with more contrast
+  im.onload=function(){var r=rect||{x:0,y:0,w:1,h:1},sx=r.x*im.naturalWidth,sy=r.y*im.naturalHeight,sw=r.w*im.naturalWidth,sh=r.h*im.naturalHeight,
+      mx=Math.max(sw,sh),s=mx>2200?2200/mx:mx<1600?1600/mx:1,c=document.createElement('canvas'),x;c.width=Math.max(1,Math.round(sw*s));c.height=Math.max(1,Math.round(sh*s));
+    x=c.getContext('2d');x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,sx,sy,sw,sh,0,0,c.width,c.height);URL.revokeObjectURL(u);
     // grey, then stretch the darkest-to-lightest range to full black-to-white (helps pale text on coloured cards)
     try{var d=x.getImageData(0,0,c.width,c.height),a=d.data,h=new Array(256).fill(0),n=a.length/4,lo=0,hi=255,acc=0,i,g;
       for(i=0;i<a.length;i+=4){g=Math.round(.299*a[i]+.587*a[i+1]+.114*a[i+2]);a[i]=g;h[g]++}
@@ -1169,8 +1205,9 @@ function columnText(d){var L=[];(d.blocks||[]).forEach(function(b){(b.paragraphs
       left.push(t(ws.slice(0,k)));right.push(t(ws.slice(k)));return}
     flush();out.push(t(ws))});
   flush();return out.join('\n')}
-function scanRecipe(f){var msg=$('scanmsg'),btn=$('scanbox');btn.classList.add('busy');msg.textContent=tr('Getting the text reader ready… (slower the first time)');
-  Promise.all([window.Tesseract?0:loadJs(TESS_JS),shrinkForScan(f)]).then(function(a){
+function scanRecipe(f){pickArea(f).then(function(rect){if(rect)readRecipe(f,rect)})}
+function readRecipe(f,rect){var msg=$('scanmsg'),btn=$('scanbox');btn.classList.add('busy');msg.textContent=tr('Getting the text reader ready… (slower the first time)');
+  Promise.all([window.Tesseract?0:loadJs(TESS_JS),shrinkForScan(f,rect)]).then(function(a){
     return Tesseract.createWorker(['eng','fra','spa'],1,{logger:function(m){
         if(m.status==='recognizing text')msg.textContent=tr('Reading the photo… {p}%',{p:Math.round(m.progress*100)});
         else if(/loading|initializ/.test(m.status||'')&&m.progress)msg.textContent=tr('Getting the text reader ready… (slower the first time)')+' '+Math.round(m.progress*100)+'%'}})
