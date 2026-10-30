@@ -525,11 +525,12 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <label for="cid" data-t="Google OAuth Client ID">Google OAuth Client ID</label><input type="text" id="cid">
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
   <label for="mmemail" data-t="Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)">Email for the translation service (optional: raises the daily limit from 5,000 to 50,000 characters)</label><input type="text" id="mmemail" inputmode="email" autocomplete="email">
+  <label for="aikey" data-t="Claude API key for reading recipe photos (kept only on this device; leave empty to use the free reader)">Claude API key for reading recipe photos (kept only on this device; leave empty to use the free reader)</label><input type="password" id="aikey" autocomplete="off" placeholder="sk-ant-…">
   <h3 class="sec" style="margin-top:20px" data-t="Add a person">Add a person</h3>
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 a (frame ingredients, then steps)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 b (read recipe photos with Claude)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -578,7 +579,7 @@ var TR={fr:{
   "Daily goal":"Objectif quotidien","No daily goal yet":"Pas encore d'objectif quotidien","Change":"Modifier","Set my goal":"Définir mon objectif","Search dishes":"Rechercher un plat",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Faites glisser un plat sur un repas, ou touchez un plat puis un repas.","{k} kcal / portion":"{k} kcal / portion","kcal unknown":"kcal inconnues",
   "No dishes match your search.":"Aucun plat ne correspond à votre recherche.","No recipes yet.":"Pas encore de recette.","Previous week":"Semaine précédente","Next week":"Semaine suivante","This week":"Cette semaine",
-  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","Step 1 of 2: frame the ingredients, then tap Next.":"Étape 1 sur 2 : encadrez les ingrédients, puis touchez Suivant.","Next":"Suivant","Step 2 of 2: frame the steps (preparation), then tap Read.":"Étape 2 sur 2 : encadrez les étapes (préparation), puis touchez Lire.","Read":"Lire","No steps":"Pas d'étapes","Reading the ingredients… {p}%":"Lecture des ingrédients… {p} %","Reading the steps… {p}%":"Lecture des étapes… {p} %","Read this part":"Lire cette partie","Whole photo":"Toute la photo","Drag the corners to keep only the recipe, then tap Read this part.":"Faites glisser les coins pour ne garder que la recette, puis touchez « Lire cette partie ».","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
+  "Show or hide the bottom bar":"Afficher ou masquer la barre du bas","Scan a recipe":"Scanner une recette","Reading the recipe with Claude…":"Lecture de la recette avec Claude…","the Claude key is not valid":"la clé Claude n'est pas valide","too many requests, try again in a minute":"trop de demandes, réessayez dans une minute","no credit left on the Claude account":"plus de crédit sur le compte Claude","Claude declined to read this photo.":"Claude a refusé de lire cette photo.","Claude could not read the photo ({e}). Using the free reader instead…":"Claude n'a pas pu lire la photo ({e}). Utilisation du lecteur gratuit…","Claude API key for reading recipe photos (kept only on this device; leave empty to use the free reader)":"Clé API Claude pour lire les photos de recettes (gardée uniquement sur cet appareil ; laissez vide pour utiliser le lecteur gratuit)","Step 1 of 2: frame the ingredients, then tap Next.":"Étape 1 sur 2 : encadrez les ingrédients, puis touchez Suivant.","Next":"Suivant","Step 2 of 2: frame the steps (preparation), then tap Read.":"Étape 2 sur 2 : encadrez les étapes (préparation), puis touchez Lire.","Read":"Lire","No steps":"Pas d'étapes","Reading the ingredients… {p}%":"Lecture des ingrédients… {p} %","Reading the steps… {p}%":"Lecture des étapes… {p} %","Read this part":"Lire cette partie","Whole photo":"Toute la photo","Drag the corners to keep only the recipe, then tap Read this part.":"Faites glisser les coins pour ne garder que la recette, puis touchez « Lire cette partie ».","Take a photo":"Prendre une photo","Choose a photo":"Choisir une photo",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Prenez ou choisissez la photo d'une recette : son texte remplit le formulaire ci-dessous. La photo n'est pas conservée.",
   "Getting the text reader ready… (slower the first time)":"Préparation du lecteur de texte… (plus lent la première fois)","Reading the photo… {p}%":"Lecture de la photo… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Terminé : vérifiez la recette ci-dessous, puis enregistrez-la. La photo n'a pas été conservée.",
@@ -642,7 +643,7 @@ var TR={fr:{
   "Daily goal":"Objetivo diario","No daily goal yet":"Aún sin objetivo diario","Change":"Cambiar","Set my goal":"Fijar mi objetivo","Search dishes":"Buscar platos",
   "Drag a dish onto a meal, or tap a dish and then tap a meal.":"Arrastra un plato a una comida, o toca un plato y luego una comida.","{k} kcal / portion":"{k} kcal / porción","kcal unknown":"kcal desconocidas",
   "No dishes match your search.":"Ningún plato coincide con tu búsqueda.","No recipes yet.":"Aún no hay recetas.","Previous week":"Semana anterior","Next week":"Semana siguiente","This week":"Esta semana",
-  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","Step 1 of 2: frame the ingredients, then tap Next.":"Paso 1 de 2: enmarca los ingredientes y luego toca Siguiente.","Next":"Siguiente","Step 2 of 2: frame the steps (preparation), then tap Read.":"Paso 2 de 2: enmarca los pasos (preparación) y luego toca Leer.","Read":"Leer","No steps":"Sin pasos","Reading the ingredients… {p}%":"Leyendo los ingredientes… {p} %","Reading the steps… {p}%":"Leyendo los pasos… {p} %","Read this part":"Leer esta parte","Whole photo":"Toda la foto","Drag the corners to keep only the recipe, then tap Read this part.":"Arrastra las esquinas para dejar solo la receta y luego toca «Leer esta parte».","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
+  "Show or hide the bottom bar":"Mostrar u ocultar la barra inferior","Scan a recipe":"Escanear una receta","Reading the recipe with Claude…":"Leyendo la receta con Claude…","the Claude key is not valid":"la clave de Claude no es válida","too many requests, try again in a minute":"demasiadas solicitudes, inténtalo en un minuto","no credit left on the Claude account":"no queda crédito en la cuenta de Claude","Claude declined to read this photo.":"Claude se negó a leer esta foto.","Claude could not read the photo ({e}). Using the free reader instead…":"Claude no pudo leer la foto ({e}). Usando el lector gratuito…","Claude API key for reading recipe photos (kept only on this device; leave empty to use the free reader)":"Clave API de Claude para leer fotos de recetas (se guarda solo en este dispositivo; déjala vacía para usar el lector gratuito)","Step 1 of 2: frame the ingredients, then tap Next.":"Paso 1 de 2: enmarca los ingredientes y luego toca Siguiente.","Next":"Siguiente","Step 2 of 2: frame the steps (preparation), then tap Read.":"Paso 2 de 2: enmarca los pasos (preparación) y luego toca Leer.","Read":"Leer","No steps":"Sin pasos","Reading the ingredients… {p}%":"Leyendo los ingredientes… {p} %","Reading the steps… {p}%":"Leyendo los pasos… {p} %","Read this part":"Leer esta parte","Whole photo":"Toda la foto","Drag the corners to keep only the recipe, then tap Read this part.":"Arrastra las esquinas para dejar solo la receta y luego toca «Leer esta parte».","Take a photo":"Hacer una foto","Choose a photo":"Elegir una foto",
   "Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.":"Haz o elige una foto de una receta: su texto rellena el formulario de abajo. La foto no se guarda.",
   "Getting the text reader ready… (slower the first time)":"Preparando el lector de texto… (más lento la primera vez)","Reading the photo… {p}%":"Leyendo la foto… {p} %",
   "Done: check the recipe below, then save it. The photo was not kept.":"Listo: revisa la receta de abajo y guárdala. La foto no se ha guardado.",
@@ -1216,7 +1217,18 @@ function scanRecipe(f){var C=tr('Cancel');
     return pickArea(f,{title:tr('Step 2 of 2: frame the steps (preparation), then tap Read.'),R:below,buttons:[['read',tr('Read'),'btn'],['skip',tr('No steps'),'btn ghost'],['cancel',C,'btn ghost']]}).then(function(b){
       if(!b||b.a==='cancel')return;
       readRecipe(f,[{R:I,as:'i'}].concat(b.a==='read'?[{R:b.R,as:'s'}]:[]))})})}
-function readRecipe(f,parts){var msg=$('scanmsg'),btn=$('scanbox'),label=tr('Reading the photo… {p}%');btn.classList.add('busy');msg.textContent=tr('Getting the text reader ready… (slower the first time)');
+// With a Claude key saved on this device the framed parts are read by Claude; otherwise (or if that fails) by the free reader
+function readRecipe(f,parts){var key=lsGet('rb-aikey',''),msg=$('scanmsg'),btn=$('scanbox');
+  if(!key)return freeRead(f,parts);
+  btn.classList.add('busy');msg.textContent=tr('Reading the recipe with Claude…');
+  aiReadRecipe(f,parts,key).then(function(p){btn.classList.remove('busy');
+      if(!p.name&&!p.ings.length&&!p.steps.length){msg.textContent=tr('No text could be read. Try a sharper, well-lit photo taken straight on.');return}
+      fillRecipe(p);msg.textContent=tr('Done: check the recipe below, then save it. The photo was not kept.')},
+    function(e){btn.classList.remove('busy');
+      var why=e&&e.status===401?tr('the Claude key is not valid'):e&&e.status===429?tr('too many requests, try again in a minute'):e&&e.status===402||/credit/i.test(e&&e.message||'')?tr('no credit left on the Claude account'):String(e&&e.message||'?').slice(0,120);
+      msg.textContent=tr('Claude could not read the photo ({e}). Using the free reader instead…',{e:why});
+      setTimeout(function(){freeRead(f,parts)},1500)})}
+function freeRead(f,parts){var msg=$('scanmsg'),btn=$('scanbox'),label=tr('Reading the photo… {p}%');btn.classList.add('busy');msg.textContent=tr('Getting the text reader ready… (slower the first time)');
   Promise.all([window.Tesseract?0:loadJs(TESS_JS)].concat(parts.map(function(p){return shrinkForScan(f,p.R)}))).then(function(a){
     return Tesseract.createWorker(['eng','fra','spa'],1,{logger:function(m){
         if(m.status==='recognizing text')msg.textContent=label.replace('{p}',Math.round(m.progress*100));
@@ -1298,11 +1310,40 @@ function parseRecipeText(text){
   // drop specks after the last sentence ("… cuisson ! 5") and read "40eufs" (4 OEUFS) as "4 oeufs"
   p.steps=st.map(function(s){return cap(s.replace(/[\s¿\/\\|*•<>=~_-]+$/,'').replace(/([.!?])\s+\S{1,4}$/,'$1'))});
   p.ings=p.ings.map(function(s){return cap(s.replace(/^(\d+)0([a-zà-ÿ]{4,})/i,'$1 o$2'))});p.tips=p.tips.map(cap);p.name=cap(p.name);return p}
-function fillFromText(text){var p=parseRecipeText(text||'');if(!p.name&&!p.ings.length&&!p.steps.length)return false;
+function fillFromText(text){var p=parseRecipeText(text||'');if(!p.name&&!p.ings.length&&!p.steps.length)return false;fillRecipe(p);return true}
+function fillRecipe(p){
   if(p.name)$('name').value=p.name;if(p.serv)$('serv').value=p.serv;if(p.prep)$('prep').value=p.prep;if(p.cook)$('cook').value=p.cook;
   $('ings').innerHTML='';(p.ings.length?p.ings:['','','']).forEach(ingRow);
-  $('steps').value=p.steps.join('\n');if(p.tips.length)$('tip').value=p.tips.join(' ');
-  return true}
+  $('steps').value=p.steps.join('\n');if(p.tips.length)$('tip').value=p.tips.join(' ')}
+// ---- Reading a recipe photo with Claude (only on a device where the owner saved a Claude API key) ----
+// The framed part(s) of the photo go straight from this device to Anthropic; nothing is stored by the site.
+var AI_SDK='https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk/+esm',AI_MODEL='claude-opus-5-5',
+  AI_SCHEMA={type:'object',additionalProperties:false,required:['name','servings','prep_minutes','cook_minutes','ingredients','steps','tip'],properties:{
+    name:{type:'string'},servings:{type:'integer'},prep_minutes:{type:'integer'},cook_minutes:{type:'integer'},
+    ingredients:{type:'array',items:{type:'string'}},steps:{type:'array',items:{type:'string'}},tip:{type:'string'}}};
+// a colour copy of the framed part, at most 1568 px on its longest side (larger costs more without reading better)
+function photoPart(f,r){return new Promise(function(ok,no){var u=URL.createObjectURL(f),im=new Image();
+  im.onload=function(){var sx=r.x*im.naturalWidth,sy=r.y*im.naturalHeight,sw=r.w*im.naturalWidth,sh=r.h*im.naturalHeight,s=Math.min(1,1568/Math.max(sw,sh)),c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(sw*s));c.height=Math.max(1,Math.round(sh*s));var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,sx,sy,sw,sh,0,0,c.width,c.height);
+    URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.88).split(',')[1])};
+  im.onerror=function(){URL.revokeObjectURL(u);no(new Error('image'))};im.src=u})}
+function aiReadRecipe(f,parts,key){
+  return Promise.all([import(AI_SDK)].concat(parts.map(function(p){return photoPart(f,p.R)}))).then(function(a){
+    var Anthropic=a[0].default,client=new Anthropic({apiKey:key,dangerouslyAllowBrowser:true}),content=[];
+    parts.forEach(function(p,i){
+      content.push({type:'text',text:p.as==='i'?'Photo '+(i+1)+': the ingredients part of the recipe.':p.as==='s'?'Photo '+(i+1)+': the steps (preparation) part of the recipe.':'Photo '+(i+1)+': the recipe.'});
+      content.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:a[i+1]}})});
+    content.push({type:'text',text:'Copy this recipe into the fields, in the language it is written in. '+
+      'name: the dish title ("" if there is none). servings: how many people or pieces it makes (0 if not given). prep_minutes / cook_minutes: 0 if not given. '+
+      'ingredients: one entry per ingredient, as written, with its quantity, without bullets. '+
+      'steps: one entry per step in order, without the numbering, with lines that wrap joined into one sentence. '+
+      'tip: notes or advice ("" if none). Write capitals as normal sentence case and fix only obvious reading slips; never add anything that is not on the photo.'});
+    return client.beta.messages.create({model:AI_MODEL,max_tokens:16000,output_config:{effort:'low',format:{type:'json_schema',schema:AI_SCHEMA}},
+      betas:['server-side-fallback-2026-07-01'],fallbacks:'default',messages:[{role:'user',content:content}]})})
+  .then(function(res){
+    if(res.stop_reason==='refusal')throw new Error(tr('Claude declined to read this photo.'));
+    var t=res.content.filter(function(b){return b.type==='text'}).map(function(b){return b.text}).join(''),j=JSON.parse(t);
+    return {name:j.name||'',serv:j.servings||0,prep:j.prep_minutes||0,cook:j.cook_minutes||0,ings:j.ingredients||[],steps:j.steps||[],tips:j.tip?[j.tip]:[]}})}
 $('file').onchange=function(){
   Array.prototype.forEach.call($('file').files,function(f){
     var rd=new FileReader();
@@ -1538,10 +1579,10 @@ $('trall').onclick=function(){if(!TOKEN){alert(tr('Sign in with Google first.'))
   (function next(){if(i>=n){status(tr('All recipes are translated.'));return}var r=todo[i++];status(tr('Translating recipes: {i} of {n}…',{i:i,n:n}));
     translateRecipe(r).then(function(){return driveSave(r)}).then(function(){reshow(r);next()}).catch(trFailed)})()};
 ['sign','exp','imp','sout','trall'].forEach(function(i){$(i).addEventListener('click',function(){$('lockm').classList.add('hidden')})});
-$('lock').onclick=function(){var c=cfgv();$('openfold').href=c.folder?'https://drive.google.com/drive/folders/'+encodeURIComponent(c.folder):'https://drive.google.com/';$('cid').value=c.cid;$('fold').value=c.folder;$('mmemail').value=lsGet('rb-mmemail','');$('lockm').classList.remove('hidden')};
+$('lock').onclick=function(){var c=cfgv();$('openfold').href=c.folder?'https://drive.google.com/drive/folders/'+encodeURIComponent(c.folder):'https://drive.google.com/';$('cid').value=c.cid;$('fold').value=c.folder;$('mmemail').value=lsGet('rb-mmemail','');$('aikey').value=lsGet('rb-aikey','');$('lockm').classList.remove('hidden')};
 $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
 $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
-  var before=JSON.stringify(cfgv());lsSet('rb-mmemail',$('mmemail').value.trim());
+  var before=JSON.stringify(cfgv());lsSet('rb-mmemail',$('mmemail').value.trim());lsSet('rb-aikey',$('aikey').value.trim());
   if(a)lsSet('rb-cid',a);if(b)lsSet('rb-folder',m?m[1]:b);$('lockm').classList.add('hidden');
   if(TOKEN&&JSON.stringify(cfgv())!==before){TOKEN=null;$('sign').textContent=tr('Sign in with Google');status(tr('Connection changed. Sign in again.'));$('signm').classList.remove('hidden')}};
 $('signbtn').onclick=function(){signIn()};
