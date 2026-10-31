@@ -269,9 +269,9 @@ body.sb.hascats .wrap{padding-bottom:110px}
 @media (max-width:899px){
   #cats{transition:transform .25s}
   body.cdown #cats{transform:translateY(100%)}
-  .cpull{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;top:-24px;transform:translateX(-50%);width:64px;height:24px;padding:0;border:0;border-radius:12px 12px 0 0;background:var(--accent);color:var(--accent-ink);font-size:14px;cursor:pointer;box-shadow:0 -2px 8px rgba(0,0,0,.15)}
-  .cpull::before{content:'▼'}
-  body.cdown .cpull::before{content:'▲'}
+  .cpull{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;top:-26px;transform:translateX(-50%);height:26px;padding:0 14px;gap:6px;border:0;border-radius:12px 12px 0 0;background:var(--accent);color:var(--accent-ink);font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer;box-shadow:0 -2px 8px rgba(0,0,0,.15)}
+  .cpull::after{content:"\2212";font-size:18px;line-height:1}
+  body.cdown .cpull::after{content:"+"}
   body.hascats.sb #cats{display:flex;flex-direction:column}
   body.sb.hascats .wrap{padding-bottom:120px}
   body.cdown.sb.hascats .wrap{padding-bottom:50px}
@@ -563,7 +563,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
     </div>
   </form>
 </div>
-<nav id="cats" aria-label="Categories"><button type="button" class="cpull" data-ta="Show or hide the bottom bar" aria-label="Show or hide the bottom bar"></button><div id="catsin"></div></nav>
+<nav id="cats" aria-label="Categories"><button type="button" class="cpull" data-ta="Show or hide the bottom bar" aria-label="Show or hide the bottom bar"><span data-t="Menu">Menu</span></button><div id="catsin"></div></nav>
 <button type="button" class="htab" id="htab" data-ta="Back to all recipes" aria-label="Back to all recipes" title="Back to all recipes"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
 <button type="button" class="mtab" id="mtab" data-ta="Show or hide the menu" aria-label="Show or hide the menu"><span class="fi"></span><span class="ft" data-t="Menu">Menu</span></button>
 
@@ -592,7 +592,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 p (menu to the top)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 q (Menu tab on phones)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
