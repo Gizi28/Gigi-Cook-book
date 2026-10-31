@@ -120,6 +120,34 @@ ul.ing input{width:20px;height:20px;accent-color:var(--accent-text)}
 ul.ing li.done span{text-decoration:line-through;color:var(--muted)}
 .step{margin-bottom:16px}
 .step b{color:var(--accent-text);display:block;margin-bottom:2px}
+.step .sphoto{display:block;width:100%;max-width:340px;max-height:260px;object-fit:cover;border-radius:10px;margin-top:8px;cursor:zoom-in}
+.ssec{margin:18px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--line);font-size:17px}
+.ssec:first-of-type{margin-top:4px}
+/* Steps editor: one box per step, section titles between them, a photo per step */
+.shint{display:block;color:var(--muted);font-size:13px;margin:-2px 0 8px}
+.stepl{display:grid;gap:8px;margin-bottom:8px}
+.srow{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px}
+.srow .snum{width:28px;height:28px;margin-top:7px;border-radius:50%;background:var(--soft);color:var(--accent-text);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.srow textarea{min-height:0;resize:none;overflow:hidden;line-height:1.4}
+.srow.sec{background:var(--soft);border-color:transparent}
+.srow.sec .snum{background:transparent;font-size:16px}
+.srow.sec input{font-weight:700}
+.srow.sec>div{display:flex;gap:6px;align-items:center}
+.srow.sec .sfoot{margin:0;flex-wrap:nowrap}
+.srow.sec .grow{display:none}
+.sfoot{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.sph{position:relative;display:block;width:max-content;margin-top:6px}
+.sph:empty{display:none}
+.sph img,.sph .sload{display:block;width:120px;height:86px;object-fit:cover;border-radius:8px;background:var(--soft)}
+.sph button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;font-size:12px;padding:0}
+.sfoot .grow{margin-right:auto}
+.sbtn{width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn svg{width:17px;height:17px}
+.sbtn.wide{width:auto;padding:0 12px;gap:6px;border-radius:999px;font-size:13px}
+.stepadd{display:flex;gap:8px;flex-wrap:wrap}
+.lbox{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.lbox img{max-width:100%;max-height:100%;border-radius:10px}
 .tip{background:var(--soft);border-radius:10px;padding:12px 14px}
 label{display:block;font-weight:700;margin:14px 0 6px;font-size:14px}
 input[type=text],input[type=url],input[type=password],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
@@ -511,8 +539,10 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
     <label data-t="Ingredients (start with the quantity, e.g. 200g pasta)">Ingredients (start with the quantity, e.g. 200g pasta)</label>
     <div id="ings"></div>
     <button class="btn ghost" type="button" id="adding" data-t="Add ingredient">Add ingredient</button>
-    <label for="steps" data-t="Steps (one per line)">Steps (one per line)</label>
-    <textarea id="steps" data-tp="Boil the pasta&#10;Fry the bacon" placeholder="Boil the pasta&#10;Fry the bacon"></textarea>
+    <label data-t="Steps">Steps</label>
+    <small class="shint" data-t="Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.">Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.</small>
+    <div id="stepl" class="stepl"></div>
+    <div class="stepadd"><button class="btn ghost" type="button" id="addstep">+ <span data-t="Add a step">Add a step</span></button><button class="btn ghost" type="button" id="addsec">+ <span data-t="Add a section">Add a section</span></button></div>
     <label for="tip" data-t="Tips and notes">Tips and notes</label>
     <textarea id="tip" style="min-height:70px"></textarea>
     <div class="actions">
@@ -547,7 +577,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 i (padlock panel scrolls)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 j (step editor with sections and photos)</small>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -621,7 +651,7 @@ var TR={fr:{
   "Got it":"J'ai cet ingrédient","Preparation":"Préparation","Step {n}":"Étape {n}","Videos and photos":"Vidéos et photos","Loading…":"Chargement…","Edit":"Modifier","Delete":"Supprimer","in total":"au total","per person":"par personne",
   "Calories entered in the recipe.":"Calories saisies dans la recette.","Estimated from the ingredients.":"Estimation à partir des ingrédients.","Not counted:":"Non comptés :","Sign in to load videos":"Connectez-vous pour charger les vidéos",
   "Could not load video":"Impossible de charger la vidéo","Sound":"Son","Delete “{n}”?":"Supprimer « {n} » ?","Give your recipe a name.":"Donnez un nom à votre recette.","e.g. 200g spaghetti":"ex. 200 g de spaghetti",
-  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Remove video":"Retirer la vidéo",
+  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} dépasse 200 Mo et risque de ne pas s'envoyer. L'ajouter quand même ?","Session expired. Sign in again.":"Session expirée. Reconnectez-vous.",
   "Could not load Google sign-in. Check your connection.":"Impossible de charger la connexion Google. Vérifiez votre connexion.","Sign-in failed: {e}. Ask the owner to add your email.":"Échec de la connexion : {e}. Demandez l'accès pour votre e-mail.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"La connexion a été fermée ou bloquée. Autorisez les fenêtres pop-up et réessayez.","Loading from Drive…":"Chargement depuis Drive…",
@@ -685,7 +715,7 @@ var TR={fr:{
   "Got it":"Lo tengo","Preparation":"Preparación","Step {n}":"Paso {n}","Videos and photos":"Videos y fotos","Loading…":"Cargando…","Edit":"Editar","Delete":"Eliminar","in total":"en total","per person":"por persona",
   "Calories entered in the recipe.":"Calorías indicadas en la receta.","Estimated from the ingredients.":"Estimado a partir de los ingredientes.","Not counted:":"No contados:","Sign in to load videos":"Inicia sesión para cargar los videos",
   "Could not load video":"No se pudo cargar el video","Sound":"Sonido","Delete “{n}”?":"¿Eliminar «{n}»?","Give your recipe a name.":"Ponle un nombre a tu receta.","e.g. 200g spaghetti":"p. ej. 200 g de espaguetis",
-  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Remove video":"Quitar video",
+  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} pesa más de 200 MB y puede que no se suba. ¿Añadirlo de todos modos?","Session expired. Sign in again.":"La sesión ha caducado. Vuelve a iniciar sesión.",
   "Could not load Google sign-in. Check your connection.":"No se pudo cargar el inicio de sesión de Google. Revisa tu conexión.","Sign-in failed: {e}. Ask the owner to add your email.":"Error al iniciar sesión: {e}. Pide acceso para tu correo.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"El inicio de sesión se cerró o se bloqueó. Permite las ventanas emergentes e inténtalo de nuevo.","Loading from Drive…":"Cargando desde Drive…",
@@ -832,11 +862,11 @@ function trLines(lines,pair){var out=[],batch=[];
     if(batch.length&&batch.join('\n').length+l.length+1>400)return flush().then(function(){batch.push(l)});
     batch.push(l)})},Promise.resolve()).then(flush).then(function(){return out})}
 // Dish names are kept as written (they are usually proper names, e.g. "Ají de gallina"); ingredients, steps and tips are translated
-function translateRecipe(r){var h=srcHash(r),ings=r.ings||[],steps=(r.steps||'').split('\n'),tip=(r.tip||'').split('\n'),lines=ings.concat(steps,tip);
+function translateRecipe(r){var h=srcHash(r),ings=r.ings||[],steps=(r.steps||'').split('\n'),tip=(r.tip||'').split('\n'),lines=ings.concat(steps.map(function(l){return l.replace(SEC,'')}),tip);
   var sample=[r.steps,ings.join(', '),r.name].filter(Boolean).join('. ').slice(0,350),res={h:h};
   return mm(sample,'autodetect|de').then(function(d){var src=String(d.detectedLanguage||'en').slice(0,2).toLowerCase();
     return ['en','fr','es'].filter(function(l){return l!==src}).reduce(function(p,l){return p.then(function(){return trLines(lines,src+'|'+l).then(function(o){var a=ings.length,b=a+steps.length;
-      res[l]={ings:o.slice(0,a),steps:o.slice(a,b).join('\n'),tip:o.slice(b).join('\n')}})})},Promise.resolve()).then(function(){r.lang=src;r.tr=res})})}
+      res[l]={ings:o.slice(0,a),steps:o.slice(a,b).map(function(t,i){return SEC.test(steps[i])?'## '+t:t}).join('\n'),tip:o.slice(b).join('\n')}})})},Promise.resolve()).then(function(){r.lang=src;r.tr=res})})}
 function trFailed(e){status(tr(e&&e.message==='quota'?'Daily translation limit reached. Try again tomorrow.':'Translation failed; the original text is kept.'))}
 function reshow(r){renderList();if(viewId===r.id&&document.body.classList.contains('rv')){var y=window.scrollY;openRecipe(r.id);window.scrollTo(0,y)}}
 // After a save: translate if the text changed, then save the translations to Drive too
@@ -1111,12 +1141,14 @@ function openRecipe(id){
    (base?'<div class="srv"><span>'+tr('For')+'</span><button id="minus" aria-label="'+tr('Fewer servings')+'">−</button><b id="srvn">'+n+'</b><button id="plus" aria-label="'+tr('More servings')+'">+</button><span>'+tr('people')+'</span></div>':'')+kcalHtml(r,f)+
    '<ul class="ing" id="ingl">'+L.ings.map(function(i){return '<li><input type="checkbox" aria-label="'+esc(tr('Got it'))+'"><span>'+esc(scale(i,f))+'</span></li>'}).join('')+'</ul></div>'+
    '<div class="rsteps">'+
-   ((r.steps||total)?'<div class="panel"><h3 class="sec">'+tr('Preparation')+'</h3>'+tmrHtml(r,total)+(L.steps||'').split('\n').filter(function(s){return s.trim()}).map(function(s,i){return '<div class="step"><b>'+tr('Step {n}',{n:i+1})+'</b>'+esc(s)+'</div>'}).join('')+'</div>':'')+
+   ((r.steps||total)?'<div class="panel"><h3 class="sec">'+tr('Preparation')+'</h3>'+tmrHtml(r,total)+stepsHtml(r,L)+'</div>':'')+
    (L.tip?'<div class="tip"><b>'+tr('Tips and notes')+'</b><br>'+esc(L.tip)+'</div>':'')+'</div>'+
    (nm?'<div class="panel rmedia"><h3 class="sec">'+tr('Videos and photos')+'</h3><div class="car v" id="mcar">'+vv.map(function(v,i){return '<div class="vslide" data-i="'+i+'"><div class="vload">'+tr('Loading…')+'</div></div>'}).join('')+ph.slice(1).map(function(p,i){return '<img src="'+pic(r,i+1,'md')+'" alt="" loading="lazy" decoding="async">'}).join('')+'</div>'+dotsHtml(nm)+'</div>':'')+
    '</div>'+
    '<div class="actions'+(canWrite?'':' hidden')+'" style="margin-top:14px"><button class="btn" id="edit">'+tr('Edit')+'</button><button class="btn danger" id="del">'+tr('Delete')+'</button></div>';
   show('view');
+  $('view').querySelectorAll('.sphoto').forEach(function(im){im.onclick=function(){lightbox(im.src)}});
+  stepPics(r).then(function(ch){if(ch)reshow(r)});
   $('view').querySelectorAll('.cat,.rcat').forEach(function(b){b.onclick=function(){catSel=b.dataset.c?[b.dataset.c]:[];renderList();show('list')}});
   var mc=$('mcar');
   if(mc&&vv.length){
@@ -1157,6 +1189,91 @@ function ingRow(v){
   d.querySelector('.x').onclick=function(){d.remove()};
   $('ings').appendChild(d);return d;
 }
+// ---- Steps editor: one box per step, section titles (a line "## Sauce" in the saved text) and an optional photo per step ----
+// The photos are files "step-xxxx.jpg" in the recipe's Drive folder; r.sp lists them line by line next to the steps.
+var SEC=/^##\s*/,STEPF=/^step-[a-z0-9]+\.jpe?g$/i;
+function svgI(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>'}
+var IC={cam:svgI('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'),up:svgI('<path d="M12 19V5M6 11l6-6 6 6"/>'),down:svgI('<path d="M12 5v14M6 13l6 6 6-6"/>'),del:svgI('<path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/>')};
+function stepRow(kind,text,ph,after){
+  var d=document.createElement('div'),h=kind==='h';d.className='srow'+(h?' sec':'');d.dataset.k=kind;
+  var tools='<button type="button" class="sbtn" data-a="up" aria-label="'+esc(tr('Move up'))+'" title="'+esc(tr('Move up'))+'">'+IC.up+'</button>'+
+    '<button type="button" class="sbtn" data-a="down" aria-label="'+esc(tr('Move down'))+'" title="'+esc(tr('Move down'))+'">'+IC.down+'</button>'+
+    '<button type="button" class="sbtn" data-a="del" aria-label="'+esc(tr(h?'Remove section':'Remove step'))+'" title="'+esc(tr(h?'Remove section':'Remove step'))+'">'+IC.del+'</button>';
+  d.innerHTML=h?'<span class="snum">§</span><div><input type="text" aria-label="'+esc(tr('Section name'))+'" placeholder="'+esc(tr('Section name, e.g. Sauce'))+'"><div class="sfoot"><span class="grow"></span>'+tools+'</div></div>'
+    :'<span class="snum"></span><div><textarea rows="1" aria-label="'+esc(tr('Step'))+'" placeholder="'+esc(tr('Describe this step'))+'"></textarea><span class="sph"></span><div class="sfoot"><span class="grow"></span>'+
+      '<span class="sbtn wide filebtn" title="'+esc(tr('Add a photo to this step'))+'">'+IC.cam+'<span class="sphl">'+esc(tr('Photo'))+'</span><input type="file" accept="image/*" aria-label="'+esc(tr('Add a photo to this step'))+'"></span>'+tools+'</div></div>';
+  var f=d.querySelector('textarea,input');f.value=text||'';
+  if(after&&after.parentNode)after.parentNode.insertBefore(d,after.nextSibling);else $('stepl').appendChild(d);
+  if(!h){d._p=ph||null;showStepPhoto(d);grow(f)}
+  return d}
+function grow(t){t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}
+function showStepPhoto(d){var b=d.querySelector('.sph'),p=d._p;if(!b)return;
+  b.innerHTML=p?(p.url?'<img src="'+p.url+'" alt="">':'<span class="sload"></span>')+'<button type="button" data-a="nophoto" aria-label="'+esc(tr('Remove the photo'))+'">✕</button>':'';
+  d.querySelector('.sphl').textContent=tr(p?'Change':'Photo')}
+// Number the steps, starting again at 1 after each section title
+function numberSteps(){var n=0;Array.prototype.forEach.call($('stepl').children,function(d){if(d.dataset.k==='h'){n=0;return}d.querySelector('.snum').textContent=++n})}
+function setSteps(s,sp,r){$('stepl').innerHTML='';sp=sp||[];
+  String(s||'').split('\n').forEach(function(l,i){if(!l.trim())return;var h=SEC.test(l);
+    stepRow(h?'h':'s',l.replace(SEC,'').trim(),!h&&sp[i]?{name:sp[i],url:r&&r._simg&&r._simg[sp[i]]}:null)});
+  if(!$('stepl').children.length)stepRow('s','');numberSteps();
+  if(r&&r.sp&&r.sp.some(Boolean))stepPics(r).then(function(){if(cur!==r)return;
+    Array.prototype.forEach.call($('stepl').children,function(d){if(d._p&&!d._p.url&&r._simg&&r._simg[d._p.name]){d._p.url=r._simg[d._p.name];showStepPhoto(d)}})})}
+// -> {steps: text with one line per step / "## section", sp: photo file per line, add: new photos to upload}
+function getSteps(){var lines=[],sp=[],add=[];
+  Array.prototype.forEach.call($('stepl').children,function(d){var v=d.querySelector('textarea,input').value.replace(/\s*\n\s*/g,' ').trim();
+    if(d.dataset.k==='h'){if(v){lines.push('## '+v);sp.push(null)}return}
+    if(!v&&!d._p)return;lines.push(v||'…');sp.push(d._p?d._p.name:null);if(d._p&&d._p.blob)add.push(d._p)});
+  return {steps:lines.join('\n'),sp:sp.some(Boolean)?sp:[],add:add}}
+function stepFocus(d,end){var f=d&&d.querySelector('textarea,input');if(!f)return;f.focus();var n=end?f.value.length:0;try{f.setSelectionRange(n,n)}catch(e){}}
+function newStepAfter(d,text){var n=stepRow('s',text||'',null,d);numberSteps();stepFocus(n);n.scrollIntoView({block:'nearest',behavior:'smooth'});return n}
+$('addstep').onclick=function(){var l=$('stepl').lastElementChild,f=l&&l.dataset.k==='s'&&l.querySelector('textarea');
+  if(f&&!f.value.trim()&&!l._p){stepFocus(l);return}newStepAfter(l)};
+$('addsec').onclick=function(){var s=stepRow('h','');
+  // a section starts with an empty step, unless the list is only one empty step (then it moves under the new title)
+  var first=$('stepl').firstElementChild;if(first!==s&&$('stepl').children.length===2&&first.dataset.k==='s'&&!first.querySelector('textarea').value.trim()&&!first._p)$('stepl').insertBefore(s,first);
+  else stepRow('s','',null,s);numberSteps();stepFocus(s);s.scrollIntoView({block:'nearest',behavior:'smooth'})};
+$('stepl').addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;var d=b.closest('.srow'),a=b.dataset.a;
+  if(a==='up'&&d.previousElementSibling)d.parentNode.insertBefore(d,d.previousElementSibling);
+  else if(a==='down'&&d.nextElementSibling)d.parentNode.insertBefore(d.nextElementSibling,d);
+  else if(a==='del'){if($('stepl').children.length>1)d.remove();else{d.querySelector('textarea,input').value='';d._p=null;showStepPhoto(d)}}
+  else if(a==='nophoto'){d._p=null;showStepPhoto(d)}
+  numberSteps()});
+$('stepl').addEventListener('input',function(e){if(e.target.tagName==='TEXTAREA')grow(e.target)});
+$('stepl').addEventListener('change',function(e){var t=e.target;if(t.type!=='file')return;var f=t.files&&t.files[0],d=t.closest('.srow');t.value='';if(!f)return;
+  stepPhoto(f).then(function(b){d._p={name:'step-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+'.jpg',url:URL.createObjectURL(b),blob:b};showStepPhoto(d)},
+    function(){alert(tr('This photo could not be opened.'))})});
+$('stepl').addEventListener('keydown',function(e){var t=e.target,d=t.closest('.srow');if(!d||e.isComposing)return;
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();
+    if(t.tagName==='INPUT'){var nx=d.nextElementSibling;if(nx&&nx.dataset.k==='s')stepFocus(nx);else newStepAfter(d);return}
+    // Enter splits the step at the cursor: the text after it moves to a new step
+    var a=t.selectionStart,rest=t.value.slice(t.selectionEnd);t.value=t.value.slice(0,a).replace(/\s+$/,'');grow(t);newStepAfter(d,rest.replace(/^\s+/,''));stepFocus(d.nextElementSibling);return}
+  if(e.key==='Backspace'&&t.selectionStart===0&&t.selectionEnd===0&&$('stepl').children.length>1){var pv=d.previousElementSibling;
+    if(!t.value&&!d._p){e.preventDefault();d.remove();numberSteps();stepFocus(pv||$('stepl').firstElementChild,true);return}
+    // at the start of a step, Backspace joins it to the step above
+    var pf=pv&&pv.dataset.k==='s'&&pv.querySelector('textarea');
+    if(pf&&!(d._p&&pv._p)){e.preventDefault();var n=pf.value.length;pf.value=(pf.value+' '+t.value).trim();pv._p=pv._p||d._p;showStepPhoto(pv);grow(pf);d.remove();numberSteps();pf.focus();pf.setSelectionRange(n,n)}}});
+// Pasting several lines into a step makes one step per line
+$('stepl').addEventListener('paste',function(e){var t=e.target;if(t.tagName!=='TEXTAREA')return;var s=(e.clipboardData||window.clipboardData).getData('text');
+  var ls=s.split(/\r?\n/).map(function(l){return l.trim()}).filter(Boolean);if(ls.length<2)return;e.preventDefault();
+  var d=t.closest('.srow'),a=t.selectionStart,rest=t.value.slice(t.selectionEnd);t.value=(t.value.slice(0,a)+ls[0]).trim();grow(t);
+  var last=d;ls.slice(1).forEach(function(l,i){last=stepRow('s',i===ls.length-2?(l+' '+rest).trim():l,null,last)});
+  numberSteps();stepFocus(last,true)});
+// A step photo is kept up to 1600 px wide, as a JPEG
+function stepPhoto(f){return new Promise(function(ok,no){var u=URL.createObjectURL(f),im=new Image();
+  im.onload=function(){var s=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);
+    var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){b?ok(b):no()},'image/jpeg',.85)};
+  im.onerror=function(){URL.revokeObjectURL(u);no()};im.src=u})}
+// Step photos are downloaded from Drive only when the recipe is opened
+function stepPics(r){var fl=(r._sfiles||[]).filter(function(f){return !(r._simg&&r._simg[f.name])});if(!fl.length||!TOKEN)return Promise.resolve(false);
+  return Promise.all(fl.map(function(f){return imgCache[f.id]||(imgCache[f.id]=api('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media&supportsAllDrives=true').then(function(x){return x.blob()}).then(toSizes))}))
+  .then(function(l){r._simg=r._simg||{};fl.forEach(function(f,i){r._simg[f.name]=l[i][1]});return true},function(){fl.forEach(function(f){delete imgCache[f.id]});return false})}
+// The steps on the recipe page: section titles, numbers starting again after each title, and the step photos
+function stepsHtml(r,L){var sp=r.sp||[],orig=(r.steps||'').split('\n'),n=0;
+  return (L.steps||'').split('\n').map(function(s,i){if(!s.trim())return '';
+    if(SEC.test(orig[i]||'')||SEC.test(s)){n=0;return '<h4 class="ssec">'+esc(s.replace(SEC,''))+'</h4>'}
+    var u=sp[i]&&r._simg&&r._simg[sp[i]];
+    return '<div class="step"><b>'+tr('Step {n}',{n:++n})+'</b>'+(s.trim()==='…'?'':esc(s))+(u?'<img class="sphoto" src="'+u+'" alt="" loading="lazy">':'')+'</div>'}).join('')}
+function lightbox(src){var o=document.createElement('div');o.className='lbox';o.innerHTML='<img src="'+src+'" alt="">';o.onclick=function(){o.remove()};document.body.appendChild(o)}
 function renderPhotos(){
   $('photos').innerHTML=photos.map(function(p,i){return '<div class="p"><img src="'+p+'" alt=""><button type="button" data-i="'+i+'" aria-label="'+tr('Remove photo')+'">✕</button></div>'}).join('');
 }
@@ -1356,7 +1473,7 @@ function findRecipeLd(j){if(!j||typeof j!=='object')return null;
 function ldSteps(x,out){out=out||[];if(!x)return out;
   if(typeof x==='string'){x.split(/<br\s*\/?>|<\/p>|\r?\n/i).map(htmlText).filter(Boolean).forEach(function(s){out.push(s)});return out}
   if(Array.isArray(x)){x.forEach(function(y){ldSteps(y,out)});return out}
-  if(x.itemListElement)return ldSteps(x.itemListElement,out);           // a section of steps
+  if(x.itemListElement){var sn=htmlText(x.name||'');if(sn)out.push('## '+sn);return ldSteps(x.itemListElement,out)}   // a section of steps, with its title
   var t=htmlText(x.text||x.name||'');if(t)out.push(t);return out}
 function recipeFromHtml(html,base){var doc=new DOMParser().parseFromString(html,'text/html'),R=null,p,img='';
   // some sites write slightly broken JSON (line breaks inside texts, trailing commas): tidy it before giving up
@@ -1388,7 +1505,10 @@ function recipeFromHtml(html,base){var doc=new DOMParser().parseFromString(html,
   return p}
 // Reword steps with the free translation service: into another language and back (French/Spanish go via English,
 // English goes via French). The meaning stays, the wording changes; odd words are possible, so the form is checked before saving.
-function rewordSteps(steps){if(!steps.length)return Promise.resolve(steps);
+// Section titles ("## Sauce") are kept as they are; only the steps are reworded
+function rewordSteps(all){var steps=all.filter(function(s){return !SEC.test(s)});if(!steps.length)return Promise.resolve(all);
+  return rewordPlain(steps).then(function(o){var k=0;return all.map(function(s){return SEC.test(s)?s:o[k++]})})}
+function rewordPlain(steps){
   return mm(steps.join(' ').slice(0,350),'autodetect|de').then(function(d){var src=String(d.detectedLanguage||'en').slice(0,2).toLowerCase(),via=src==='en'?'fr':'en';
     return trLines(steps,src+'|'+via).then(function(o){return trLines(o,via+'|'+src)})})
   .then(function(o){if(o.length!==steps.length)throw new Error('lines');return o.map(function(s,i){return s.trim()||steps[i]})})}
@@ -1418,7 +1538,7 @@ function sharedLink(){var l=null;try{l=sessionStorage.getItem('rb-shared')}catch
 function fillRecipe(p){
   if(p.name)$('name').value=p.name;if(p.serv)$('serv').value=p.serv;if(p.prep)$('prep').value=p.prep;if(p.cook)$('cook').value=p.cook;
   $('ings').innerHTML='';(p.ings.length?p.ings:['','','']).forEach(ingRow);
-  $('steps').value=p.steps.join('\n');if(p.tips.length)$('tip').value=p.tips.join('\n')}
+  setSteps(p.steps.join('\n'));if(p.tips.length)$('tip').value=p.tips.join('\n')}
 $('file').onchange=function(){
   Array.prototype.forEach.call($('file').files,addPhotoFile);
   $('file').value='';
@@ -1442,29 +1562,29 @@ function openForm(r){
   $('name').value=r?r.name:'';$('serv').value=r&&r.serv?r.serv:'';
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
-  $('steps').value=r?r.steps:'';$('tip').value=r&&r.tip?r.tip:'';$('kcalin').value=r&&r.kcal?r.kcal:'';
+  setSteps(r?r.steps:'',r&&r.sp,r);$('tip').value=r&&r.tip?r.tip:'';$('kcalin').value=r&&r.kcal?r.kcal:'';
   photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();catPick=r&&r.cats?r.cats.slice():[];renderCatPick();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
   $('scanbox').classList.toggle('hidden',!!r);$('linkmsg').textContent='';$('linkin').value='';$('scanmsg').textContent=tr('Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.');
-  show('form');
+  show('form');Array.prototype.forEach.call($('stepl').querySelectorAll('textarea'),grow);
 }
 $('add').onclick=function(){if(!TOKEN){openForm(null);return}logoSplash(function(){openForm(null)},'#form>*')};
 $('cancel').onclick=function(){cur?openRecipe(cur.id):show('list')};
 $('save').onclick=function(){
   var name=$('name').value.trim();
   if(!name){alert(tr('Give your recipe a name.'));$('name').focus();return}
-  var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean);
+  var ings=Array.prototype.map.call($('ings').querySelectorAll('input'),function(i){return i.value.trim()}).filter(Boolean),st=getSteps();
   var rec={id:cur?cur.id:'r'+Date.now(),ts:cur&&cur.ts?cur.ts:Date.now(),name:name,serv:+$('serv').value||0,prep:+$('prep').value||0,cook:+$('cook').value||0,rest:+$('rest').value||0,
-    diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:$('steps').value.trim(),tip:$('tip').value.trim(),kcal:+$('kcalin').value||0,lang:cur&&cur.lang||'',tr:cur&&cur.tr||null};
-  rec._vpend=vids.map(function(v){return {f:v.f||null,file:v.file||null}});rec._vids=vids.filter(function(v){return v.f}).map(function(v){return v.f});rec._oldVids=(cur&&cur._vids)||[];rec._imgs=photos.slice();rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname;rec._folder=cur._folder;rec._folderName=cur._folderName;rec._inRoot=cur._inRoot}var old=recipes.slice();
+    diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:st.steps,sp:st.sp,tip:$('tip').value.trim(),kcal:+$('kcalin').value||0,lang:cur&&cur.lang||'',tr:cur&&cur.tr||null};
+  rec._vpend=vids.map(function(v){return {f:v.f||null,file:v.file||null}});rec._vids=vids.filter(function(v){return v.f}).map(function(v){return v.f});rec._oldVids=(cur&&cur._vids)||[];rec._imgs=photos.slice();rec._spend=st.add;rec._sfiles=cur&&cur._sfiles||[];rec._simg={};st.add.forEach(function(p){rec._simg[p.name]=p.url});if(cur&&cur._simg)for(var k in cur._simg)rec._simg[k]=rec._simg[k]||cur._simg[k];rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname;rec._folder=cur._folder;rec._folderName=cur._folderName;rec._inRoot=cur._inRoot}var old=recipes.slice();
   if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
   persist();driveSave(rec).then(function(){return autoTranslate(rec)});
   factor=1;renderList();openRecipe(rec.id);
 };
 
 function download(name,text,type){var b=new Blob([text],{type:type||'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
-function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),tip:String(r.tip||''),kcal:+r.kcal||0,lang:String(r.lang||''),tr:r.tr&&typeof r.tr==='object'?r.tr:null,cats:Array.isArray(r.cats)?r.cats.map(String):[]}:null}
+function clean(r,fb){return r&&typeof r==='object'&&r.name?{id:String(r.id||fb||'r'+Date.now()+Math.random().toString(36).slice(2,6)),ts:+r.ts||Date.now(),name:String(r.name),serv:+r.serv||0,prep:+r.prep||0,cook:+r.cook||0,rest:+r.rest||0,diff:r.diff||'Easy',cost:r.cost||'Cheap',ings:Array.isArray(r.ings)?r.ings.map(String):[],photos:Array.isArray(r.photos)?r.photos.map(String):[],steps:String(r.steps||''),sp:Array.isArray(r.sp)?r.sp.map(function(x){return x?String(x):null}):[],tip:String(r.tip||''),kcal:+r.kcal||0,lang:String(r.lang||''),tr:r.tr&&typeof r.tr==='object'?r.tr:null,cats:Array.isArray(r.cats)?r.cats.map(String):[]}:null}
 function parseList(t,fb){var d=JSON.parse(t);if(!Array.isArray(d)){if(d&&Array.isArray(d.recipes))d=d.recipes;else if(d&&d.name)d=[d];else throw new Error('x')}return d.map(function(x,i){return clean(x,fb?fb+'-'+i:null)}).filter(Boolean)}
 $('exp').onclick=function(){download('recipes.json',JSON.stringify(recipes.map(strip),null,2))};
 $('imp').onclick=function(){$('impfile').click()};
@@ -1521,7 +1641,8 @@ function loadFolder(folder){
       var o=JSON.parse(t);if(o&&!Array.isArray(o)&&!o.name)o.name=folder.name;
       var l=parseList(JSON.stringify(o),jf.id);if(!l.length)return null;var r=l[0];
       r._folder=folder.id;r._folderName=folder.name;r._fid=jf.id;r._fname=jf.name;r._multi=false;r._inRoot=false;
-      r._imgFiles=files.filter(function(f){return /^image\//.test(f.mimeType)}).sort(bySuffix).map(slim);
+      r._imgFiles=files.filter(function(f){return /^image\//.test(f.mimeType)&&!STEPF.test(f.name)}).sort(bySuffix).map(slim);
+      r._sfiles=files.filter(function(f){return /^image\//.test(f.mimeType)&&STEPF.test(f.name)}).map(slim);
       r._vids=files.filter(function(f){return /^video\//.test(f.mimeType)}).sort(bySuffix).map(slim);
       return r})
   }).catch(function(e){if(e.message==='auth')throw e;return null})}
@@ -1614,7 +1735,12 @@ function driveSave(rec){
     if(rec._fid&&!rec._multi&&!oldRoot)pj=upload('PATCH',rec._fid,{name:jname},'application/json',json);
     else pj=upload('POST',null,{name:jname,parents:[folder],mimeType:'application/json'},'application/json',json);
     pj=pj.then(function(d){rec._fid=d.id;rec._multi=false;rec._fname=jname;if(oldFid)driveTrash(oldFid,true)});
-    var pi=Promise.resolve(),pv=Promise.resolve();
+    var pi=Promise.resolve(),pv=Promise.resolve(),ps=Promise.resolve();
+    // step photos: upload the new ones, bin the ones no step uses any more
+    if(rec._spend){var want={};(rec.sp||[]).forEach(function(n){if(n)want[n]=1});
+      ps=Promise.all(rec._spend.filter(function(p){return want[p.name]}).map(function(p){return upload('POST',null,{name:p.name,parents:[folder],mimeType:'image/jpeg'},'image/jpeg',p.blob)})).then(function(added){
+        var old=rec._sfiles||[];old.forEach(function(f){if(!want[f.name])driveTrash(f.id,true)});
+        rec._sfiles=old.filter(function(f){return want[f.name]}).concat(added.map(function(f){return {id:f.id,name:f.name}}));rec._spend=null})}
     if(rec._pend){
       var pend=rec._pend,n=pend.length,keep={},old=rec._oldFiles||[];
       pi=Promise.all(pend.map(function(p,i){
@@ -1636,7 +1762,7 @@ function driveSave(rec){
         return upload('POST',null,{name:base+suf+ext2,parents:[folder],mimeType:ty},ty,p.file)
       })).then(function(files){vold.forEach(function(f){if(!vkeep[f.id])driveTrash(f.id,true)});
         rec._vids=files.map(function(f){return {id:f.id,name:f.name}});rec._vpend=null;rec._oldVids=null})}
-    return Promise.all([pj,pi,pv]).then(function(){rec._inRoot=false})
+    return Promise.all([pj,pi,pv,ps]).then(function(){rec._inRoot=false})
   }).then(function(){status(tr('Saved to Drive in folder “{n}”',{n:rec._folderName}))}).catch(function(e){if(e.message!=='auth'){status(tr('Not saved'));alert(tr('Could not save to Drive: {e}',{e:String(e.message).slice(0,150)}))}})}
 function driveTrash(fid,q){api('https://www.googleapis.com/drive/v3/files/'+fid+'?supportsAllDrives=true',{method:'PATCH',headers:{'Content-Type':'application/json'},body:'{"trashed":true}'}).then(function(){if(!q)status(tr('Deleted'))}).catch(function(e){if(e.message!=='auth')alert(tr('Could not delete in Drive.'))})}
 $('sign').onclick=function(){TOKEN?refresh():signIn()};
