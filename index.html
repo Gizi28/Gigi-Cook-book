@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poiret+One&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#ececec;--surface:#fff;--ink:#2b2b2b;--muted:#767676;--line:#e4e4e4;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#8a5a00;--soft:#fdf3d8;
+:root{--bg:#ececec;--surface:#fff;--ink:#2b2b2b;--muted:#767676;--line:#e4e4e4;--accent:#f2b01e;--accent-rgb:242,176,30;--accent-ink:#2b2b2b;--accent-text:#8a5a00;--soft:#fdf3d8;
 box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}}
-:root[data-theme="dark"]{--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-rgb:242,176,30;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}}
+:root[data-theme="dark"]{--bg:#2c2c2c;--surface:#3a3a3a;--ink:#f0f0f0;--muted:#b0b0b0;--line:#4c4c4c;--accent:#f2b01e;--accent-rgb:242,176,30;--accent-ink:#2b2b2b;--accent-text:#f2b01e;--soft:#4a4030}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
@@ -146,6 +146,14 @@ ul.ing li.done span{text-decoration:line-through;color:var(--muted)}
 .sbtn svg{width:17px;height:17px}
 .sbtn.wide{width:auto;padding:0 12px;gap:6px;border-radius:999px;font-size:13px}
 .stepadd{display:flex;gap:8px;flex-wrap:wrap}
+/* Customize the site (owner) */
+.l3{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.l3 span{flex:none;width:26px;font-size:12px;font-weight:700;color:var(--muted)}
+.swatch{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.swatch button{width:34px;height:34px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.swatch button.on{box-shadow:0 0 0 3px var(--ink)}
+.swatch label{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:13px;font-weight:400;cursor:pointer}
+.swatch input[type=color]{width:38px;height:34px;padding:0 2px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer}
 .lbox{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
 .lbox img{max-width:100%;max-height:100%;border-radius:10px}
 .tip{background:var(--soft);border-radius:10px;padding:12px 14px}
@@ -423,9 +431,9 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .pfab .lbl{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .25s,margin .25s}
 .pfab button:hover .lbl,.pfab button:focus-visible .lbl{max-width:220px;margin-left:8px}
 /* softer, see-through yellow for the meal plan buttons */
-#plan .btn.ghost,#plan .ibtn,#plan .seg{border-color:rgba(242,176,30,.5)}
-#plan .seg button.on,#plan .cpick.on{background:rgba(242,176,30,.28);color:var(--ink);border-color:rgba(242,176,30,.55)}
-.pfab button{background:rgba(242,176,30,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#plan .btn.ghost,#plan .ibtn,#plan .seg{border-color:rgba(var(--accent-rgb),.5)}
+#plan .seg button.on,#plan .cpick.on{background:rgba(var(--accent-rgb),.28);color:var(--ink);border-color:rgba(var(--accent-rgb),.55)}
+.pfab button{background:rgba(var(--accent-rgb),.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.18)}
 /* Layout: on small screens the dishes are above the plan and the meal times below; on big screens the dishes move to the left */
 .pwrap{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"car" "nav" "sum" "tabs" "days" "times"}
 #pctl{display:contents}
@@ -569,6 +577,9 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 <div id="lockm" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Owner tools">Owner tools</h3>
   <div class="ltools"><button class="btn ghost" id="sign">Sign in with Google</button><button class="btn ghost" id="exp" data-t="Export JSON">Export JSON</button><button class="btn ghost" id="imp" data-t="Import">Import</button><button class="btn ghost" id="sout" data-t="Sign out">Sign out</button><button class="btn ghost" id="trall" data-t="Translate recipes">Translate recipes</button></div>
+  <h3 class="sec" style="margin-top:20px" data-t="Your site">Your site</h3>
+  <p style="margin-top:0;font-size:14px" data-t="Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.">Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.</p>
+  <div class="ltools"><button class="btn ghost" id="custom" type="button" data-t="Customize the site">Customize the site</button></div>
   <h3 class="sec" style="margin-top:20px" data-t="Google connection">Google connection</h3>
   <label for="cid" data-t="Google OAuth Client ID">Google OAuth Client ID</label><input type="text" id="cid">
   <label for="fold" data-t="Drive folder link">Drive folder link</label><input type="text" id="fold">
@@ -577,7 +588,24 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 j (step editor with sections and photos)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 k (customize the site)</small>
+</div></div>
+<div id="sitem" class="overlay hidden"><div class="dlg">
+  <h3 class="sec" data-t="Customize the site">Customize the site</h3>
+  <small class="shint" data-t="You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.">You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.</small>
+  <label for="sname" data-t="Site name">Site name</label><input type="text" id="sname" maxlength="40">
+  <label data-t="Subtitle, under the name">Subtitle, under the name</label>
+  <div class="l3"><span>EN</span><input type="text" id="ssub-en" maxlength="60" aria-label="English"></div>
+  <div class="l3"><span>FR</span><input type="text" id="ssub-fr" maxlength="60" aria-label="Français"></div>
+  <div class="l3"><span>ES</span><input type="text" id="ssub-es" maxlength="60" aria-label="Español"></div>
+  <label data-t="Main page slogan">Main page slogan</label>
+  <div class="l3"><span>EN</span><input type="text" id="sslo-en" maxlength="80" aria-label="English"></div>
+  <div class="l3"><span>FR</span><input type="text" id="sslo-fr" maxlength="80" aria-label="Français"></div>
+  <div class="l3"><span>ES</span><input type="text" id="sslo-es" maxlength="80" aria-label="Español"></div>
+  <label data-t="Main colour">Main colour</label>
+  <div class="swatch" id="swatch"></div>
+  <label for="shero" data-t="Main page photo">Main page photo</label><select id="shero"></select>
+  <div class="actions"><button class="btn" id="ssave" type="button" data-t="Save">Save</button><button class="btn ghost" id="scanc" type="button" data-t="Cancel">Cancel</button><button class="btn ghost" id="sreset" type="button" data-t="Back to the original">Back to the original</button></div>
 </div></div>
 <div id="signm" class="overlay gate hidden"><div class="dlg" style="text-align:center">
   <span class="logom" style="width:150px;margin:0 auto 12px;color:var(--accent-text)"></span>
@@ -651,7 +679,7 @@ var TR={fr:{
   "Got it":"J'ai cet ingrédient","Preparation":"Préparation","Step {n}":"Étape {n}","Videos and photos":"Vidéos et photos","Loading…":"Chargement…","Edit":"Modifier","Delete":"Supprimer","in total":"au total","per person":"par personne",
   "Calories entered in the recipe.":"Calories saisies dans la recette.","Estimated from the ingredients.":"Estimation à partir des ingrédients.","Not counted:":"Non comptés :","Sign in to load videos":"Connectez-vous pour charger les vidéos",
   "Could not load video":"Impossible de charger la vidéo","Sound":"Son","Delete “{n}”?":"Supprimer « {n} » ?","Give your recipe a name.":"Donnez un nom à votre recette.","e.g. 200g spaghetti":"ex. 200 g de spaghetti",
-  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
+  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Your site":"Votre site","Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.":"Changez le nom, le sous-titre, le slogan, la couleur principale et la photo de la page d’accueil. Tout le monde voit les changements.","Customize the site":"Personnaliser le site","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Chaque changement s’affiche tout de suite. Il n’est gardé pour tout le monde que lorsque vous appuyez sur Enregistrer. Laissez une case vide pour garder le texte d’origine.","Site name":"Nom du site","Subtitle, under the name":"Sous-titre, sous le nom","Main page slogan":"Slogan de la page d’accueil","Main colour":"Couleur principale","Main page photo":"Photo de la page d’accueil","Back to the original":"Revenir à l’original","Another colour":"Autre couleur","A different recipe photo each visit":"Une photo de recette différente à chaque visite","Your site is saved: everyone will see the changes.":"Votre site est enregistré : tout le monde verra les changements.","Saffron":"Safran","Apricot":"Abricot","Terracotta":"Terre cuite","Rose":"Rose","Plum":"Prune","Navy":"Bleu marine","Teal":"Bleu canard","Sage":"Sauge","Olive":"Olive","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} dépasse 200 Mo et risque de ne pas s'envoyer. L'ajouter quand même ?","Session expired. Sign in again.":"Session expirée. Reconnectez-vous.",
   "Could not load Google sign-in. Check your connection.":"Impossible de charger la connexion Google. Vérifiez votre connexion.","Sign-in failed: {e}. Ask the owner to add your email.":"Échec de la connexion : {e}. Demandez l'accès pour votre e-mail.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"La connexion a été fermée ou bloquée. Autorisez les fenêtres pop-up et réessayez.","Loading from Drive…":"Chargement depuis Drive…",
@@ -715,7 +743,7 @@ var TR={fr:{
   "Got it":"Lo tengo","Preparation":"Preparación","Step {n}":"Paso {n}","Videos and photos":"Videos y fotos","Loading…":"Cargando…","Edit":"Editar","Delete":"Eliminar","in total":"en total","per person":"por persona",
   "Calories entered in the recipe.":"Calorías indicadas en la receta.","Estimated from the ingredients.":"Estimado a partir de los ingredientes.","Not counted:":"No contados:","Sign in to load videos":"Inicia sesión para cargar los videos",
   "Could not load video":"No se pudo cargar el video","Sound":"Sonido","Delete “{n}”?":"¿Eliminar «{n}»?","Give your recipe a name.":"Ponle un nombre a tu receta.","e.g. 200g spaghetti":"p. ej. 200 g de espaguetis",
-  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
+  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Your site":"Tu sitio","Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.":"Cambia el nombre, el subtítulo, el eslogan, el color principal y la foto de la página principal. Todos ven los cambios.","Customize the site":"Personalizar el sitio","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Cada cambio se ve al momento. Solo se guarda para todos cuando pulsas Guardar. Deja una casilla vacía para mantener el texto original.","Site name":"Nombre del sitio","Subtitle, under the name":"Subtítulo, bajo el nombre","Main page slogan":"Eslogan de la página principal","Main colour":"Color principal","Main page photo":"Foto de la página principal","Back to the original":"Volver al original","Another colour":"Otro color","A different recipe photo each visit":"Una foto de receta distinta en cada visita","Your site is saved: everyone will see the changes.":"Tu sitio está guardado: todos verán los cambios.","Saffron":"Azafrán","Apricot":"Albaricoque","Terracotta":"Terracota","Rose":"Rosa","Plum":"Ciruela","Navy":"Azul marino","Teal":"Verde azulado","Sage":"Salvia","Olive":"Oliva","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} pesa más de 200 MB y puede que no se suba. ¿Añadirlo de todos modos?","Session expired. Sign in again.":"La sesión ha caducado. Vuelve a iniciar sesión.",
   "Could not load Google sign-in. Check your connection.":"No se pudo cargar el inicio de sesión de Google. Revisa tu conexión.","Sign-in failed: {e}. Ask the owner to add your email.":"Error al iniciar sesión: {e}. Pide acceso para tu correo.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"El inicio de sesión se cerró o se bloqueó. Permite las ventanas emergentes e inténtalo de nuevo.","Loading from Drive…":"Cargando desde Drive…",
@@ -740,10 +768,38 @@ var MONS={en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 var LOCALE={en:'en-GB',fr:'fr-FR',es:'es-ES'},viewId=null;
 var LANG=(function(){var l=lsGet('rb-lang','')||String(navigator.language||'en').slice(0,2).toLowerCase();return LOCALE[l]?l:'en'})();
 // Translate an English UI text; {name} placeholders are filled from v
-function tr(s,v){var r=(TR[LANG]&&TR[LANG][s])||s;if(v)Object.keys(v).forEach(function(k){r=r.split('{'+k+'}').join(v[k])});return r}
+// ---- The site's own name, subtitle, slogan, colour and main page photo: set by the owner, saved in the recipe folder for everyone ----
+var SITE_DEF={name:'Gusto Cabinet',color:'#f2b01e'},SITE_FILE='gusto-site.json',siteFid=null;
+var SITE=siteClean(jget('rb-site',{}));
+function siteClean(o){o=o&&typeof o==='object'?o:{};
+  var t=function(x,n){return String(x||'').replace(/\s+/g,' ').trim().slice(0,n)},m=function(x,n){var r={};['en','fr','es'].forEach(function(l){var v=t(x&&x[l],n);if(v)r[l]=v});return r};
+  return {name:t(o.name,40)||SITE_DEF.name,sub:m(o.sub,60),slogan:m(o.slogan,80),color:/^#[0-9a-f]{6}$/i.test(o.color||'')?o.color.toLowerCase():SITE_DEF.color,hero:t(o.hero,80)}}
+function hexRgb(h){return [1,3,5].map(function(i){return parseInt(h.substr(i,2),16)})}
+function rgbHex(c){return '#'+c.map(function(x){return ('0'+Math.round(x).toString(16)).slice(-2)}).join('')}
+function mixc(a,b,t){return a.map(function(x,i){return x+(b[i]-x)*t})}
+function lum(c){var a=c.map(function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*a[0]+.7152*a[1]+.0722*a[2]}
+// The main colour and the shades made from it: text on it (dark or white), a darker one for text, a pale one for backgrounds
+function applySiteColour(){var st=document.getElementById('sitecss');if(!st){st=document.createElement('style');st.id='sitecss';document.head.appendChild(st)}
+  var mc=document.querySelector('meta[name=theme-color]');if(mc)mc.content=SITE.color;
+  if(SITE.color===SITE_DEF.color){st.textContent='';return}
+  var c=hexRgb(SITE.color),L=lum(c),ink=(L+.05)/(.0247+.05)>=1.05/(L+.05)?'#2b2b2b':'#ffffff',dk=c,lt=c,t;
+  for(t=0;t<=1&&lum(dk)>.12;t+=.05)dk=mixc(c,[0,0,0],t);        // dark enough to read on white
+  for(t=0;t<=1&&lum(lt)<.25;t+=.05)lt=mixc(c,[255,255,255],t);  // light enough to read on the dark theme
+  var base='--accent:'+SITE.color+';--accent-rgb:'+c.join(',')+';--accent-ink:'+ink+';';
+  var day=base+'--accent-text:'+rgbHex(dk)+';--soft:'+rgbHex(mixc(c,[255,255,255],.84)),night=base+'--accent-text:'+rgbHex(lt)+';--soft:'+rgbHex(mixc(c,[44,44,44],.76));
+  st.textContent=':root{'+day+'}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){'+night+'}}:root[data-theme="dark"]{'+night+'}'}
+applySiteColour();
+function setSite(o){SITE=siteClean(o);lsSet('rb-site',JSON.stringify(SITE));applySiteColour();applyLang();renderList()}
+function siteSave(){var json=JSON.stringify(SITE,null,2);
+  return (siteFid?upload('PATCH',siteFid,{name:SITE_FILE},'application/json',json):upload('POST',null,{name:SITE_FILE,parents:[cfgv().folder],mimeType:'application/json'},'application/json',json))
+    .then(function(d){siteFid=d.id})}
+function tr(s,v){var r=(TR[LANG]&&TR[LANG][s])||s;
+  if(s==='The gourmet notebook'&&SITE.sub[LANG])r=SITE.sub[LANG];else if(s==='What shall we cook today?'&&SITE.slogan[LANG])r=SITE.slogan[LANG];
+  if(SITE.name!==SITE_DEF.name&&r.indexOf(SITE_DEF.name)>=0)r=r.split(SITE_DEF.name).join(SITE.name);
+  if(v)Object.keys(v).forEach(function(k){r=r.split('{'+k+'}').join(v[k])});return r}
 // Built-in category names are shown translated; the English name is what recipes store
 function catName(c){return DEFCATS.some(function(d){return d[0]===c})?tr(c):c}
-function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;document.title='Gusto Cabinet';DAYN=DAYS[LANG];MON=MONS[LANG];
+function applyLang(){document.documentElement.lang=LANG;$('lang').value=LANG;document.title=SITE.name;document.querySelector('.blogo').setAttribute('aria-label',SITE.name);DAYN=DAYS[LANG];MON=MONS[LANG];
   document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=tr(e.dataset.t)});
   document.querySelectorAll('[data-tp]').forEach(function(e){e.placeholder=tr(e.dataset.tp)});
   document.querySelectorAll('[data-ta]').forEach(function(e){e.setAttribute('aria-label',tr(e.dataset.ta))});
@@ -917,7 +973,8 @@ function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return
 // Main page hero: a random recipe photo, kept for the whole visit
 var heroId=null;
 function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
-  if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
+  if(SITE.hero&&withPh.some(function(r){return r.id===SITE.hero}))heroId=SITE.hero;   // the owner's chosen main photo
+  else if(!withPh.some(function(r){return r.id===heroId}))heroId=withPh.length?withPh[Math.floor(Math.random()*withPh.length)].id:null;
   var r=heroId&&recipes.find(function(x){return x.id===heroId}),ph=r&&pic(r,0,'lg');
   $('lhero').className='rhero lhero'+(ph?'':' none');
   $('lhero').innerHTML=(ph?'<img src="'+ph+'" alt="">':'<span class="emo">🍝</span>')+'<div class="rcap"><h2 class="name">'+tr('What shall we cook today?')+'</h2>'+
@@ -1053,16 +1110,16 @@ function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=
 function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
   Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/gc-192.png').catch(function(){return null})]).then(function(a){
     var logo=a[1],doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=12,y=0;
-    var Y=[242,176,30],INK=[43,43,43],MUT=[125,120,110],CREAM=[253,243,216],PALE=[255,252,243],LINE=[230,222,200],OK=[60,154,95],OVER=[192,57,43];
+    var Y=hexRgb(SITE.color),INK=[43,43,43],MUT=[125,120,110],CREAM=mixc(Y,[255,255,255],.84),PALE=mixc(Y,[255,255,255],.95),LINE=mixc(Y,[255,255,255],.72),OK=[60,154,95],OVER=[192,57,43];
     var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),g=goal(),dw=34,tw=28,cw=(W-2*M-dw-tw)/slots.length,LH=3.5;
     function col(f,c){doc[f](c[0],c[1],c[2])}
     function font(st,sz,c){doc.setFont('helvetica',st);doc.setFontSize(sz);col('setTextColor',c||INK)}
     function head(){if(logo)doc.addImage(logo,'PNG',M,8,17,17);
       font('bold',22);doc.text(tr('Meal plan'),M+21,16);
-      font('normal',10,MUT);doc.text('Gusto Cabinet  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
+      font('normal',10,MUT);doc.text(SITE.name+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
       if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
       col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
-      y=33;col('setFillColor',Y);doc.rect(M,y,W-2*M,11,'F');font('bold',10);
+      y=33;col('setFillColor',Y);doc.rect(M,y,W-2*M,11,'F');font('bold',10,lum(Y)>.3?INK:[255,255,255]);
       doc.text(tr('Day'),M+dw/2,y+7,{align:'center'});
       slots.forEach(function(s,j){doc.text(tr(s[1])+'  '+s[2],M+dw+cw*j+cw/2,y+7,{align:'center',maxWidth:cw-2})});
       doc.text(tr('Total'),W-M-tw/2,y+7,{align:'center'});y+=11}
@@ -1624,7 +1681,7 @@ $('reqsend').onclick=function(){var em=($('reqmail').value||'').trim(),nm=($('re
 // ---- Sharing the site link ----
 function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
 $('share').onclick=function(e){e.stopPropagation();var url=location.origin+location.pathname;
-  if(navigator.share){navigator.share({title:'Gusto Cabinet',text:tr('The gourmet notebook'),url:url}).catch(function(){});return}
+  if(navigator.share){navigator.share({title:SITE.name,text:tr('The gourmet notebook'),url:url}).catch(function(){});return}
   if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast(tr('Link copied'))},function(){prompt(tr('Copy this link:'),url)});else prompt(tr('Copy this link:'),url)};
 var FOLDER_MIME='application/vnd.google-apps.folder';
 function slim(f){return {id:f.id,name:f.name}}
@@ -1674,7 +1731,8 @@ function refresh(){
   (ME?Promise.resolve():loadMe()).then(function(){return api('https://www.googleapis.com/drive/v3/files/'+root+'?fields=id&supportsAllDrives=true')
     .catch(function(e){if(/^40[34]\b/.test(e.message))e.noAccess=true;throw e})})
   .then(function(){return listFiles("'"+root+"' in parents and trashed=false")}).then(function(rootFiles){
-    var folders=rootFiles.filter(function(f){return f.mimeType===FOLDER_MIME}),others=rootFiles.filter(function(f){return f.mimeType!==FOLDER_MIME});
+    var folders=rootFiles.filter(function(f){return f.mimeType===FOLDER_MIME}),others=rootFiles.filter(function(f){return f.mimeType!==FOLDER_MIME&&f.name!==SITE_FILE});
+    loadSite(rootFiles.filter(function(f){return f.name===SITE_FILE})[0]);
     return Promise.all([Promise.all(folders.map(loadFolder)),loadLegacy(others)])
   }).then(function(res){
     var map={};res[1].forEach(function(x){map[x.id]=x});res[0].filter(Boolean).forEach(function(x){map[x.id]=x});
@@ -1783,6 +1841,32 @@ $('trall').onclick=function(){if(!TOKEN){alert(tr('Sign in with Google first.'))
 ['sign','exp','imp','sout','trall'].forEach(function(i){$(i).addEventListener('click',function(){$('lockm').classList.add('hidden')})});
 $('lock').onclick=function(){var c=cfgv();$('openfold').href=c.folder?'https://drive.google.com/drive/folders/'+encodeURIComponent(c.folder):'https://drive.google.com/';$('cid').value=c.cid;$('fold').value=c.folder;$('mmemail').value=lsGet('rb-mmemail','');$('lockm').classList.remove('hidden')};
 $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
+// Everyone reads the owner's site settings from the recipe folder; with no file there, the original look is used
+function loadSite(f){siteFid=f?f.id:null;
+  (f?readText(f).then(JSON.parse):Promise.resolve({})).then(function(o){if(JSON.stringify(siteClean(o))!==JSON.stringify(SITE))setSite(o)}).catch(function(){})}
+var SWATCHES=[['#f2b01e','Saffron'],['#e07a2f','Apricot'],['#c8553d','Terracotta'],['#d9768a','Rose'],['#8e4a7d','Plum'],['#34508a','Navy'],['#2a8c8c','Teal'],['#6f9a7c','Sage'],['#7a8b3a','Olive']],siteBefore=null;
+function subDef(l,s){return l==='en'?s:(TR[l]&&TR[l][s])||s}
+function fillSiteForm(){$('sname').value=SITE.name;$('sname').placeholder=SITE_DEF.name;
+  ['en','fr','es'].forEach(function(l){$('ssub-'+l).value=SITE.sub[l]||'';$('ssub-'+l).placeholder=subDef(l,'The gourmet notebook');
+    $('sslo-'+l).value=SITE.slogan[l]||'';$('sslo-'+l).placeholder=subDef(l,'What shall we cook today?')});
+  $('swatch').innerHTML=SWATCHES.map(function(s){return '<button type="button" data-c="'+s[0]+'" class="'+(s[0]===SITE.color?'on':'')+'" style="background:'+s[0]+'" title="'+esc(tr(s[1]))+'" aria-label="'+esc(tr(s[1]))+'"></button>'}).join('')+
+    '<label>'+esc(tr('Another colour'))+' <input type="color" id="scol" value="'+SITE.color+'"></label>';
+  var ph=recipes.filter(function(r){return imgs(r)[0]||(r._imgFiles&&r._imgFiles.length)}).sort(function(a,b){return a.name.localeCompare(b.name)});
+  $('shero').innerHTML='<option value="">'+esc(tr('A different recipe photo each visit'))+'</option>'+ph.map(function(r){return '<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>'}).join('');
+  $('shero').value=SITE.hero}
+function readSiteForm(){var o={name:$('sname').value,sub:{},slogan:{},color:$('scol').value,hero:$('shero').value};
+  ['en','fr','es'].forEach(function(l){o.sub[l]=$('ssub-'+l).value;o.slogan[l]=$('sslo-'+l).value});return o}
+$('custom').onclick=function(){$('lockm').classList.add('hidden');siteBefore=JSON.parse(JSON.stringify(SITE));fillSiteForm();$('sitem').classList.remove('hidden')};
+// every change shows at once behind the panel
+$('sitem').addEventListener('input',function(){setSite(readSiteForm())});
+$('sitem').addEventListener('change',function(){setSite(readSiteForm())});
+$('swatch').addEventListener('click',function(e){var b=e.target.closest('button[data-c]');if(!b)return;$('scol').value=b.dataset.c;
+  Array.prototype.forEach.call($('swatch').querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});setSite(readSiteForm())});
+$('scanc').onclick=function(){setSite(siteBefore);$('sitem').classList.add('hidden')};
+$('sreset').onclick=function(){setSite({});fillSiteForm()};
+$('ssave').onclick=function(){if(!TOKEN){alert(tr('Sign in with Google first.'));return}var b=$('ssave');b.disabled=true;setSite(readSiteForm());
+  siteSave().then(function(){$('sitem').classList.add('hidden');status(tr('Your site is saved: everyone will see the changes.'))},
+    function(e){if(e.message!=='auth')alert(tr('Could not save to Drive: {e}',{e:String(e.message).slice(0,150)}))}).then(function(){b.disabled=false})};
 $('lsave').onclick=function(){var a=$('cid').value.trim(),b=$('fold').value.trim(),m=b.match(/folders\/([-\w]+)/)||b.match(/[?&]id=([-\w]+)/);
   var before=JSON.stringify(cfgv());lsSet('rb-mmemail',$('mmemail').value.trim());
   if(a)lsSet('rb-cid',a);if(b)lsSet('rb-folder',m?m[1]:b);$('lockm').classList.add('hidden');
