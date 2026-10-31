@@ -26,7 +26,7 @@ body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--ink);font:16px/
 button,input,textarea,select{font:inherit;color:inherit}
 .top{position:fixed;top:0;left:0;right:0;z-index:40;background:var(--accent);color:var(--accent-ink);padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .25s,color .25s,box-shadow .25s}
 .top.clear{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;box-shadow:none}
-.top h1{margin:0;font:400 36px/1.05 'Poiret One','Century Gothic',Futura,sans-serif;letter-spacing:.05em;-webkit-text-stroke:.4px currentColor;white-space:nowrap}
+.top h1{margin:0;font:var(--tw,400) calc(36px*var(--ts,1))/1.05 'Poiret One','Century Gothic',Futura,sans-serif;letter-spacing:.05em;-webkit-text-stroke:.4px currentColor;white-space:nowrap}
 .wrap{max-width:760px;margin:0 auto;padding:calc(84px + env(safe-area-inset-top,0px)) 14px 80px}
 body{--fw:0px;--cw:0px}
 body.rv .wrap{max-width:none;padding:0 0 80px}
@@ -46,7 +46,7 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 .btxt{display:flex;flex-direction:column;min-width:0}
 .btxt h1{overflow:hidden;text-overflow:ellipsis}
 #tbtns{flex:none;flex-wrap:nowrap!important;margin-left:auto}
-@media (max-width:899px){.blogo{height:36px}.top h1{font-size:28px}}
+@media (max-width:899px){.blogo{height:36px}.top h1{font-size:calc(28px*var(--ts,1))}}
 @media (max-width:700px){.top .lg{display:none}.top .sm{display:inline}}
 #tside{display:contents}
 #lang{order:1}#theme{order:2}#planbtn{order:3}#lock{order:4}#add{order:5}#share{order:6}#me{order:7}
@@ -79,9 +79,9 @@ body.rv .wrap{max-width:none;padding:0 0 80px}
 /* visually hidden but still a real file input, so phones open the camera / gallery from the label */
 .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0;opacity:0}
 .toast{position:fixed;left:50%;bottom:96px;z-index:70;transform:translateX(-50%);background:var(--accent-ink);color:var(--accent);padding:10px 18px;border-radius:999px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none}
-.tslog{font-size:13px;line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tslog{font-size:calc(13px*var(--ss,1));font-weight:var(--sw,400);line-height:1.2;letter-spacing:.04em;opacity:.85;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top #theme{padding:10px 12px;line-height:1}
-@media (max-width:520px){.top{padding-left:12px;padding-right:12px}body.pv .top h1{font-size:17px!important;letter-spacing:0!important}.blogo{height:25px}.brand{gap:6px}.top h1{font-size:20px;letter-spacing:.02em;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
+@media (max-width:520px){.top{padding-left:12px;padding-right:12px}body.pv .top h1{font-size:calc(17px*var(--ts,1))!important;letter-spacing:0!important}.blogo{height:25px}.brand{gap:6px}.top h1{font-size:calc(20px*var(--ts,1));letter-spacing:.02em;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}.top>span{flex:none}#me{width:34px;height:34px}.top .btn,.top #theme{padding:8px 8px;font-size:13px;white-space:nowrap}.top>span{flex-wrap:nowrap!important;gap:3px!important}.top .lg{display:none}.top .sm{display:inline}}
 .btn.ghost{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
 .btn.danger{background:transparent;color:#c0392b;border:1.5px solid #c0392b}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -153,6 +153,22 @@ ul.ing li.done span{text-decoration:line-through;color:var(--muted)}
 .swatch button{width:34px;height:34px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
 .swatch button.on{box-shadow:0 0 0 3px var(--ink)}
 .swatch label{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:13px;font-weight:400;cursor:pointer}
+.sstyle{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:2px 0 4px}
+.sstyle label{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:13px;font-weight:400;cursor:pointer}
+.sstyle input[type=range]{width:130px;accent-color:var(--accent)}
+.cgrow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cgrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cgrow select{width:auto;flex:none}
+/* Category groups: headings in the sidebar and the recipe form */
+.cgh{flex:none;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.7;padding:10px 12px 2px;white-space:nowrap}
+body.ccol #cats .cgh{font-size:0;padding:0;margin:6px 10px;border-top:1px solid currentColor}
+/* phone bottom bar: the group name stands upright between the tiles */
+@media (max-width:899px){#cats .cgh{align-self:stretch;writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;font-size:9px;padding:4px 3px;border-left:1px solid var(--line)}}
+#catpick{display:block}
+.cpg{margin-bottom:10px}
+.cpg>b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.cpg>div{display:flex;flex-wrap:wrap;gap:8px}
+.ncat select{width:auto;flex:none}
 .swatch input[type=color]{width:38px;height:34px;padding:0 2px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer}
 .lbox{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
 .lbox img{max-width:100%;max-height:100%;border-radius:10px}
@@ -535,7 +551,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
     </div>
     <label data-t="Categories">Categories</label>
     <div class="catpick" id="catpick"></div>
-    <div class="row"><input type="text" id="newcat" data-tp="New category (e.g. Vegan)" placeholder="New category (e.g. Vegan)"><button type="button" class="btn ghost" id="addcat" data-t="Add">Add</button></div>
+    <div class="row ncat"><input type="text" id="newcat" data-tp="New category (e.g. Vegan)" placeholder="New category (e.g. Vegan)"><select id="newcatg" data-ta="Group" aria-label="Group"><option value="type" data-t="Dish type">Dish type</option><option value="cuisine" data-t="Cuisine">Cuisine</option><option value="more" selected data-t="More">More</option></select><button type="button" class="btn ghost" id="addcat" data-t="Add">Add</button></div>
     <label data-t="Photos">Photos</label>
     <div class="photos" id="photos"></div>
     <input type="file" id="file" accept="image/*" multiple class="hidden">
@@ -578,7 +594,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <h3 class="sec" data-t="Owner tools">Owner tools</h3>
   <div class="ltools"><button class="btn ghost" id="sign">Sign in with Google</button><button class="btn ghost" id="exp" data-t="Export JSON">Export JSON</button><button class="btn ghost" id="imp" data-t="Import">Import</button><button class="btn ghost" id="sout" data-t="Sign out">Sign out</button><button class="btn ghost" id="trall" data-t="Translate recipes">Translate recipes</button></div>
   <h3 class="sec" style="margin-top:20px" data-t="Your site">Your site</h3>
-  <p style="margin-top:0;font-size:14px" data-t="Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.">Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.</p>
+  <p style="margin-top:0;font-size:14px" data-t="Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.">Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.</p>
   <div class="ltools"><button class="btn ghost" id="custom" type="button" data-t="Customize the site">Customize the site</button></div>
   <h3 class="sec" style="margin-top:20px" data-t="Google connection">Google connection</h3>
   <label for="cid" data-t="Google OAuth Client ID">Google OAuth Client ID</label><input type="text" id="cid">
@@ -588,22 +604,27 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 k (customize the site)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 l (category groups, more styles)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
   <small class="shint" data-t="You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.">You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.</small>
   <label for="sname" data-t="Site name">Site name</label><input type="text" id="sname" maxlength="40">
+  <div class="sstyle"><label class="chk"><input type="checkbox" id="stb"> <span data-t="Bold">Bold</span></label><label class="rng"><span data-t="Size">Size</span> <input type="range" id="sts" min="0.7" max="1.5" step="0.05"></label></div>
   <label data-t="Subtitle, under the name">Subtitle, under the name</label>
   <div class="l3"><span>EN</span><input type="text" id="ssub-en" maxlength="60" aria-label="English"></div>
   <div class="l3"><span>FR</span><input type="text" id="ssub-fr" maxlength="60" aria-label="Français"></div>
   <div class="l3"><span>ES</span><input type="text" id="ssub-es" maxlength="60" aria-label="Español"></div>
+  <div class="sstyle"><label class="chk"><input type="checkbox" id="ssb"> <span data-t="Bold">Bold</span></label><label class="rng"><span data-t="Size">Size</span> <input type="range" id="sss" min="0.7" max="1.5" step="0.05"></label></div>
   <label data-t="Main page slogan">Main page slogan</label>
   <div class="l3"><span>EN</span><input type="text" id="sslo-en" maxlength="80" aria-label="English"></div>
   <div class="l3"><span>FR</span><input type="text" id="sslo-fr" maxlength="80" aria-label="Français"></div>
   <div class="l3"><span>ES</span><input type="text" id="sslo-es" maxlength="80" aria-label="Español"></div>
   <label data-t="Main colour">Main colour</label>
   <div class="swatch" id="swatch"></div>
+  <label data-t="Background colour">Background colour</label>
+  <div class="swatch" id="bgswatch"></div>
+  <div id="cgbox"></div>
   <label for="shero" data-t="Main page photo">Main page photo</label><select id="shero"></select>
   <div class="actions"><button class="btn" id="ssave" type="button" data-t="Save">Save</button><button class="btn ghost" id="scanc" type="button" data-t="Cancel">Cancel</button><button class="btn ghost" id="sreset" type="button" data-t="Back to the original">Back to the original</button></div>
 </div></div>
@@ -679,7 +700,7 @@ var TR={fr:{
   "Got it":"J'ai cet ingrédient","Preparation":"Préparation","Step {n}":"Étape {n}","Videos and photos":"Vidéos et photos","Loading…":"Chargement…","Edit":"Modifier","Delete":"Supprimer","in total":"au total","per person":"par personne",
   "Calories entered in the recipe.":"Calories saisies dans la recette.","Estimated from the ingredients.":"Estimation à partir des ingrédients.","Not counted:":"Non comptés :","Sign in to load videos":"Connectez-vous pour charger les vidéos",
   "Could not load video":"Impossible de charger la vidéo","Sound":"Son","Delete “{n}”?":"Supprimer « {n} » ?","Give your recipe a name.":"Donnez un nom à votre recette.","e.g. 200g spaghetti":"ex. 200 g de spaghetti",
-  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Your site":"Votre site","Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.":"Changez le nom, le sous-titre, le slogan, la couleur principale et la photo de la page d’accueil. Tout le monde voit les changements.","Customize the site":"Personnaliser le site","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Chaque changement s’affiche tout de suite. Il n’est gardé pour tout le monde que lorsque vous appuyez sur Enregistrer. Laissez une case vide pour garder le texte d’origine.","Site name":"Nom du site","Subtitle, under the name":"Sous-titre, sous le nom","Main page slogan":"Slogan de la page d’accueil","Main colour":"Couleur principale","Main page photo":"Photo de la page d’accueil","Back to the original":"Revenir à l’original","Another colour":"Autre couleur","A different recipe photo each visit":"Une photo de recette différente à chaque visite","Your site is saved: everyone will see the changes.":"Votre site est enregistré : tout le monde verra les changements.","Saffron":"Safran","Apricot":"Abricot","Terracotta":"Terre cuite","Rose":"Rose","Plum":"Prune","Navy":"Bleu marine","Teal":"Bleu canard","Sage":"Sauge","Olive":"Olive","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
+  "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Your site":"Votre site","Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.":"Changez le nom et son style, le sous-titre, le slogan, les couleurs, la photo de la page d’accueil et les groupes de catégories. Tout le monde voit les changements.","Customize the site":"Personnaliser le site","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Chaque changement s’affiche tout de suite. Il n’est gardé pour tout le monde que lorsque vous appuyez sur Enregistrer. Laissez une case vide pour garder le texte d’origine.","Site name":"Nom du site","Subtitle, under the name":"Sous-titre, sous le nom","Main page slogan":"Slogan de la page d’accueil","Main colour":"Couleur principale","Main page photo":"Photo de la page d’accueil","Back to the original":"Revenir à l’original","Another colour":"Autre couleur","A different recipe photo each visit":"Une photo de recette différente à chaque visite","Your site is saved: everyone will see the changes.":"Votre site est enregistré : tout le monde verra les changements.","Saffron":"Safran","Dish type":"Type de plat","Cuisine":"Cuisine","More":"Autres","Group":"Groupe","Bold":"Gras","Size":"Taille","Background colour":"Couleur de fond","Groups of your own categories":"Groupes de vos catégories","Light grey":"Gris clair","White":"Blanc","Cream":"Crème","Sand":"Sable","Blush":"Poudré","Mint":"Menthe","Sky":"Ciel","Stone":"Pierre","Apricot":"Abricot","Terracotta":"Terre cuite","Rose":"Rose","Plum":"Prune","Navy":"Bleu marine","Teal":"Bleu canard","Sage":"Sauge","Olive":"Olive","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} dépasse 200 Mo et risque de ne pas s'envoyer. L'ajouter quand même ?","Session expired. Sign in again.":"Session expirée. Reconnectez-vous.",
   "Could not load Google sign-in. Check your connection.":"Impossible de charger la connexion Google. Vérifiez votre connexion.","Sign-in failed: {e}. Ask the owner to add your email.":"Échec de la connexion : {e}. Demandez l'accès pour votre e-mail.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"La connexion a été fermée ou bloquée. Autorisez les fenêtres pop-up et réessayez.","Loading from Drive…":"Chargement depuis Drive…",
@@ -743,7 +764,7 @@ var TR={fr:{
   "Got it":"Lo tengo","Preparation":"Preparación","Step {n}":"Paso {n}","Videos and photos":"Videos y fotos","Loading…":"Cargando…","Edit":"Editar","Delete":"Eliminar","in total":"en total","per person":"por persona",
   "Calories entered in the recipe.":"Calorías indicadas en la receta.","Estimated from the ingredients.":"Estimado a partir de los ingredientes.","Not counted:":"No contados:","Sign in to load videos":"Inicia sesión para cargar los videos",
   "Could not load video":"No se pudo cargar el video","Sound":"Sonido","Delete “{n}”?":"¿Eliminar «{n}»?","Give your recipe a name.":"Ponle un nombre a tu receta.","e.g. 200g spaghetti":"p. ej. 200 g de espaguetis",
-  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Your site":"Tu sitio","Change the name, subtitle, slogan, main colour and main page photo. Everyone sees the changes.":"Cambia el nombre, el subtítulo, el eslogan, el color principal y la foto de la página principal. Todos ven los cambios.","Customize the site":"Personalizar el sitio","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Cada cambio se ve al momento. Solo se guarda para todos cuando pulsas Guardar. Deja una casilla vacía para mantener el texto original.","Site name":"Nombre del sitio","Subtitle, under the name":"Subtítulo, bajo el nombre","Main page slogan":"Eslogan de la página principal","Main colour":"Color principal","Main page photo":"Foto de la página principal","Back to the original":"Volver al original","Another colour":"Otro color","A different recipe photo each visit":"Una foto de receta distinta en cada visita","Your site is saved: everyone will see the changes.":"Tu sitio está guardado: todos verán los cambios.","Saffron":"Azafrán","Apricot":"Albaricoque","Terracotta":"Terracota","Rose":"Rosa","Plum":"Ciruela","Navy":"Azul marino","Teal":"Verde azulado","Sage":"Salvia","Olive":"Oliva","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
+  "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Your site":"Tu sitio","Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.":"Cambia el nombre y su estilo, el subtítulo, el eslogan, los colores, la foto de la página principal y los grupos de categorías. Todos ven los cambios.","Customize the site":"Personalizar el sitio","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Cada cambio se ve al momento. Solo se guarda para todos cuando pulsas Guardar. Deja una casilla vacía para mantener el texto original.","Site name":"Nombre del sitio","Subtitle, under the name":"Subtítulo, bajo el nombre","Main page slogan":"Eslogan de la página principal","Main colour":"Color principal","Main page photo":"Foto de la página principal","Back to the original":"Volver al original","Another colour":"Otro color","A different recipe photo each visit":"Una foto de receta distinta en cada visita","Your site is saved: everyone will see the changes.":"Tu sitio está guardado: todos verán los cambios.","Saffron":"Azafrán","Dish type":"Tipo de plato","Cuisine":"Cocina","More":"Más","Group":"Grupo","Bold":"Negrita","Size":"Tamaño","Background colour":"Color de fondo","Groups of your own categories":"Grupos de tus categorías","Light grey":"Gris claro","White":"Blanco","Cream":"Crema","Sand":"Arena","Blush":"Rosado","Mint":"Menta","Sky":"Cielo","Stone":"Piedra","Apricot":"Albaricoque","Terracotta":"Terracota","Rose":"Rosa","Plum":"Ciruela","Navy":"Azul marino","Teal":"Verde azulado","Sage":"Salvia","Olive":"Oliva","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
   "{n} is larger than 200 MB and may fail to upload. Add it anyway?":"{n} pesa más de 200 MB y puede que no se suba. ¿Añadirlo de todos modos?","Session expired. Sign in again.":"La sesión ha caducado. Vuelve a iniciar sesión.",
   "Could not load Google sign-in. Check your connection.":"No se pudo cargar el inicio de sesión de Google. Revisa tu conexión.","Sign-in failed: {e}. Ask the owner to add your email.":"Error al iniciar sesión: {e}. Pide acceso para tu correo.",
   "Sign-in was closed or blocked. Allow pop-ups and try again.":"El inicio de sesión se cerró o se bloqueó. Permite las ventanas emergentes e inténtalo de nuevo.","Loading from Drive…":"Cargando desde Drive…",
@@ -769,11 +790,14 @@ var LOCALE={en:'en-GB',fr:'fr-FR',es:'es-ES'},viewId=null;
 var LANG=(function(){var l=lsGet('rb-lang','')||String(navigator.language||'en').slice(0,2).toLowerCase();return LOCALE[l]?l:'en'})();
 // Translate an English UI text; {name} placeholders are filled from v
 // ---- The site's own name, subtitle, slogan, colour and main page photo: set by the owner, saved in the recipe folder for everyone ----
-var SITE_DEF={name:'Gusto Cabinet',color:'#f2b01e'},SITE_FILE='gusto-site.json',siteFid=null;
+var SITE_DEF={name:'Gusto Cabinet',color:'#f2b01e',bg:'#ececec'},SITE_FILE='gusto-site.json',siteFid=null;
 var SITE=siteClean(jget('rb-site',{}));
 function siteClean(o){o=o&&typeof o==='object'?o:{};
   var t=function(x,n){return String(x||'').replace(/\s+/g,' ').trim().slice(0,n)},m=function(x,n){var r={};['en','fr','es'].forEach(function(l){var v=t(x&&x[l],n);if(v)r[l]=v});return r};
-  return {name:t(o.name,40)||SITE_DEF.name,sub:m(o.sub,60),slogan:m(o.slogan,80),color:/^#[0-9a-f]{6}$/i.test(o.color||'')?o.color.toLowerCase():SITE_DEF.color,hero:t(o.hero,80)}}
+  var hex=function(x,d){return /^#[0-9a-f]{6}$/i.test(x||'')?x.toLowerCase():d},sz=function(x){x=+x;return x>=.7&&x<=1.5?Math.round(x*100)/100:1},cg={};
+  if(o.cg&&typeof o.cg==='object')Object.keys(o.cg).slice(0,100).forEach(function(k){if(/^(type|cuisine|more)$/.test(o.cg[k]))cg[t(k,40)]=o.cg[k]});
+  return {name:t(o.name,40)||SITE_DEF.name,sub:m(o.sub,60),slogan:m(o.slogan,80),color:hex(o.color,SITE_DEF.color),hero:t(o.hero,80),
+    bg:hex(o.bg,SITE_DEF.bg),tb:!!o.tb,ts:sz(o.ts),sb:!!o.sb,ss:sz(o.ss),cg:cg}}
 function hexRgb(h){return [1,3,5].map(function(i){return parseInt(h.substr(i,2),16)})}
 function rgbHex(c){return '#'+c.map(function(x){return ('0'+Math.round(x).toString(16)).slice(-2)}).join('')}
 function mixc(a,b,t){return a.map(function(x,i){return x+(b[i]-x)*t})}
@@ -781,13 +805,17 @@ function lum(c){var a=c.map(function(v){v/=255;return v<=.03928?v/12.92:Math.pow
 // The main colour and the shades made from it: text on it (dark or white), a darker one for text, a pale one for backgrounds
 function applySiteColour(){var st=document.getElementById('sitecss');if(!st){st=document.createElement('style');st.id='sitecss';document.head.appendChild(st)}
   var mc=document.querySelector('meta[name=theme-color]');if(mc)mc.content=SITE.color;
-  if(SITE.color===SITE_DEF.color){st.textContent='';return}
+  // the name and subtitle: bold or not, bigger or smaller
+  var css=':root{--tw:'+(SITE.tb?700:400)+';--ts:'+SITE.ts+';--sw:'+(SITE.sb?700:400)+';--ss:'+SITE.ss+'}';
+  // the page background: as chosen in light mode, a hint of it in dark mode
+  if(SITE.bg!==SITE_DEF.bg){var b=hexRgb(SITE.bg);css+=':root{--bg:'+SITE.bg+'}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:'+rgbHex(mixc(b,[44,44,44],.9))+'}}:root[data-theme="dark"]{--bg:'+rgbHex(mixc(b,[44,44,44],.9))+'}'}
+  if(SITE.color===SITE_DEF.color){st.textContent=css;return}
   var c=hexRgb(SITE.color),L=lum(c),ink=(L+.05)/(.0247+.05)>=1.05/(L+.05)?'#2b2b2b':'#ffffff',dk=c,lt=c,t;
   for(t=0;t<=1&&lum(dk)>.12;t+=.05)dk=mixc(c,[0,0,0],t);        // dark enough to read on white
   for(t=0;t<=1&&lum(lt)<.25;t+=.05)lt=mixc(c,[255,255,255],t);  // light enough to read on the dark theme
   var base='--accent:'+SITE.color+';--accent-rgb:'+c.join(',')+';--accent-ink:'+ink+';';
   var day=base+'--accent-text:'+rgbHex(dk)+';--soft:'+rgbHex(mixc(c,[255,255,255],.84)),night=base+'--accent-text:'+rgbHex(lt)+';--soft:'+rgbHex(mixc(c,[44,44,44],.76));
-  st.textContent=':root{'+day+'}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){'+night+'}}:root[data-theme="dark"]{'+night+'}'}
+  st.textContent=css+':root{'+day+'}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){'+night+'}}:root[data-theme="dark"]{'+night+'}'}
 applySiteColour();
 function setSite(o){SITE=siteClean(o);lsSet('rb-site',JSON.stringify(SITE));applySiteColour();applyLang();renderList()}
 function siteSave(){var json=JSON.stringify(SITE,null,2);
@@ -947,10 +975,20 @@ var ICONS={
   japanese:'<ellipse cx="12" cy="9" rx="8" ry="3"/><path d="M4 9v6c0 1.7 3.6 3 8 3s8-1.3 8-3V9"/><ellipse cx="12" cy="9" rx="3" ry="1.1"/>',
   other:'<path d="M12 3.5l1.8 5 5 1.8-5 1.8-1.8 5-1.8-5-5-1.8 5-1.8z"/><path d="M19 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>',
   tag:'<path d="M3.5 12V4.5H11l9.5 9.5-7 7z"/><circle cx="7.6" cy="8.5" r="1.3"/>'};
-var DEFCATS=[['Starter','starter'],['Main course','main'],['Dessert','dessert'],['Italian','italian'],['Peruvian','peruvian'],['Japanese','japanese'],['Other','other']],catSel=[],catPick=[];
+ICONS.breakfast='<path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 3.5c-.8 1 .8 2 0 3M12 3.5c-.8 1 .8 2 0 3"/>';
+// Categories come in groups: what kind of dish, and which cuisine (plus "more" for anything else, e.g. Vegan).
+// Ticking several in one group shows any of them; ticking in two groups shows only recipes in both (Italian + Dessert = Italian desserts).
+var CGROUPS=[['type','Dish type'],['cuisine','Cuisine'],['more','More']];
+var DEFCATS=[['Breakfast','breakfast','type'],['Starter','starter','type'],['Main course','main','type'],['Dessert','dessert','type'],['Italian','italian','cuisine'],['Peruvian','peruvian','cuisine'],['Japanese','japanese','cuisine'],['Other','other','cuisine']],catSel=[],catPick=[],catNew={};
 function catIcon(c){var d=DEFCATS.filter(function(x){return x[0]===c})[0];return lineIcon(ICONS[d?d[1]:'tag'])}
+function catGroup(c){var d=DEFCATS.filter(function(x){return x[0]===c})[0];return d?d[2]:catNew[c]||(SITE.cg&&SITE.cg[c])||'more'}
+function byGroup(list){var o=CGROUPS.map(function(g){return {g:g,l:list.filter(function(c){return catGroup(c)===g[0]})}});return o.filter(function(x){return x.l.length})}
+function catMatch(r){if(!catSel.length)return true;var rc=r.cats||[];
+  return byGroup(catSel).every(function(x){return x.l.some(function(c){return rc.indexOf(c)>-1})})}
 function catTile(c,label,icon,on){return '<label class="cat'+(on?' on':'')+'" title="'+esc(label)+'"><input type="checkbox" data-c="'+esc(c)+'"'+(on?' checked':'')+'><span class="ic">'+icon+'</span><span class="cl">'+esc(label)+'</span></label>'}
-function catTiles(list,sel){var h=list.map(function(c){return catTile(c,catName(c),catIcon(c),sel.indexOf(c)>-1)});
+function catTiles(list,sel){var gs=byGroup(list),h=[];
+  gs.forEach(function(x){if(gs.length>1)h.push('<span class="cgh">'+esc(tr(x.g[1]))+'</span>');
+    x.l.forEach(function(c){h.push(catTile(c,catName(c),catIcon(c),sel.indexOf(c)>-1))})});
   h.unshift(catTile('',tr('All'),lineIcon(ICONS.all),!sel.length));
   return '<div class="cats">'+h.join('')+'</div>'}
 function usedCats(){var u=[];DEFCATS.forEach(function(d){if(recipes.some(function(r){return (r.cats||[]).indexOf(d[0])>-1}))u.push(d[0])});
@@ -969,7 +1007,8 @@ window.addEventListener('resize',placeTools);var smallMq=window.matchMedia('(max
 function renderCats(){var u=usedCats();catSel=catSel.filter(function(c){return u.indexOf(c)>-1});document.body.classList.toggle('hascats',u.length>0);
   $('catsin').innerHTML=u.length?'<div class="chd"><b>'+tr('Categories')+'</b><button type="button" class="ctog" aria-label="'+tr('Collapse or expand categories')+'">'+(catCol?'»':'«')+'</button></div>'+catTiles(u,catSel):'';placeTools()}
 function allCats(){var a=DEFCATS.map(function(x){return x[0]});recipes.forEach(function(r){(r.cats||[]).forEach(function(c){if(a.indexOf(c)<0)a.push(c)})});catPick.forEach(function(c){if(a.indexOf(c)<0)a.push(c)});return a}
-function renderCatPick(){$('catpick').innerHTML=allCats().map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(catName(c))+'</button>'}).join('')}
+function renderCatPick(){$('catpick').innerHTML=byGroup(allCats()).map(function(x){return '<div class="cpg"><b>'+esc(tr(x.g[1]))+'</b><div>'+
+  x.l.map(function(c){return '<button type="button" class="cpick'+(catPick.indexOf(c)>-1?' on':'')+'" data-c="'+esc(c)+'">'+catIcon(c)+' '+esc(catName(c))+'</button>'}).join('')+'</div></div>'}).join('')}
 // Main page hero: a random recipe photo, kept for the whole visit
 var heroId=null;
 function renderHero(){var withPh=recipes.filter(function(r){return imgs(r)[0]});
@@ -984,7 +1023,7 @@ function renderList(){
   renderCats();renderHero();
   if(document.body.classList.contains('pv')&&$('pcar')){renderPlanCar();renderPlanDays()}
   var q=$('search').value.toLowerCase().trim();
-  var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return (!catSel.length||(r.cats||[]).some(function(c){return catSel.indexOf(c)>-1}))&&(!q||(r.name+' '+r.ings.join(' ')+' '+rt(r).name+' '+rt(r).ings.join(' ')).toLowerCase().indexOf(q)>-1)});
+  var items=recipes.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)}).filter(function(r){return catMatch(r)&&(!q||(r.name+' '+r.ings.join(' ')+' '+rt(r).name+' '+rt(r).ings.join(' ')).toLowerCase().indexOf(q)>-1)});
   if(!items.length){$('grid').innerHTML='<div class="empty">'+tr(accessMsg&&!recipes.length?accessMsg:recipes.length?'No recipes match your search.':'No recipes yet. Tap “Add recipe” to save your first one.')+'</div>';return}
   $('grid').innerHTML=items.map(function(r){
     var t=(+r.prep||0)+(+r.cook||0)+(+r.rest||0);
@@ -1620,7 +1659,7 @@ function openForm(r){
   $('prep').value=r&&r.prep?r.prep:'';$('cook').value=r&&r.cook?r.cook:'';$('rest').value=r&&r.rest?r.rest:'';
   $('diff').value=r&&r.diff?r.diff:'Easy';$('cost').value=r&&r.cost?r.cost:'Cheap';
   setSteps(r?r.steps:'',r&&r.sp,r);$('tip').value=r&&r.tip?r.tip:'';$('kcalin').value=r&&r.kcal?r.kcal:'';
-  photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();catPick=r&&r.cats?r.cats.slice():[];renderCatPick();
+  photos=r?imgs(r).slice():[];srcFid={};if(r&&r._imgs&&r._imgFiles)r._imgs.forEach(function(u,i){srcFid[u]=r._imgFiles[i]});renderPhotos();vids=r&&r._vids?r._vids.map(function(f){return {f:f}}):[];renderVids();catPick=r&&r.cats?r.cats.slice():[];catNew={};renderCatPick();
   $('ings').innerHTML='';
   (r&&r.ings.length?r.ings:['','','']).forEach(ingRow);
   $('scanbox').classList.toggle('hidden',!!r);$('linkmsg').textContent='';$('linkin').value='';$('scanmsg').textContent=tr('Take or choose a photo of a recipe: its text fills in the form below. The photo is not kept.');
@@ -1636,7 +1675,7 @@ $('save').onclick=function(){
     diff:$('diff').value,cost:$('cost').value,ings:ings,cats:catPick.slice(),photos:[],steps:st.steps,sp:st.sp,tip:$('tip').value.trim(),kcal:+$('kcalin').value||0,lang:cur&&cur.lang||'',tr:cur&&cur.tr||null};
   rec._vpend=vids.map(function(v){return {f:v.f||null,file:v.file||null}});rec._vids=vids.filter(function(v){return v.f}).map(function(v){return v.f});rec._oldVids=(cur&&cur._vids)||[];rec._imgs=photos.slice();rec._spend=st.add;rec._sfiles=cur&&cur._sfiles||[];rec._simg={};st.add.forEach(function(p){rec._simg[p.name]=p.url});if(cur&&cur._simg)for(var k in cur._simg)rec._simg[k]=rec._simg[k]||cur._simg[k];rec._pend=photos.map(function(u){return {u:u,f:srcFid[u]||null}});rec._oldFiles=(cur&&cur._imgFiles)||[];rec._imgFiles=cur&&cur._imgFiles;if(cur&&cur._fid){rec._fid=cur._fid;rec._multi=cur._multi;rec._fname=cur._fname;rec._folder=cur._folder;rec._folderName=cur._folderName;rec._inRoot=cur._inRoot}var old=recipes.slice();
   if(cur){recipes=recipes.map(function(x){return x.id===cur.id?rec:x})}else{recipes.unshift(rec)}
-  persist();driveSave(rec).then(function(){return autoTranslate(rec)});
+  saveCatGroups(rec);persist();driveSave(rec).then(function(){return autoTranslate(rec)});
   factor=1;renderList();openRecipe(rec.id);
 };
 
@@ -1845,23 +1884,33 @@ $('lclose').onclick=function(){$('lockm').classList.add('hidden')};
 function loadSite(f){siteFid=f?f.id:null;
   (f?readText(f).then(JSON.parse):Promise.resolve({})).then(function(o){if(JSON.stringify(siteClean(o))!==JSON.stringify(SITE))setSite(o)}).catch(function(){})}
 var SWATCHES=[['#f2b01e','Saffron'],['#e07a2f','Apricot'],['#c8553d','Terracotta'],['#d9768a','Rose'],['#8e4a7d','Plum'],['#34508a','Navy'],['#2a8c8c','Teal'],['#6f9a7c','Sage'],['#7a8b3a','Olive']],siteBefore=null;
+var BGSWATCHES=[['#ececec','Light grey'],['#ffffff','White'],['#f7f2e8','Cream'],['#f6ede4','Sand'],['#f6eeee','Blush'],['#eef2ec','Mint'],['#edf1f6','Sky'],['#e6e2dc','Stone']];
 function subDef(l,s){return l==='en'?s:(TR[l]&&TR[l][s])||s}
 function fillSiteForm(){$('sname').value=SITE.name;$('sname').placeholder=SITE_DEF.name;
   ['en','fr','es'].forEach(function(l){$('ssub-'+l).value=SITE.sub[l]||'';$('ssub-'+l).placeholder=subDef(l,'The gourmet notebook');
     $('sslo-'+l).value=SITE.slogan[l]||'';$('sslo-'+l).placeholder=subDef(l,'What shall we cook today?')});
   $('swatch').innerHTML=SWATCHES.map(function(s){return '<button type="button" data-c="'+s[0]+'" class="'+(s[0]===SITE.color?'on':'')+'" style="background:'+s[0]+'" title="'+esc(tr(s[1]))+'" aria-label="'+esc(tr(s[1]))+'"></button>'}).join('')+
     '<label>'+esc(tr('Another colour'))+' <input type="color" id="scol" value="'+SITE.color+'"></label>';
+  $('bgswatch').innerHTML=BGSWATCHES.map(function(s){return '<button type="button" data-c="'+s[0]+'" class="'+(s[0]===SITE.bg?'on':'')+'" style="background:'+s[0]+'" title="'+esc(tr(s[1]))+'" aria-label="'+esc(tr(s[1]))+'"></button>'}).join('')+
+    '<label>'+esc(tr('Another colour'))+' <input type="color" id="sbg" value="'+SITE.bg+'"></label>';
+  $('stb').checked=SITE.tb;$('sts').value=SITE.ts;$('ssb').checked=SITE.sb;$('sss').value=SITE.ss;
+  // categories you added yourself: choose their group
+  var own=allCats().filter(function(c){return !DEFCATS.some(function(d){return d[0]===c})});
+  $('cgbox').innerHTML=own.length?'<label>'+esc(tr('Groups of your own categories'))+'</label>'+own.map(function(c){var g=catGroup(c);
+    return '<div class="cgrow"><span>'+esc(c)+'</span><select data-c="'+esc(c)+'">'+CGROUPS.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===g?' selected':'')+'>'+esc(tr(x[1]))+'</option>'}).join('')+'</select></div>'}).join(''):'';
   var ph=recipes.filter(function(r){return imgs(r)[0]||(r._imgFiles&&r._imgFiles.length)}).sort(function(a,b){return a.name.localeCompare(b.name)});
   $('shero').innerHTML='<option value="">'+esc(tr('A different recipe photo each visit'))+'</option>'+ph.map(function(r){return '<option value="'+esc(r.id)+'">'+esc(r.name)+'</option>'}).join('');
   $('shero').value=SITE.hero}
-function readSiteForm(){var o={name:$('sname').value,sub:{},slogan:{},color:$('scol').value,hero:$('shero').value};
+function readSiteForm(){var o={name:$('sname').value,sub:{},slogan:{},color:$('scol').value,hero:$('shero').value,bg:$('sbg').value,
+    tb:$('stb').checked,ts:$('sts').value,sb:$('ssb').checked,ss:$('sss').value,cg:JSON.parse(JSON.stringify(SITE.cg))};
+  Array.prototype.forEach.call($('cgbox').querySelectorAll('select'),function(s){o.cg[s.dataset.c]=s.value});
   ['en','fr','es'].forEach(function(l){o.sub[l]=$('ssub-'+l).value;o.slogan[l]=$('sslo-'+l).value});return o}
 $('custom').onclick=function(){$('lockm').classList.add('hidden');siteBefore=JSON.parse(JSON.stringify(SITE));fillSiteForm();$('sitem').classList.remove('hidden')};
 // every change shows at once behind the panel
 $('sitem').addEventListener('input',function(){setSite(readSiteForm())});
 $('sitem').addEventListener('change',function(){setSite(readSiteForm())});
-$('swatch').addEventListener('click',function(e){var b=e.target.closest('button[data-c]');if(!b)return;$('scol').value=b.dataset.c;
-  Array.prototype.forEach.call($('swatch').querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});setSite(readSiteForm())});
+[['swatch','scol'],['bgswatch','sbg']].forEach(function(p){$(p[0]).addEventListener('click',function(e){var b=e.target.closest('button[data-c]');if(!b)return;$(p[1]).value=b.dataset.c;
+  Array.prototype.forEach.call($(p[0]).querySelectorAll('button'),function(x){x.classList.toggle('on',x===b)});setSite(readSiteForm())})});
 $('scanc').onclick=function(){setSite(siteBefore);$('sitem').classList.add('hidden')};
 $('sreset').onclick=function(){setSite({});fillSiteForm()};
 $('ssave').onclick=function(){if(!TOKEN){alert(tr('Sign in with Google first.'));return}var b=$('ssave');b.disabled=true;setSite(readSiteForm());
@@ -1888,7 +1937,12 @@ $('cats').onchange=function(e){var i=e.target,c=i.dataset.c;if(c==null)return;
   if(!c)catSel=[];else if(i.checked){if(catSel.indexOf(c)<0)catSel.push(c)}else catSel=catSel.filter(function(x){return x!==c});
   renderList();if(!document.body.classList.contains('lv'))show('list')};
 $('catpick').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c,i=catPick.indexOf(c);if(i>-1)catPick.splice(i,1);else catPick.push(c);renderCatPick()};
-$('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);$('newcat').value='';renderCatPick()};
+// A new category's group is kept in the site settings (saved to Drive when the owner adds it)
+function saveCatGroups(rec){var nk=Object.keys(catNew).filter(function(c){return rec.cats.indexOf(c)>-1}),g=catNew;catNew={};if(!nk.length)return;
+  var o=JSON.parse(JSON.stringify(SITE));nk.forEach(function(c){o.cg[c]=g[c]});SITE=siteClean(o);lsSet('rb-site',JSON.stringify(SITE));
+  if(TOKEN&&lsGet('rb-owner','')==='1')siteSave().catch(function(){})}
+$('addcat').onclick=function(){var v=$('newcat').value.trim();if(!v)return;if(catPick.indexOf(v)<0)catPick.push(v);
+  if(!DEFCATS.some(function(d){return d[0]===v}))catNew[v]=$('newcatg').value;$('newcat').value='';renderCatPick()};
 $('lang').onchange=function(){LANG=this.value;lsSet('rb-lang',LANG);applyLang();var b=document.body.classList;renderList();
   if(b.contains('rv')&&viewId){var y=window.scrollY;openRecipe(viewId);window.scrollTo(0,y)}else if(b.contains('pv'))renderPlan();
   if(!$('form').classList.contains('hidden')){$('ftitle').textContent=tr(cur?'Edit recipe':'New recipe');renderCatPick()}
