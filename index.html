@@ -299,7 +299,7 @@ body.sb.hascats .wrap{padding-bottom:110px}
   /* the recipe photo runs under the sidebar too, so the see-through top bar always has the photo behind it */
   body.rv.hascats .rhero{margin-left:calc(0px - var(--cw))}
   body.rv.hascats .rhero .rcap{padding-left:calc(var(--cw) + 52px)}
-  .lhero .rcap{padding-left:52px;padding-right:36px}
+  .lhero .rcap{padding-left:calc(var(--cw) + 52px);padding-right:36px}
   body.ccol #cats .chd{justify-content:center;padding:0 0 10px}
   body.ccol #cats .chd b,body.ccol #cats .cat .cl{display:none}
   body.ccol #cats .cats{padding:0 8px 12px}
@@ -315,12 +315,15 @@ body.sb.hascats .wrap{padding-bottom:110px}
   #cats .cat.on{background:var(--accent-ink);color:var(--accent)}
   #cats .cat input{accent-color:var(--accent-ink)}
   .ctog{background:var(--accent-ink);color:var(--accent)}
-  body.hascats.sb .mtab{display:flex;position:fixed;left:var(--cw);top:calc(var(--toph,84px) + 14px);z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:rgba(var(--accent-rgb),.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--accent-ink);border-radius:0 10px 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
+  body.hascats.sb .mtab{display:flex;position:fixed;left:var(--cw);top:var(--toph,84px);z-index:46;width:38px;height:120px;flex-direction:column;align-items:center;padding:10px 0;gap:12px;border:0;cursor:pointer;background:rgba(var(--accent-rgb),.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--accent-ink);border-radius:0 0 10px 0;box-shadow:2px 2px 8px rgba(0,0,0,.2);transition:left .25s}
   .mtab .fi::before{content:'−';font-size:22px;font-weight:700;line-height:1}
   body.mcol .mtab .fi::before{content:'+'}
   .mtab .ft{writing-mode:vertical-rl;transform:rotate(180deg);font-size:14px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
 }
 .mtab{display:none}
+/* The site name sits over the page, not over the sidebar; on wide screens it is centred in the top bar */
+@media (min-width:1100px){body.sb.hascats .top .brand{margin-left:var(--cw);transition:margin-left .25s}}
+@media (min-width:1200px){.top .brand{position:absolute;left:50%;top:calc(50% + env(safe-area-inset-top,0px)/2);transform:translate(-50%,-50%);max-width:calc(100% - 760px);margin-left:0!important}}
 @media (min-width:1100px){
   /* leave room for the "Menu" tab that sticks out of the sidebar */
   body.rv #view>.rgrid,body.rv #view>.actions,body.rv.hascats #view>.rgrid,body.rv.hascats #view>.actions{padding-left:62px}
@@ -589,7 +592,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 n (top bar over the menu)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 o (centred title, one-edge menu)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
