@@ -665,7 +665,7 @@ body.picking .pslot{cursor:copy;box-shadow:0 0 0 2px rgba(var(--accent-rgb),.6)}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-11-01 g (rings on the side, round days)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-11-01 h (PDF like the week)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
@@ -1286,7 +1286,13 @@ function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=
 function loadImg(u){return new Promise(function(ok){if(!u)return ok(null);var im=new Image();im.onload=function(){ok(im)};im.onerror=function(){ok(null)};im.src=u})}
 function cropJpeg(im,w,h){try{var c=document.createElement('canvas'),s=Math.min(im.naturalWidth/w,im.naturalHeight/h);c.width=Math.round(w*12);c.height=Math.round(h*12);
   c.getContext('2d').drawImage(im,(im.naturalWidth-w*s)/2,(im.naturalHeight-h*s)/2,w*s,h*s,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82)}catch(e){return null}}
-// The week as a page of day columns: one white card per meal with its photo, calories and a protein / carbs / fat bar (like the screen)
+// Small pictures for the PDF, drawn in the browser: a meal-time emoji, and a ring filled up to a share (like the screen)
+function emojiPng(e){try{var c=document.createElement('canvas'),x=c.getContext('2d');c.width=c.height=72;x.textAlign='center';x.textBaseline='middle';
+  x.font='54px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.fillText(e,36,40);return c.toDataURL('image/png')}catch(er){return null}}
+function ringPng(p,col){try{var c=document.createElement('canvas'),x=c.getContext('2d');c.width=c.height=120;x.lineWidth=13;x.lineCap='round';
+  x.strokeStyle='rgba(0,0,0,.09)';x.beginPath();x.arc(60,60,50,0,2*Math.PI);x.stroke();
+  if(p>0){x.strokeStyle=col;x.beginPath();x.arc(60,60,50,-Math.PI/2,-Math.PI/2+2*Math.PI*Math.min(1,p));x.stroke()}return c.toDataURL('image/png')}catch(er){return null}}
+// The week as on screen: round dates across, meal times down the left, a photo per meal ("+" when empty), and each day's calories at the bottom
 function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
   var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),ids={};
   keys.forEach(function(k){slots.forEach(function(s){((plan[k]&&plan[k][s[0]])||[]).forEach(function(m){ids[m.id]=1})})});
@@ -1294,46 +1300,49 @@ function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));r
   Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/gc-192.png').catch(function(){return null}),
     Promise.all(idl.map(function(id){return loadImg(pic(recById(id),0))}))]).then(function(a){
     var logo=a[1],ims={};idl.forEach(function(id,i){ims[id]=a[2][i]});
-    var doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=10,G=2.5,LW=22,g=goal();
-    var Y=hexRgb(SITE.color),INK=[43,43,43],MUT=[125,120,110],LINE=[222,218,210],EMPTY=[247,246,243],OK=[60,154,95],OVER=[192,57,43];
-    var cw=(W-2*M-LW-6*G)/7,y0=33,hh=14,top=y0+hh+3,foot=13,rowH=Math.min(54,(H-foot-top-G*(slots.length-1))/slots.length);
+    var doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=10,G=2.2,LW=24,g=goal(),tk=dkey(new Date());
+    var Y=hexRgb(SITE.color),INK=[43,43,43],MUT=[125,120,110],LINE=[226,223,216],CELL=[244,243,240],WHITE=[255,255,255];
+    var cw=(W-2*M-LW-7*G)/7,x0=M+LW+G,y0=33,hh=17,top=y0+hh+1.5,TH=27,foot=9,rowH=Math.min(46,(H-foot-top-TH-G*slots.length)/slots.length);
     function col(f,c){doc[f](c[0],c[1],c[2])}
     function font(st,sz,c){doc.setFont('helvetica',st);doc.setFontSize(sz);col('setTextColor',c||INK)}
     function rgb(s){return s.split(',').map(Number)}
+    function box(x,y,w,h,fill,line){col('setFillColor',fill);if(line){col('setDrawColor',line);doc.setLineWidth(.25)}doc.roundedRect(x,y,w,h,3,3,line?'FD':'F')}
+    function label(y,h,emo,name,sub){box(M,y,LW,h,WHITE,LINE);var im=emojiPng(emo),cy=y+h/2;
+      if(im)doc.addImage(im,'PNG',M+LW/2-3,cy-(sub?7.5:6),6,6);font('bold',7.5);doc.text(doc.splitTextToSize(name,LW-3),M+LW/2,cy+(sub?2:3),{align:'center'});
+      if(sub){font('normal',6.5,MUT);doc.text(sub,M+LW/2,cy+5.5,{align:'center'})}}
     // header: logo, title, dates, goal
     if(logo)doc.addImage(logo,'PNG',M,8,17,17);
     font('bold',22);doc.text(tr('Meal plan'),M+21,16);
     font('normal',10,MUT);doc.text(SITE.name+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
     if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
     col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
-    // day labels with the day's calories and a bar towards the goal
-    keys.forEach(function(k,i){var x=M+LW+i*(cw+G),t=dayTotal(k);
-      col('setFillColor',[255,255,255]);col('setDrawColor',LINE);doc.setLineWidth(.3);doc.roundedRect(x,y0,cw,hh,2.5,2.5,'FD');
-      font('bold',9.5);doc.text(DAYN[i]+' '+fmtD(pday(i)),x+cw/2,y0+5,{align:'center'});
-      font('normal',7.5,MUT);doc.text((t?nf(t):'0')+(g?' / '+nf(g):'')+' kcal',x+cw/2,y0+9,{align:'center'});
-      if(g){var p=t/g;col('setFillColor',[235,232,226]);doc.roundedRect(x+3,y0+10.8,cw-6,1.4,.7,.7,'F');
-        if(t){col('setFillColor',p>1.1?OVER:p>=.9?OK:Y);doc.roundedRect(x+3,y0+10.8,(cw-6)*Math.min(1,p),1.4,.7,.7,'F')}}});
+    // round dates: today filled, days with meals ringed
+    keys.forEach(function(k,i){var cx=x0+i*(cw+G)+cw/2;
+      font('bold',8,MUT);doc.text(DAYN[i],cx,y0+3.5,{align:'center'});
+      if(k===tk){col('setFillColor',Y);doc.circle(cx,y0+10.5,5,'F')}else{col('setFillColor',WHITE);col('setDrawColor',plan[k]?Y:LINE);doc.setLineWidth(plan[k]?.6:.3);doc.circle(cx,y0+10.5,5,'FD')}
+      font('bold',10,k===tk&&lum(Y)<=.3?WHITE:INK);doc.text(String(pday(i).getDate()),cx,y0+12,{align:'center'})});
     // one row per meal time
-    slots.forEach(function(s,j){var y=top+j*(rowH+G);
-      font('bold',8.5);doc.text(doc.splitTextToSize(tr(s[1]),LW-2),M,y+5);font('normal',7.5,MUT);doc.text(s[2],M,y+(tr(s[1]).length>12?12.5:9));
-      keys.forEach(function(k,i){var x=M+LW+i*(cw+G),ms=(plan[k]&&plan[k][s[0]])||[];
-        if(!ms.length){col('setFillColor',EMPTY);col('setDrawColor',LINE);doc.setLineWidth(.3);doc.setLineDashPattern([1,1],0);
-          doc.roundedRect(x,y,cw,rowH,3,3,'FD');doc.setLineDashPattern([],0);return}
-        var ch=(rowH-(ms.length-1)*1.5)/ms.length;
-        ms.forEach(function(m,n){var r=recById(m.id),cy=y+n*(ch+1.5),pk=r?portionKcal(r):0;
-          col('setFillColor',[255,255,255]);col('setDrawColor',LINE);doc.setLineWidth(.35);doc.roundedRect(x,cy,cw,ch,3,3,'FD');
-          var im=r&&ims[r.id],tx=cy+4,ph=Math.min(ch-14,(cw-3)*.62);
-          if(im&&ph>=9){var d=cropJpeg(im,cw-3,ph);if(d){doc.addImage(d,'JPEG',x+1.5,cy+1.5,cw-3,ph);tx=cy+ph+5}}
+    slots.forEach(function(s,j){var y=top+j*(rowH+G);label(y,rowH,SLOTICON[s[0]],tr(s[1]),s[2]);
+      keys.forEach(function(k,i){var x=x0+i*(cw+G),ms=(plan[k]&&plan[k][s[0]])||[];box(x,y,cw,rowH,CELL);
+        if(!ms.length){font('normal',14,[190,186,178]);doc.text('+',x+cw/2,y+rowH/2+2,{align:'center'});return}
+        var ch=(rowH-1.5-(ms.length-1)*1.5)/ms.length;
+        ms.forEach(function(m,n){var r=recById(m.id),cy=y+1.5+n*(ch+1.5),pk=r?portionKcal(r):0,im=r&&ims[r.id],ty=cy+3.5,ph=Math.min(ch-8.5,(cw-3)*.75);
+          if(im&&ph>=8){var d=cropJpeg(im,cw-3,ph);if(d){doc.addImage(d,'JPEG',x+1.5,cy,cw-3,ph);ty=cy+ph+3.2}}
           var name=(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):'');
-          font('bold',8);var ln=doc.splitTextToSize(name,cw-4).slice(0,ch-(tx-cy)>12?2:1);doc.text(ln,x+2,tx);tx+=ln.length*3.3;
-          if(pk){font('normal',7,MUT);doc.text(nf(pk*m.p)+' kcal',x+2,tx)}
-          var e=r&&macroE(r);if(e&&cy+ch-tx>3.5){var et=e[0]+e[1]+e[2],bx=x+2,bw=cw-4-2*1;
-            e.forEach(function(v,q){var w=bw*Math.max(v,et*.02)/et;col('setFillColor',rgb(MACRO_RGB[q]));doc.roundedRect(bx,cy+ch-2.6,w,1.1,.5,.5,'F');bx+=w+1})}})})});
-    // footer: colour legend, weekly average, note
-    var fy=H-6,lx=M;
-    MACRO_BAL.forEach(function(b,q){col('setFillColor',rgb(MACRO_RGB[q]));doc.roundedRect(lx,fy-2.6,3,3,.8,.8,'F');font('normal',8);doc.text(tr(b[0]),lx+4.2,fy);lx+=6+doc.getTextWidth(tr(b[0]))+3});
+          font('bold',7.5);doc.text(doc.splitTextToSize(name,cw-3)[0],x+1.5,ty);
+          if(pk){font('normal',6.5,MUT);doc.text(nf(pk*m.p)+' kcal',x+1.5,ty+3)}})})});
+    // each day's calories ring and carbs / protein / fat bars
+    var ty0=top+slots.length*(rowH+G);label(ty0,TH,'🔥',tr('Total'));
+    keys.forEach(function(k,i){var x=x0+i*(cw+G),R=nutRows(k),rc=R[0][1]>R[0][2]*1.1?[192,57,43]:Y,rs=12;box(x,ty0,cw,TH,WHITE,LINE);
+      var rp=ringPng(R[0][1]/R[0][2],'rgb('+rc.join(',')+')');if(rp)doc.addImage(rp,'PNG',x+cw/2-rs/2,ty0+1.5,rs,rs);
+      font('bold',6.5);doc.text(nf(R[0][1]),x+cw/2,ty0+1.5+rs/2+.6,{align:'center'});font('normal',4.8,MUT);doc.text('kcal',x+cw/2,ty0+1.5+rs/2+2.6,{align:'center'});
+      R.slice(1).forEach(function(r,q){var by=ty0+16+q*3.6,c=rgb(MACRO_RGB[[1,0,2][q]]),bx=x+5.5,bw=cw-16;
+        col('setFillColor',c);doc.circle(x+2.2,by-.9,.8,'F');font('bold',6);doc.text(tr(r[0]).charAt(0),x+3.6,by);
+        col('setFillColor',[234,232,227]);doc.roundedRect(bx,by-1.8,bw,1.5,.7,.7,'F');col('setFillColor',c);doc.roundedRect(bx,by-1.8,Math.max(.8,bw*Math.min(1,r[1]/r[2])),1.5,.7,.7,'F');
+        font('normal',5.5,MUT);doc.text(nf(r[1])+' g',x+cw-1.2,by,{align:'right'})})});
+    // footer: weekly average, note
     var used=keys.map(dayTotal).filter(function(t){return t>0});
-    font('normal',8,MUT);doc.text((used.length?tr('Weekly average: {k} kcal a day',{k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'  ·  ':'')+tr('Calories are estimated from the ingredients.'),W-M,fy,{align:'right'});
+    font('normal',8,MUT);doc.text((used.length?tr('Weekly average: {k} kcal a day',{k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'  ·  ':'')+tr('Calories are estimated from the ingredients.'),W-M,H-5,{align:'right'});
     doc.save('meal-plan-'+keys[0]+'.pdf')
   }).catch(function(){alert(tr('Could not create the PDF. Check your internet connection.'))})}
 function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n')}
