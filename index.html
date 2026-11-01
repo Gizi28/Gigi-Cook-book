@@ -479,29 +479,30 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 .pci{flex:0 0 48px;width:48px;height:48px;border-radius:10px;font-size:22px}
 .pday .pdh{background:var(--surface);border-radius:12px;padding:8px 10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 /* Week: seven pastel columns side by side (they scroll sideways when the screen is too narrow) */
-.pdays.week{grid-template-columns:repeat(7,minmax(132px,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 12px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 8px}
+.pdays.week{grid-template-columns:repeat(7,minmax(118px,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 12px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 8px}
 .pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;row-gap:10px;padding:0;border:0;background:none;box-shadow:none}
 .pdays.week .pday.today .pdh{box-shadow:0 0 0 2px var(--accent)}
 .pdays.week .pdh{text-align:center}
 .pdays.week .pdt{flex-direction:column;align-items:center;gap:1px}
-.pdays.week .pslot{border-radius:16px;padding:7px;min-height:96px}
+.pdays.week .pslot{border-radius:16px;padding:7px;min-height:80px}
 .pdays.week .psl{font-size:11px;text-transform:uppercase;letter-spacing:.04em}
-.pdays.week .pchip{flex-direction:column;align-items:stretch;gap:5px;padding:6px;border-radius:12px}
-.pdays.week .pci{flex:none;width:100%;height:auto;aspect-ratio:4/3;font-size:34px}
-.pdays.week .pct b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pdays.week .pchip{flex-direction:column;align-items:stretch;gap:3px;padding:5px;border-radius:12px}
+.pdays.week .pci{flex:none;width:100%;height:64px;font-size:28px}
+.pdays.week .pct b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pdays.week .pcb{justify-content:center;gap:4px}
+.pdays.week .pcb button{width:20px;height:20px;font-size:12px}
 @media (min-width:900px){.pdays.day{max-width:640px}}
 @media (min-width:1100px){
   .pfab{right:28px;bottom:28px}
   .pfab button{height:58px;min-width:58px;padding:0 18px;font-size:15px}
 }
-/* Very wide screens: the dishes scroll down on the left of the week */
-@media (min-width:1700px){
-  .pwrap{grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". legend" ". tabs" "car days" "car times";grid-template-rows:auto auto auto auto 1fr;column-gap:22px;align-items:start}
-  .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+/* Big screens: the dishes scroll down on the left of the week, as a narrow list with small photos */
+@media (min-width:1100px){
+  .pwrap{grid-template-columns:230px minmax(0,1fr);grid-template-areas:"sum nav" ". legend" ". tabs" "car days" "car times";grid-template-rows:auto auto auto auto 1fr;column-gap:22px;align-items:start}
+  .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
   .pcar{flex-direction:column;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 2px 2px;gap:8px}
   .pcard{flex:none;flex-direction:row;align-items:center}
-  .pcard .fth{flex:0 0 64px;width:64px;height:52px;aspect-ratio:auto}
+  .pcard .fth{flex:0 0 46px;width:46px;height:46px;aspect-ratio:auto}
   .pcx{flex:1;padding:4px 0}
   .pcard b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;padding-top:0}
   .pcard small{padding-bottom:0}
@@ -612,7 +613,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-11-01 c (meal plan coloured by nutrients)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-11-01 d (photo PDF, compact week)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
@@ -1126,26 +1127,29 @@ function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
     return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+toneAttr(r)+' data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><span class="pcx"><b>'+esc(rt(r).name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></span></button>'}).join('')
     :'<div class="phint" style="padding:16px">'+tr(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
+// Phones and small screens always plan one day at a time (a whole week is not readable there)
+var planSmall=window.matchMedia('(max-width:899px)');
+if(planSmall.addEventListener)planSmall.addEventListener('change',function(){if(document.body.classList.contains('pv'))renderPlanDays()});
 function shownSlots(keys){return SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})})}
 function renderPlanDays(){
-  var days=planMode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
+  var mode=planSmall.matches?'day':planMode,days=mode==='day'?[planDay]:[0,1,2,3,4,5,6],keys=days.map(function(i){return dkey(pday(i))}),g=goal(),tk=dkey(new Date());
   var shown=shownSlots(keys);
   var tots=[0,1,2,3,4,5,6].map(function(i){return dayTotal(dkey(pday(i)))}),used=tots.filter(function(t){return t>0});
   $('pctl').innerHTML='<div class="pnav"><button type="button" class="ibtn" data-a="prev" aria-label="'+tr('Previous week')+'">‹</button><span class="wk">'+fmtD(pday(0))+' – '+fmtD(pday(6))+'</span>'+
     '<button type="button" class="ibtn" data-a="next" aria-label="'+tr('Next week')+'">›</button><button type="button" class="btn ghost btn-s" data-a="today">'+tr('This week')+'</button>'+
     '<button type="button" class="btn ghost btn-s" data-a="clear">'+tr('Clear week')+'</button>'+
-    '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span></div>'+
-    (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
+    (planSmall.matches?'':'<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span>')+'</div>'+
+    (mode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
     '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
     '<div class="plegend">'+tr('Colour = what the dish is richest in:')+MACRO_BAL.map(function(b){return ' <span><i style="background:'+b[3]+'"></i>'+tr(b[0])+'</span>'}).join('')+'</div>'+
     (used.length?'<div class="psum">'+tr(used.length>1?'This week: {n} days planned · average {k} kcal a day':'This week: {n} day planned · average {k} kcal a day',{n:used.length,k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'</div>':'');
-  var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);pd.style.setProperty('--nc',shown.length);
+  var pd=$('pdays');pd.className='pdays '+mode;pd.style.setProperty('--rr',shown.length+1);pd.style.setProperty('--nc',shown.length);
   pd.innerHTML=days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
     return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">'+tr('Today')+'</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
-        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+tr(s[1])+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,planMode==='week'?'':'xs');
-          return '<div class="pchip'+(r?toneAttr(r):'"')+' data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?rt(r).name:tr('Removed recipe'))+'</b><small>'+(pk?nf(pk*m.p)+' kcal':tr('kcal unknown'))+'</small>'+(r?miniBar(r):'')+'</span>'+
+        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+tr(s[1])+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,mode==='week'?'':'xs');
+          return '<div class="pchip'+(r?toneAttr(r):'"')+' data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b title="'+esc(r?rt(r).name:tr('Removed recipe'))+'">'+esc(r?rt(r).name:tr('Removed recipe'))+'</b><small>'+(pk?nf(pk*m.p)+' kcal':tr('kcal unknown'))+'</small>'+(r?miniBar(r):'')+'</span>'+
             '<span class="pcb"><button type="button" data-a="minus" aria-label="'+tr('Fewer portions')+'">−</button><span title="'+tr('Portions')+'">'+m.p+'</span><button type="button" data-a="plus" aria-label="'+tr('More portions')+'">+</button><button type="button" data-a="del" aria-label="'+tr('Remove from plan')+'">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
 
 $('plan').onclick=function(e){if(pdJust)return;
@@ -1186,8 +1190,8 @@ function pdAuto(){if(!pdrag)return;var b=pdrag.v?$('top').offsetHeight:$('pcarw'
   // near the sides of the week table, scroll the days sideways
   if(pd.scrollWidth>pd.clientWidth&&y>pr.top&&y<pr.bottom){if(x>pr.right-40){pd.scrollLeft+=12;moved=true}else if(x<pr.left+136){pd.scrollLeft-=12;moved=true}}
   if(y>innerHeight-70)window.scrollBy(0,14);else if(y>b&&y<b+50)window.scrollBy(0,-14);else if(!moved)return;pdHover()}
-function scrollToToday(){var pd=$('pdays'),td=pd.querySelector('.pday.today'),h=pd.querySelector('.phr');
-  pd.scrollLeft=td&&h?td.getBoundingClientRect().left-pd.getBoundingClientRect().left+pd.scrollLeft-h.offsetWidth:0}
+function scrollToToday(){var pd=$('pdays'),td=pd.querySelector('.pday.today');
+  pd.scrollLeft=td?td.getBoundingClientRect().left-pd.getBoundingClientRect().left+pd.scrollLeft-8:0}
 function pdEnd(drop){if(!pdrag)return;clearInterval(pdTimer);var d=pdrag;pdrag=null;
   if(d.mode){pdJust=true;setTimeout(function(){pdJust=false},60)}
   if(d.mode!=='drag')return;
@@ -1203,41 +1207,58 @@ function dataUrl(u){return fetch(u).then(function(r){return r.blob()}).then(func
 function mealList(k,s){return ((plan[k]&&plan[k][s])||[]).map(function(m){var r=recById(m.id),pk=r?portionKcal(r):0;
   return {n:(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):''),k:pk?nf(pk*m.p)+' kcal':'',
     i:r?(rt(r).ings||[]).map(function(x){return scale(x,m.p/(+r.serv||1))}):[]}})}
+// Loads each planned dish's photo, so the PDF can crop it to the size of its card
+function loadImg(u){return new Promise(function(ok){if(!u)return ok(null);var im=new Image();im.onload=function(){ok(im)};im.onerror=function(){ok(null)};im.src=u})}
+function cropJpeg(im,w,h){try{var c=document.createElement('canvas'),s=Math.min(im.naturalWidth/w,im.naturalHeight/h);c.width=Math.round(w*12);c.height=Math.round(h*12);
+  c.getContext('2d').drawImage(im,(im.naturalWidth-w*s)/2,(im.naturalHeight-h*s)/2,w*s,h*s,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82)}catch(e){return null}}
+// The week as a page of day columns: one card per meal, with its photo and the colour of what the dish is richest in (like the screen)
 function planPdf(){if(planEmpty()){alert(tr('Nothing planned this week yet.'));return}
-  Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/gc-192.png').catch(function(){return null})]).then(function(a){
-    var logo=a[1],doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=12,y=0;
-    var Y=hexRgb(SITE.color),INK=[43,43,43],MUT=[125,120,110],CREAM=mixc(Y,[255,255,255],.84),PALE=mixc(Y,[255,255,255],.95),LINE=mixc(Y,[255,255,255],.72),OK=[60,154,95],OVER=[192,57,43];
-    var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),g=goal(),dw=34,tw=28,cw=(W-2*M-dw-tw)/slots.length,LH=3.5;
+  var keys=[0,1,2,3,4,5,6].map(function(i){return dkey(pday(i))}),slots=shownSlots(keys),ids={};
+  keys.forEach(function(k){slots.forEach(function(s){((plan[k]&&plan[k][s[0]])||[]).forEach(function(m){ids[m.id]=1})})});
+  var idl=Object.keys(ids).filter(recById);
+  Promise.all([window.jspdf?0:loadJs('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),dataUrl('icons/gc-192.png').catch(function(){return null}),
+    Promise.all(idl.map(function(id){return loadImg(pic(recById(id),0))}))]).then(function(a){
+    var logo=a[1],ims={};idl.forEach(function(id,i){ims[id]=a[2][i]});
+    var doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'}),W=297,H=210,M=10,G=2.5,LW=22,g=goal();
+    var Y=hexRgb(SITE.color),INK=[43,43,43],MUT=[125,120,110],LINE=[222,218,210],EMPTY=[247,246,243],OK=[60,154,95],OVER=[192,57,43];
+    var cw=(W-2*M-LW-6*G)/7,y0=33,hh=14,top=y0+hh+3,foot=13,rowH=Math.min(54,(H-foot-top-G*(slots.length-1))/slots.length);
     function col(f,c){doc[f](c[0],c[1],c[2])}
     function font(st,sz,c){doc.setFont('helvetica',st);doc.setFontSize(sz);col('setTextColor',c||INK)}
-    function head(){if(logo)doc.addImage(logo,'PNG',M,8,17,17);
-      font('bold',22);doc.text(tr('Meal plan'),M+21,16);
-      font('normal',10,MUT);doc.text(SITE.name+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
-      if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
-      col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
-      y=33;col('setFillColor',Y);doc.rect(M,y,W-2*M,11,'F');font('bold',10,lum(Y)>.3?INK:[255,255,255]);
-      doc.text(tr('Day'),M+dw/2,y+7,{align:'center'});
-      slots.forEach(function(s,j){doc.text(tr(s[1])+'  '+s[2],M+dw+cw*j+cw/2,y+7,{align:'center',maxWidth:cw-2})});
-      doc.text(tr('Total'),W-M-tw/2,y+7,{align:'center'});y+=11}
-    head();
-    keys.forEach(function(k,i){
-      var cells=slots.map(function(s){return mealList(k,s[0]).map(function(m){font('bold',9);m.l=doc.splitTextToSize(m.n,cw-4);return m})});
-      var h=Math.max(15,4+Math.max.apply(null,cells.map(function(c){return c.reduce(function(a,m){return a+(m.l.length+(m.k?1:0))*LH+1},0)})));
-      if(y+h>H-14){doc.addPage();head()}
-      col('setFillColor',i%2?PALE:[255,255,255]);doc.rect(M,y,W-2*M,h,'F');
-      col('setFillColor',CREAM);doc.rect(M,y,dw,h,'F');
-      font('bold',10);doc.text(DAYN[i]+' '+fmtD(pday(i)),M+3,y+6);
-      cells.forEach(function(c,j){var x=M+dw+cw*j,yy=y+5.5;
-        c.forEach(function(m){font('bold',9);m.l.forEach(function(t){doc.text(t,x+2,yy);yy+=LH});
-          if(m.k){font('normal',8,MUT);doc.text(m.k,x+2,yy);yy+=LH}yy+=1})});
-      var t=dayTotal(k);font('bold',11);doc.text(t?nf(t)+' kcal':'–',W-M-tw/2,y+7,{align:'center'});
-      if(g&&t){var p=Math.round(t/g*100);font('normal',8,p>110?OVER:p>=90?OK:MUT);doc.text(tr('{p}% of goal',{p:p}),W-M-tw/2,y+11.5,{align:'center'})}
-      col('setDrawColor',LINE);doc.setLineWidth(.2);doc.rect(M,y,W-2*M,h);
-      for(var j=0;j<=slots.length;j++)doc.line(M+dw+cw*j,y,M+dw+cw*j,y+h);
-      y+=h});
+    function rgb(s){return s.split(',').map(Number)}
+    // header: logo, title, dates, goal
+    if(logo)doc.addImage(logo,'PNG',M,8,17,17);
+    font('bold',22);doc.text(tr('Meal plan'),M+21,16);
+    font('normal',10,MUT);doc.text(SITE.name+'  ·  '+fmtD(pday(0))+' – '+fmtD(pday(6))+' '+pday(6).getFullYear(),M+21,22.5);
+    if(g){font('bold',11);doc.text(tr('Daily goal')+': '+nf(g)+' kcal',W-M,16,{align:'right'})}
+    col('setFillColor',Y);doc.rect(M,28,W-2*M,1.2,'F');
+    // day labels with the day's calories and a bar towards the goal
+    keys.forEach(function(k,i){var x=M+LW+i*(cw+G),t=dayTotal(k);
+      col('setFillColor',[255,255,255]);col('setDrawColor',LINE);doc.setLineWidth(.3);doc.roundedRect(x,y0,cw,hh,2.5,2.5,'FD');
+      font('bold',9.5);doc.text(DAYN[i]+' '+fmtD(pday(i)),x+cw/2,y0+5,{align:'center'});
+      font('normal',7.5,MUT);doc.text((t?nf(t):'0')+(g?' / '+nf(g):'')+' kcal',x+cw/2,y0+9,{align:'center'});
+      if(g){var p=t/g;col('setFillColor',[235,232,226]);doc.roundedRect(x+3,y0+10.8,cw-6,1.4,.7,.7,'F');
+        if(t){col('setFillColor',p>1.1?OVER:p>=.9?OK:Y);doc.roundedRect(x+3,y0+10.8,(cw-6)*Math.min(1,p),1.4,.7,.7,'F')}}});
+    // one row per meal time
+    slots.forEach(function(s,j){var y=top+j*(rowH+G);
+      font('bold',8.5);doc.text(doc.splitTextToSize(tr(s[1]),LW-2),M,y+5);font('normal',7.5,MUT);doc.text(s[2],M,y+(tr(s[1]).length>12?12.5:9));
+      keys.forEach(function(k,i){var x=M+LW+i*(cw+G),ms=(plan[k]&&plan[k][s[0]])||[];
+        if(!ms.length){col('setFillColor',EMPTY);col('setDrawColor',LINE);doc.setLineWidth(.3);doc.setLineDashPattern([1,1],0);
+          doc.roundedRect(x,y,cw,rowH,3,3,'FD');doc.setLineDashPattern([],0);return}
+        var ch=(rowH-(ms.length-1)*1.5)/ms.length;
+        ms.forEach(function(m,n){var r=recById(m.id),cy=y+n*(ch+1.5),tone=r?recipeTone(r):-1,c=tone<0?[214,206,190]:rgb(MACRO_RGB[tone]),pk=r?portionKcal(r):0;
+          col('setFillColor',mixc(c,[255,255,255],.78));col('setDrawColor',mixc(c,[255,255,255],.4));doc.setLineWidth(.35);doc.roundedRect(x,cy,cw,ch,3,3,'FD');
+          var im=r&&ims[r.id],tx=cy+4,ph=Math.min(ch-14,(cw-3)*.62);
+          if(im&&ph>=9){var d=cropJpeg(im,cw-3,ph);if(d){doc.addImage(d,'JPEG',x+1.5,cy+1.5,cw-3,ph);tx=cy+ph+5}}
+          var name=(r?rt(r).name:tr('Removed recipe'))+(m.p!==1?' ×'+String(m.p).replace('.',LANG==='en'?'.':','):'');
+          font('bold',8);var ln=doc.splitTextToSize(name,cw-4).slice(0,ch-(tx-cy)>12?2:1);doc.text(ln,x+2,tx);tx+=ln.length*3.3;
+          if(pk){font('normal',7,MUT);doc.text(nf(pk*m.p)+' kcal',x+2,tx)}
+          var e=r&&macroE(r);if(e&&cy+ch-tx>3.5){var et=e[0]+e[1]+e[2],bx=x+2,bw=cw-4-2*1;
+            e.forEach(function(v,q){var w=bw*Math.max(v,et*.02)/et;col('setFillColor',rgb(MACRO_RGB[q]));doc.roundedRect(bx,cy+ch-2.6,w,1.1,.5,.5,'F');bx+=w+1})}})})});
+    // footer: colour legend, weekly average, note
+    var fy=H-6;font('normal',8,MUT);doc.text(tr('Colour = what the dish is richest in:'),M,fy);var lx=M+doc.getTextWidth(tr('Colour = what the dish is richest in:'))+3;
+    MACRO_BAL.forEach(function(b,q){col('setFillColor',rgb(MACRO_RGB[q]));doc.roundedRect(lx,fy-2.6,3,3,.8,.8,'F');font('normal',8);doc.text(tr(b[0]),lx+4.2,fy);lx+=6+doc.getTextWidth(tr(b[0]))+3});
     var used=keys.map(dayTotal).filter(function(t){return t>0});
-    if(used.length){font('bold',11);doc.text(tr('Weekly average: {k} kcal a day',{k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+(g?'  ·  '+tr('Daily goal')+': '+nf(g)+' kcal':''),M,Math.min(y+8,H-9))}
-    font('normal',8,MUT);doc.text(tr('Calories are estimated from the ingredients.'),W-M,H-6,{align:'right'});
+    font('normal',8,MUT);doc.text((used.length?tr('Weekly average: {k} kcal a day',{k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'  ·  ':'')+tr('Calories are estimated from the ingredients.'),W-M,fy,{align:'right'});
     doc.save('meal-plan-'+keys[0]+'.pdf')
   }).catch(function(){alert(tr('Could not create the PDF. Check your internet connection.'))})}
 function icsEsc(s){return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n')}
