@@ -105,8 +105,24 @@ h2.name{font-size:26px;line-height:1.2;margin:12px 0 4px}
 h3.sec{margin:0 0 10px;font-size:20px;color:var(--accent-text)}
 .srv{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .srv button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent-text);font-size:20px;cursor:pointer;line-height:1}
-.kcal{background:var(--soft);border-radius:8px;padding:8px 12px;margin:0 0 10px;font-size:14px}
+.kcal{background:var(--soft);border-radius:14px;padding:12px 14px;margin:0 0 10px;font-size:14px}
 .kcal small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.kch{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kinfo{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;background:transparent;color:var(--muted);font:italic 700 13px/1 Georgia,serif;cursor:pointer;padding:0}
+.kinfo[aria-expanded="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.msum{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;margin-top:8px;font-size:13px}
+.msum span{display:inline-flex;align-items:center;gap:5px}.msum i{width:8px;height:8px;border-radius:50%}.msum .msep{color:var(--muted)}
+.mbar{display:flex;gap:4px;height:7px;margin:7px 0 2px}.mbar span{border-radius:4px;min-width:6px}
+.kdet{margin-top:8px}
+.macros{display:grid;gap:7px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(127,127,127,.25)}
+.mach{font-size:13px}
+.macr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"n s" "t p";align-items:center;gap:3px 10px;font-size:13px}
+.macn{grid-area:n;display:flex;align-items:center;gap:6px}.macn i{flex:none;width:10px;height:10px;border-radius:50%}
+.macs{grid-area:s;font-size:12px;font-weight:700;white-space:nowrap}.macs.ok{color:#3c9a5f}.macs.low,.macs.high{color:#c77700}
+.mact{grid-area:t;position:relative;height:8px;border-radius:4px;background:rgba(127,127,127,.22)}
+.macb{position:absolute;top:0;bottom:0;border-radius:4px;background:rgba(60,154,95,.45)}
+.macd{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--surface)}
+.macp{grid-area:p;min-width:38px;text-align:right;color:var(--muted);font-size:12px}
 ul.ing{padding:0;margin:0;list-style:none}
 ul.ing li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
 ul.ing li:last-child{border:0}
@@ -439,44 +455,49 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
 #plan .seg button.on,#plan .cpick.on{background:rgba(var(--accent-rgb),.28);color:var(--ink);border-color:rgba(var(--accent-rgb),.55)}
 .pfab button{background:rgba(var(--accent-rgb),.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.18)}
 /* Layout: on small screens the dishes are above the plan and the meal times below; on big screens the dishes move to the left */
-.pwrap{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"car" "nav" "sum" "tabs" "days" "times"}
+.pwrap{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"car" "nav" "sum" "legend" "tabs" "days" "times"}
 #pctl{display:contents}
 .pcarw{grid-area:car}
 #pdays{grid-area:days;min-width:0}
 #pctl .pnav{grid-area:nav}
 #pctl .psum{grid-area:sum}
+#pctl .plegend{grid-area:legend}
 #pctl .ptabs{grid-area:tabs}
 #pctl .ptimes{grid-area:times;margin:14px 0 0}
-/* Week table: days across (scrolls sideways on small screens), meal times down */
-.pdays.week{grid-template-columns:96px repeat(7,minmax(150px,1fr));grid-template-rows:repeat(var(--rr),auto);gap:0;border:1px solid var(--line);border-radius:14px;overflow-x:auto;overscroll-behavior-x:contain;background:var(--surface)}
-.pdays.week .phr{display:grid;grid-row:1/-1;grid-template-rows:subgrid;background:var(--surface);font-weight:700;font-size:14px;position:sticky;left:0;z-index:2;border-right:1px solid var(--line);box-shadow:3px 0 8px -4px rgba(0,0,0,.18)}
-.phr span{padding:10px 8px;border-top:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
-.phr span:first-child{border-top:0;background:var(--surface);border-bottom:2px solid var(--line)}
-.phr small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
-.pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;gap:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none}
-.pdays.week .phr+.pday{border-left:0}
-.pdays.week .pdh{padding:10px 8px;background:var(--surface);color:var(--ink);border-bottom:2px solid var(--line)}
-.pdays.week .pdt{flex-direction:column;align-items:flex-start;gap:2px}
-.pdays.week .pdt small{color:var(--muted)}
-.pdays.week .pday.today .pdh{background:var(--soft);border-bottom-color:var(--accent);box-shadow:inset 0 -1px 0 var(--accent)}
-.pdays.week .pdh .ptoday{background:var(--accent);color:var(--accent-ink)}
-.pdays.week .pdh .pbar{background:var(--line)}
-.pdays.week .pdh .pbar i{background:var(--accent)}
-.pdays.week .pdh .pbar.ok i{background:#2e7d4b}
-.pdays.week .pdh .pbar.over i{background:#b03021}
-.pdays.week .pslot{border:0;border-top:1px solid var(--line);border-radius:0;min-height:72px}
-.pdays.week .psl{display:none}
-.pdays.week .pchip{flex-wrap:wrap;row-gap:3px;background:var(--surface);border:1px solid var(--line)}
-.pdays.week .pct{flex-basis:calc(100% - 40px)}
-.pdays.week .pcb{margin-left:auto}
-.pdays.week .pcb button{background:var(--bg)}
-@media (max-width:1400px){.pdays.week .pci{display:none}.pdays.week .pct{flex-basis:100%}}
+/* Meals are photo cards coloured by what the dish is richest in (--mc); empty meals are soft "+" cards */
+.pslot{background:rgba(127,127,127,.06);border:1.5px dashed rgba(127,127,127,.35)}
+.pslot:not(:has(.pchip))::after{content:'+';display:flex;flex:1;align-items:center;justify-content:center;font-size:26px;font-weight:300;color:var(--muted)}
+.pchip{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.pchip.tone{background:rgba(var(--mc),.22);box-shadow:inset 0 0 0 1.5px rgba(var(--mc),.45)}
+.pchip.tone .pci{background:rgba(var(--mc),.3)}
+.pchip.tone .pcb button{background:rgba(var(--mc),.3)}
+.pcard.tone{border-color:rgba(var(--mc),.6);background:rgba(var(--mc),.14)}
+.pcard.tone .fth{background:rgba(var(--mc),.25)}
+.pmb{display:flex;gap:2px;height:4px;margin-top:4px}.pmb i{border-radius:2px;min-width:3px}
+.plegend{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:12px;color:var(--muted);margin:-4px 0 10px}
+.plegend span{display:inline-flex;align-items:center;gap:5px;color:var(--ink)}.plegend i{width:10px;height:10px;border-radius:3px}
+.pci{flex:0 0 48px;width:48px;height:48px;border-radius:10px;font-size:22px}
+.pday .pdh{background:var(--surface);border-radius:12px;padding:8px 10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+/* Week: seven pastel columns side by side (they scroll sideways when the screen is too narrow) */
+.pdays.week{grid-template-columns:repeat(7,minmax(132px,1fr));grid-template-rows:repeat(var(--rr),auto);gap:10px 12px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 2px 8px}
+.pdays.week .pday{grid-row:1/-1;grid-template-rows:subgrid;row-gap:10px;padding:0;border:0;background:none;box-shadow:none}
+.pdays.week .pday.today .pdh{box-shadow:0 0 0 2px var(--accent)}
+.pdays.week .pdh{text-align:center}
+.pdays.week .pdt{flex-direction:column;align-items:center;gap:1px}
+.pdays.week .pslot{border-radius:16px;padding:7px;min-height:96px}
+.pdays.week .psl{font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.pdays.week .pchip{flex-direction:column;align-items:stretch;gap:5px;padding:6px;border-radius:12px}
+.pdays.week .pci{flex:none;width:100%;height:auto;aspect-ratio:4/3;font-size:34px}
+.pdays.week .pct b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pdays.week .pcb{justify-content:center;gap:4px}
 @media (min-width:900px){.pdays.day{max-width:640px}}
-/* Big screens: the dishes scroll down on the left */
 @media (min-width:1100px){
-  .pwrap{grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". tabs" "car days" "car times";grid-template-rows:auto auto auto 1fr;column-gap:22px;align-items:start}
   .pfab{right:28px;bottom:28px}
   .pfab button{height:58px;min-width:58px;padding:0 18px;font-size:15px}
+}
+/* Very wide screens: the dishes scroll down on the left of the week */
+@media (min-width:1700px){
+  .pwrap{grid-template-columns:280px minmax(0,1fr);grid-template-areas:"sum nav" ". legend" ". tabs" "car days" "car times";grid-template-rows:auto auto auto auto 1fr;column-gap:22px;align-items:start}
   .pcarw{display:flex;flex-direction:column;max-height:calc(100vh - 84px);margin:0;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
   .pcar{flex-direction:column;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 2px 2px;gap:8px}
   .pcard{flex:none;flex-direction:row;align-items:center}
@@ -489,7 +510,6 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   #pctl .pnav{margin:0 0 12px;justify-content:flex-end}
   #pctl .pnav .seg{margin-left:6px}
   #pctl .psum{margin:0 0 12px;align-self:center}
-  .pdays.week{grid-template-columns:118px repeat(7,minmax(0,1fr))}
 }
 .hidden{display:none}
 </style>
@@ -592,7 +612,7 @@ body.picking .pslot{border-color:var(--accent);cursor:copy}
   <p style="margin-top:0;font-size:14px" data-t="When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.">When someone asks for access, you need their Gmail address. Then: 1) add it under Test users in Google Cloud, 2) share the recipe folder in Google Drive with the same address.</p>
   <div class="ltools"><a class="btn ghost" style="text-align:center;text-decoration:none" href="https://console.cloud.google.com/auth/audience" target="_blank" rel="noopener" data-t="Open Test users">Open Test users</a><a class="btn ghost" style="text-align:center;text-decoration:none" id="openfold" href="https://drive.google.com/" target="_blank" rel="noopener" data-t="Open the recipe folder">Open the recipe folder</a></div>
   <div class="actions"><button class="btn" id="lsave" data-t="Save">Save</button><button class="btn ghost" id="lclose" data-t="Close">Close</button></div>
-  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-10-31 q (Menu tab on phones)</small>
+  <small style="display:block;color:var(--muted);margin-top:12px">Version 2026-11-01 c (meal plan coloured by nutrients)</small>
 </div></div>
 <div id="sitem" class="overlay hidden"><div class="dlg">
   <h3 class="sec" data-t="Customize the site">Customize the site</h3>
@@ -686,6 +706,7 @@ var TR={fr:{
   "All recipes":"Toutes les recettes","Same categories":"Mêmes catégories","Show or hide other recipes":"Afficher ou masquer les autres recettes","Other recipes":"Autres recettes","No recipes in this category.":"Aucune recette dans cette catégorie.",
   "Prep":"Préparation","Cooking":"Cuisson","Rest":"Repos","Total":"Total","← Back":"← Retour","Ingredients":"Ingrédients","For":"Pour","people":"personnes","Fewer servings":"Moins de personnes","More servings":"Plus de personnes",
   "Got it":"J'ai cet ingrédient","Preparation":"Préparation","Step {n}":"Étape {n}","Videos and photos":"Vidéos et photos","Loading…":"Chargement…","Edit":"Modifier","Delete":"Supprimer","in total":"au total","per person":"par personne",
+  "Nutrition details":"Détails nutritionnels","Colour = what the dish is richest in:":"Couleur = ce dont le plat est le plus riche :","Richest in: {m}":"Le plus riche en : {m}","Protein":"Protéines","Carbs":"Glucides","Fat":"Lipides","Protein, carbs and fat per person":"Protéines, glucides et lipides par personne","Protein, carbs and fat in total":"Protéines, glucides et lipides au total","low":"faible","high":"élevé","balanced":"équilibré","Balanced meal: {lo}–{hi} %":"Repas équilibré : {lo}–{hi} %","Green band: a balanced meal (share of the calories: protein {p}, carbs {c}, fat {f}).":"Zone verte : un repas équilibré (part des calories : protéines {p}, glucides {c}, lipides {f}).",
   "Calories entered in the recipe.":"Calories saisies dans la recette.","Estimated from the ingredients.":"Estimation à partir des ingrédients.","Not counted:":"Non comptés :","Sign in to load videos":"Connectez-vous pour charger les vidéos",
   "Could not load video":"Impossible de charger la vidéo","Sound":"Son","Delete “{n}”?":"Supprimer « {n} » ?","Give your recipe a name.":"Donnez un nom à votre recette.","e.g. 200g spaghetti":"ex. 200 g de spaghetti",
   "Ingredient":"Ingrédient","Remove ingredient":"Retirer l'ingrédient","Remove photo":"Retirer la photo","Your site":"Votre site","Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.":"Changez le nom et son style, le sous-titre, le slogan, les couleurs, la photo de la page d’accueil et les groupes de catégories. Tout le monde voit les changements.","Customize the site":"Personnaliser le site","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Chaque changement s’affiche tout de suite. Il n’est gardé pour tout le monde que lorsque vous appuyez sur Enregistrer. Laissez une case vide pour garder le texte d’origine.","Site name":"Nom du site","Subtitle, under the name":"Sous-titre, sous le nom","Main page slogan":"Slogan de la page d’accueil","Main colour":"Couleur principale","Main page photo":"Photo de la page d’accueil","Back to the original":"Revenir à l’original","Another colour":"Autre couleur","A different recipe photo each visit":"Une photo de recette différente à chaque visite","Your site is saved: everyone will see the changes.":"Votre site est enregistré : tout le monde verra les changements.","Saffron":"Safran","Dish type":"Type de plat","Cuisine":"Cuisine","More":"Autres","Group":"Groupe","Bold":"Gras","Size":"Taille","Background colour":"Couleur de fond","Groups of your own categories":"Groupes de vos catégories","Light grey":"Gris clair","White":"Blanc","Cream":"Crème","Sand":"Sable","Blush":"Poudré","Mint":"Menthe","Sky":"Ciel","Stone":"Pierre","Apricot":"Abricot","Terracotta":"Terre cuite","Rose":"Rose","Plum":"Prune","Navy":"Bleu marine","Teal":"Bleu canard","Sage":"Sauge","Olive":"Olive","Steps":"Étapes","Step":"Étape","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Appuyez sur Entrée pour passer à l’étape suivante. Ajoutez des parties pour séparer les étapes, par ex. sauce, pâte, garniture.","Add a step":"Ajouter une étape","Add a section":"Ajouter une partie","Move up":"Monter","Move down":"Descendre","Remove step":"Supprimer l’étape","Remove section":"Supprimer la partie","Section name":"Nom de la partie","Section name, e.g. Sauce":"Nom de la partie, par ex. Sauce","Describe this step":"Décrivez cette étape","Add a photo to this step":"Ajouter une photo à cette étape","Photo":"Photo","Remove the photo":"Retirer la photo","This photo could not be opened.":"Impossible d’ouvrir cette photo.","Remove video":"Retirer la vidéo",
@@ -750,6 +771,7 @@ var TR={fr:{
   "All recipes":"Todas las recetas","Same categories":"Mismas categorías","Show or hide other recipes":"Mostrar u ocultar otras recetas","Other recipes":"Otras recetas","No recipes in this category.":"No hay recetas en esta categoría.",
   "Prep":"Preparación","Cooking":"Cocción","Rest":"Reposo","Total":"Total","← Back":"← Volver","Ingredients":"Ingredientes","For":"Para","people":"personas","Fewer servings":"Menos personas","More servings":"Más personas",
   "Got it":"Lo tengo","Preparation":"Preparación","Step {n}":"Paso {n}","Videos and photos":"Videos y fotos","Loading…":"Cargando…","Edit":"Editar","Delete":"Eliminar","in total":"en total","per person":"por persona",
+  "Nutrition details":"Detalles nutricionales","Colour = what the dish is richest in:":"Color = en lo que el plato es más rico:","Richest in: {m}":"Más rico en: {m}","Protein":"Proteínas","Carbs":"Carbohidratos","Fat":"Grasas","Protein, carbs and fat per person":"Proteínas, carbohidratos y grasas por persona","Protein, carbs and fat in total":"Proteínas, carbohidratos y grasas en total","low":"bajo","high":"alto","balanced":"equilibrado","Balanced meal: {lo}–{hi} %":"Comida equilibrada: {lo}–{hi} %","Green band: a balanced meal (share of the calories: protein {p}, carbs {c}, fat {f}).":"Zona verde: una comida equilibrada (parte de las calorías: proteínas {p}, carbohidratos {c}, grasas {f}).",
   "Calories entered in the recipe.":"Calorías indicadas en la receta.","Estimated from the ingredients.":"Estimado a partir de los ingredientes.","Not counted:":"No contados:","Sign in to load videos":"Inicia sesión para cargar los videos",
   "Could not load video":"No se pudo cargar el video","Sound":"Sonido","Delete “{n}”?":"¿Eliminar «{n}»?","Give your recipe a name.":"Ponle un nombre a tu receta.","e.g. 200g spaghetti":"p. ej. 200 g de espaguetis",
   "Ingredient":"Ingrediente","Remove ingredient":"Quitar ingrediente","Remove photo":"Quitar foto","Your site":"Tu sitio","Change the name and its style, the subtitle, slogan, colours, main page photo and category groups. Everyone sees the changes.":"Cambia el nombre y su estilo, el subtítulo, el eslogan, los colores, la foto de la página principal y los grupos de categorías. Todos ven los cambios.","Customize the site":"Personalizar el sitio","You see each change right away. It is kept for everyone only when you press Save. Leave a box empty to keep the original wording.":"Cada cambio se ve al momento. Solo se guarda para todos cuando pulsas Guardar. Deja una casilla vacía para mantener el texto original.","Site name":"Nombre del sitio","Subtitle, under the name":"Subtítulo, bajo el nombre","Main page slogan":"Eslogan de la página principal","Main colour":"Color principal","Main page photo":"Foto de la página principal","Back to the original":"Volver al original","Another colour":"Otro color","A different recipe photo each visit":"Una foto de receta distinta en cada visita","Your site is saved: everyone will see the changes.":"Tu sitio está guardado: todos verán los cambios.","Saffron":"Azafrán","Dish type":"Tipo de plato","Cuisine":"Cocina","More":"Más","Group":"Grupo","Bold":"Negrita","Size":"Tamaño","Background colour":"Color de fondo","Groups of your own categories":"Grupos de tus categorías","Light grey":"Gris claro","White":"Blanco","Cream":"Crema","Sand":"Arena","Blush":"Rosado","Mint":"Menta","Sky":"Cielo","Stone":"Piedra","Apricot":"Albaricoque","Terracotta":"Terracota","Rose":"Rosa","Plum":"Ciruela","Navy":"Azul marino","Teal":"Verde azulado","Sage":"Salvia","Olive":"Oliva","Steps":"Pasos","Step":"Paso","Press Enter to start the next step. Add sections to split the steps, e.g. sauce, dough, filling.":"Pulsa Intro para pasar al siguiente paso. Añade secciones para separar los pasos, p. ej. salsa, masa, relleno.","Add a step":"Añadir un paso","Add a section":"Añadir una sección","Move up":"Subir","Move down":"Bajar","Remove step":"Quitar el paso","Remove section":"Quitar la sección","Section name":"Nombre de la sección","Section name, e.g. Sauce":"Nombre de la sección, p. ej. Salsa","Describe this step":"Describe este paso","Add a photo to this step":"Añadir una foto a este paso","Photo":"Foto","Remove the photo":"Quitar la foto","This photo could not be opened.":"No se pudo abrir esta foto.","Remove video":"Quitar video",
@@ -882,6 +904,25 @@ var FOODS=[
   [['vanilla','vainilla','vanille'],288,0,1],[['cinnamon','canela','cannelle','cumin','comino','paprika','pimentón','oregano','orégano','origan','spice','especia','épice','curry','nutmeg','nuez moscada','muscade'],300],
   [['salt','sal ','sel '],0],[['water','agua','eau'],0]
 ];
+// Protein, carbs and fat in grams per 100 g, keyed by each food's first name above (alcohol counts as calories only)
+var MACROS={'egg yolk':[16,3.6,27],'egg white':[11,.7,.2],egg:[12.6,.7,9.5],pasta:[13,75,1.5],rice:[7,79,.6],quinoa:[14,64,6],oats:[17,66,7],couscous:[13,77,.6],
+  flour:[10,76,1],cornstarch:[.3,91,.1],breadcrumbs:[13,72,5],bread:[9,49,3.2],tortilla:[8,50,7],'puff pastry':[7,45,38],biscuit:[6,68,20],ladyfinger:[8,75,4],
+  sugar:[0,100,0],'brown sugar':[.1,98,0],honey:[.3,82,0],'maple syrup':[0,67,.1],jam:[.4,63,.1],'dulce de leche':[7,55,7.5],butter:[.9,.1,81],'peanut butter':[25,20,50],oil:[0,0,100],
+  milk:[3.2,4.8,3.3],'coconut milk':[2,3,21],'evaporated milk':[7,10,7.6],'condensed milk':[8,54,8.7],cream:[2.1,2.8,36],'sour cream':[2.4,4.6,19],'ice cream':[3.5,24,11],
+  'cream cheese':[6,4,34],yogurt:[3.5,4.7,3.3],cheese:[25,1.3,33],pecorino:[32,3.6,27],parmesan:[38,4,29],mozzarella:[22,2.2,17],feta:[14,4,21],ricotta:[11,3,13],mascarpone:[4.6,4.8,44],
+  'queso fresco':[18,3,20],'gruyère':[29,.4,32],'goat cheese':[22,0,30],bacon:[12.6,1.4,40],guanciale:[6,0,69],pancetta:[15,0,45],ham:[21,1.5,6],chorizo:[24,2,38],sausage:[12,2,27],
+  chicken:[23,0,6.5],turkey:[28,0,2.5],duck:[19,0,28],beef:[26,0,17],veal:[24,0,8.5],'minced meat':[17,0,20],pork:[27,0,14],lamb:[17,0,23],
+  salmon:[20,0,13],tuna:[28,0,1.3],fish:[20,0,1.5],shrimp:[24,.2,.3],octopus:[15,2.2,1],squid:[16,3,1.4],mussel:[12,3.7,2.2],
+  tofu:[8,1.9,4.8],lentil:[25,60,1],chickpea:[9,27,2.6],beans:[8,21,.5],potato:[2,17,.1],'sweet potato':[1.6,20,.1],yuca:[1.4,38,.3],
+  onion:[1.1,9,.1],garlic:[6.4,33,.5],tomato:[.9,3.9,.2],passata:[1.6,7,.2],carrot:[.9,10,.2],'bell pepper':[1,6,.3],chili:[2,9,.4],'black pepper':[10,64,3.3],
+  avocado:[2,8.5,15],lemon:[1.1,9,.3],lime:[.7,10,.2],orange:[.9,12,.1],apple:[.3,14,.2],banana:[1.1,23,.3],strawberr:[.7,7.7,.3],blueberr:[1,12,.5],mango:[.8,15,.4],pineapple:[.5,13,.1],pear:[.4,15,.1],peach:[.9,10,.3],
+  corn:[3.3,19,1.4],peas:[5.4,14,.4],mushroom:[3.1,3.3,.3],spinach:[2.9,3.6,.4],zucchini:[1.2,3.1,.3],eggplant:[1,6,.2],cucumber:[.7,3.6,.1],lettuce:[1.4,2.9,.2],
+  cabbage:[1.3,6,.1],cauliflower:[1.9,5,.3],broccoli:[2.8,7,.4],celery:[.7,3,.2],pumpkin:[1,6.5,.1],leek:[1.5,14,.3],olive:[.8,6,11],ginger:[1.8,18,.8],parsley:[3,6,.8],
+  chocolate:[5,60,31],'dark chocolate':[7.8,46,43],cocoa:[20,58,14],coffee:[.1,0,0],almond:[21,22,50],walnut:[15,14,65],peanut:[26,16,49],hazelnut:[15,17,61],pecan:[9,14,72],'pine nut':[14,13,68],
+  sesame:[18,23,50],coconut:[3.3,15,33],raisin:[3.1,79,.5],mayonnaise:[1,.6,75],ketchup:[1.2,26,.1],mustard:[4,6,3.3],'soy sauce':[8,5,.6],vinegar:[0,.6,0],
+  wine:[.1,2.6,0],beer:[.5,3.6,0],stock:[.6,.3,.2],gelatin:[86,0,0],'baking powder':[0,28,0],yeast:[40,41,7.6],vanilla:[.1,13,.1],cinnamon:[10,60,10]};
+// A balanced meal gets this share of its calories from each (WHO / EFSA guidelines): [name, low %, high %, colour]
+var MACRO_BAL=[['Protein',10,20,'#4fa36b'],['Carbs',45,60,'#e3b23c'],['Fat',20,35,'#e0674f']];
 // Units: [pattern, size, 'g' or 'ml']; size 0 means "pieces" (counted by the food's piece weight)
 function unit(re,n,k){return [new RegExp('^(?:'+re+')(?![a-zà-ÿœ])\\.?'),n,k]}
 var UNITS=[unit('kg|kilos?|kilogrammes?|kilograms?|kilogramos?',1000,'g'),unit('mg',.001,'g'),unit('g|gr|grs|grams?|grammes?|gramos?',1,'g'),
@@ -908,7 +949,8 @@ function ingKcal(line){
   s=s.replace(/^\s*(?:of\s+(?:the\s+)?|de\s+la\s+|de\s+l'|del\s+|de\s+|d'|du\s+|des\s+)/,'');
   var f=findFood(s);if(!q)return {k:0};if(!f)return null;
   var g=u?(u[2]==='g'?q*u[1]:q*u[1]*(f[3]||1)):(f[2]?q*f[2]:null);
-  return g==null?null:{k:g*f[1]/100}}
+  var mc=MACROS[f[0][0]]||[0,0,0];
+  return g==null?null:{k:g*f[1]/100,p:g*mc[0]/100,c:g*mc[1]/100,f:g*mc[2]/100}}
 // ---- Recipe translation (free MyMemory service): done once after a recipe is saved and stored in the recipe as r.lang + r.tr ----
 var MMURL='https://api.mymemory.translated.net/get';
 function unent(s){var e=document.createElement('textarea');e.innerHTML=s;return e.value}
@@ -946,11 +988,39 @@ function reshow(r){renderList();if(viewId===r.id&&document.body.classList.contai
 // After a save: translate if the text changed, then save the translations to Drive too
 function autoTranslate(rec){if(!TOKEN||!rec._fid||!needsTr(rec))return;status(tr('Translating…'));
   return translateRecipe(rec).then(function(){return driveSave(rec)}).then(function(){reshow(rec)}).catch(trFailed)}
-function recipeKcal(r){if(+r.kcal>0)return {k:+r.kcal,miss:[],manual:true};
-  var t=0,miss=[];(r.ings||[]).forEach(function(l){var c=ingKcal(l);if(c)t+=c.k;else miss.push(l)});return {k:Math.round(t),miss:miss}}
-function kcalHtml(r,f){var c=recipeKcal(r),base=+r.serv||0;if(!c.k)return '';
-  return '<div class="kcal" id="kcalbox">🔥 '+(c.manual?'':'≈ ')+'<b>'+nf(c.k*f)+' kcal</b> '+tr('in total')+(base?' · <b>'+nf(c.k/base)+' kcal</b> '+tr('per person'):'')+
-    '<small>'+(c.manual?tr('Calories entered in the recipe.'):tr('Estimated from the ingredients.')+(c.miss.length?' '+tr('Not counted:')+' '+esc(c.miss.join(', ')):''))+'</small></div>'}
+// Calories, plus protein / carbs / fat in grams (always estimated from the ingredients, even when the calories were typed in)
+function recipeKcal(r){var t=0,m=[0,0,0],miss=[];
+  (r.ings||[]).forEach(function(l){var c=ingKcal(l);if(c){t+=c.k;m[0]+=c.p||0;m[1]+=c.c||0;m[2]+=c.f||0}else miss.push(l)});
+  return +r.kcal>0?{k:+r.kcal,miss:[],manual:true,m:m}:{k:Math.round(t),miss:miss,m:m}}
+// Calorie box: kcal, a protein / carbs / fat summary with a bar, and an "i" button that opens the details (kept open while the servings change)
+var kcalOpen=false;
+function kcalHtml(r,f){var c=recipeKcal(r),base=+r.serv||0;if(!c.k)return '';var mf=base?1/base:f;
+  return '<div class="kcal" id="kcalbox"><div class="kch"><span>🔥 '+(c.manual?'':'≈ ')+'<b>'+nf(base?c.k/base:c.k*f)+' kcal</b> '+tr(base?'per person':'in total')+'</span>'+
+    '<button type="button" class="kinfo" id="kinfo" aria-expanded="'+kcalOpen+'" aria-label="'+esc(tr('Nutrition details'))+'" title="'+esc(tr('Nutrition details'))+'">i</button></div>'+
+    (base?'<small>'+nf(c.k*f)+' kcal '+tr('in total')+'</small>':'')+macroSum(c.m,mf)+
+    '<div class="kdet'+(kcalOpen?'':' hidden')+'"><small>'+(c.manual?tr('Calories entered in the recipe.'):tr('Estimated from the ingredients.')+(c.miss.length?' '+tr('Not counted:')+' '+esc(c.miss.join(', ')):''))+'</small>'+macroHtml(c.m,mf,!!base)+'</div></div>'}
+// One line of grams and a bar split by each one's share of the calories
+function macroSum(m,f){var e=[m[0]*4,m[1]*4,m[2]*9],t=e[0]+e[1]+e[2];if(t<1)return '';
+  return '<div class="msum">'+MACRO_BAL.map(function(b,i){return '<span title="'+esc(tr(b[0]))+'"><i style="background:'+b[3]+'"></i>'+esc(tr(b[0]).charAt(0))+': <b>'+nf(m[i]*f)+' g</b></span>'}).join('<span class="msep">·</span>')+'</div>'+
+    '<div class="mbar">'+MACRO_BAL.map(function(b,i){return '<span style="flex:'+Math.max(e[i],t*.02)+';background:'+b[3]+'"></span>'}).join('')+'</div>'}
+// Meal plan colours: each dish takes the colour of what it is richest in, compared with a balanced meal (protein green, carbs yellow, fat red)
+var MACRO_RGB=['79,163,107','227,178,60','224,103,79'];
+function macroE(r){var key=(r.ings||[]).join('\n');if(!r._mac||r._mac.key!==key){var m=recipeKcal(r).m;r._mac={key:key,e:[m[0]*4,m[1]*4,m[2]*9]}}
+  var e=r._mac.e;return e[0]+e[1]+e[2]<1?null:e}
+function recipeTone(r){var e=macroE(r);if(!e)return -1;var t=e[0]+e[1]+e[2],best=-1,bv=0;
+  MACRO_BAL.forEach(function(b,i){var v=e[i]/t*100/((b[1]+b[2])/2);if(v>bv){bv=v;best=i}});return best}
+function toneAttr(r){var i=recipeTone(r);return i<0?'"':' tone" style="--mc:'+MACRO_RGB[i]+'" title="'+esc(tr('Richest in: {m}',{m:tr(MACRO_BAL[i][0]).toLowerCase()}))+'"'}
+function miniBar(r){var e=macroE(r);if(!e)return '';var t=e[0]+e[1]+e[2];
+  return '<span class="pmb">'+e.map(function(x,i){return '<i style="flex:'+Math.max(x,t*.02)+';background:'+MACRO_BAL[i][3]+'"></i>'}).join('')+'</span>'}
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#kinfo'))return;kcalOpen=!kcalOpen;
+  var d=document.querySelector('#kcalbox .kdet');if(d)d.classList.toggle('hidden',!kcalOpen);$('kinfo').setAttribute('aria-expanded',kcalOpen)});
+// Protein, carbs and fat: grams (per person when the servings are known), share of the calories, and the balanced-meal range for comparison
+function macroHtml(m,f,pp){var e=[m[0]*4,m[1]*4,m[2]*9],t=e[0]+e[1]+e[2];if(t<1)return '';
+  return '<div class="macros"><b class="mach">'+tr(pp?'Protein, carbs and fat per person':'Protein, carbs and fat in total')+'</b>'+MACRO_BAL.map(function(b,i){var pc=Math.round(e[i]/t*100),
+    st=pc<b[1]?['low','↓ '+tr('low')]:pc>b[2]?['high','↑ '+tr('high')]:['ok','✓ '+tr('balanced')];
+    return '<div class="macr"><span class="macn"><i style="background:'+b[3]+'"></i>'+tr(b[0])+' <b>'+nf(m[i]*f)+' g</b></span><span class="macs '+st[0]+'">'+st[1]+'</span><span class="mact" title="'+esc(tr('Balanced meal: {lo}–{hi} %',{lo:b[1],hi:b[2]}))+'">'+
+      '<span class="macb" style="left:'+b[1]+'%;width:'+(b[2]-b[1])+'%"></span><span class="macd" style="left:'+Math.min(pc,100)+'%;background:'+b[3]+'"></span></span><span class="macp">'+pc+' %</span></div>'}).join('')+
+    '<small>'+tr('Green band: a balanced meal (share of the calories: protein {p}, carbs {c}, fat {f}).',{p:'10–20 %',c:'45–60 %',f:'20–35 %'})+'</small></div>'}
 function scale(s,f){if(f===1)return s;return s.replace(/^(\d+(?:[.,]\d+)?)/,function(n){var v=parseFloat(n.replace(',','.'))*f;return String(Math.round(v*100)/100)})}
 
 // Category icons: simple one-colour line drawings that take the text colour
@@ -1054,7 +1124,7 @@ function renderPlan(){var g=goal();
 function renderPlanCar(){var q=$('psearch').value.toLowerCase().trim();
   var list=recipes.slice().sort(function(a,b){return rt(a).name.localeCompare(rt(b).name)}).filter(function(r){return !q||(r.name+' '+rt(r).name).toLowerCase().indexOf(q)>-1});
   $('pcar').innerHTML=list.length?list.map(function(r){var im=pic(r,0,'xs'),k=portionKcal(r);
-    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+'" data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><span class="pcx"><b>'+esc(rt(r).name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></span></button>'}).join('')
+    return '<button type="button" class="pcard'+(pick===r.id?' pick':'')+toneAttr(r)+' data-id="'+esc(r.id)+'"><span class="fth">'+(im?'<img src="'+im+'" alt="" draggable="false" loading="lazy" decoding="async">':'🍝')+'</span><span class="pcx"><b>'+esc(rt(r).name)+'</b><small>'+(k?tr('{k} kcal / portion',{k:nf(k)}):tr('kcal unknown'))+'</small></span></button>'}).join('')
     :'<div class="phint" style="padding:16px">'+tr(recipes.length?'No dishes match your search.':'No recipes yet.')+'</div>'}
 function shownSlots(keys){return SLOTS.filter(function(s){return slotsOn.indexOf(s[0])>-1||keys.some(function(k){return plan[k]&&plan[k][s[0]]})})}
 function renderPlanDays(){
@@ -1067,14 +1137,15 @@ function renderPlanDays(){
     '<span class="seg"><button type="button" data-a="mode" data-m="day"'+(planMode==='day'?' class="on"':'')+'>'+tr('Day')+'</button><button type="button" data-a="mode" data-m="week"'+(planMode==='week'?' class="on"':'')+'>'+tr('Week')+'</button></span></div>'+
     (planMode==='day'?'<div class="ptabs">'+DAYN.map(function(n,i){return '<button type="button" data-a="day" data-i="'+i+'"'+(i===planDay?' class="on"':'')+'>'+n+'<small>'+pday(i).getDate()+'</small></button>'}).join('')+'</div>':'')+
     '<div class="ptimes"><span>'+tr('Meal times:')+'</span>'+SLOTS.map(function(s){return '<button type="button" class="cpick'+(slotsOn.indexOf(s[0])>-1?' on':'')+'" data-a="slot" data-s="'+s[0]+'">'+tr(s[1])+'</button>'}).join('')+'</div>'+
+    '<div class="plegend">'+tr('Colour = what the dish is richest in:')+MACRO_BAL.map(function(b){return ' <span><i style="background:'+b[3]+'"></i>'+tr(b[0])+'</span>'}).join('')+'</div>'+
     (used.length?'<div class="psum">'+tr(used.length>1?'This week: {n} days planned · average {k} kcal a day':'This week: {n} day planned · average {k} kcal a day',{n:used.length,k:nf(used.reduce(function(a,b){return a+b},0)/used.length)})+'</div>':'');
   var pd=$('pdays');pd.className='pdays '+planMode;pd.style.setProperty('--rr',shown.length+1);pd.style.setProperty('--nc',shown.length);
-  pd.innerHTML=(planMode==='week'?'<div class="phr"><span></span>'+shown.map(function(s){return '<span>'+tr(s[1])+'<small>'+s[2]+'</small></span>'}).join('')+'</div>':'')+days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
+  pd.innerHTML=days.map(function(i){var d=pday(i),k=dkey(d),t=dayTotal(k),pct=g?t/g*100:0,cls=!t?'':pct>110?' over':pct>=90?' ok':'';
     return '<section class="pday'+(k===tk?' today':'')+'"><div class="pdh"><div class="pdt"><b>'+DAYN[i]+' '+fmtD(d)+(k===tk?'<span class="ptoday">'+tr('Today')+'</span>':'')+'</b><small>'+nf(t)+(g?' / '+nf(g):'')+' kcal</small></div>'+
       (g?'<div class="pbar'+cls+'"><i style="width:'+Math.min(100,pct)+'%"></i></div>':'')+'</div>'+
       shown.map(function(s){var items=(plan[k]&&plan[k][s[0]])||[];
-        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+tr(s[1])+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,'xs');
-          return '<div class="pchip" data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?rt(r).name:tr('Removed recipe'))+'</b><small>'+(pk?nf(pk*m.p)+' kcal':tr('kcal unknown'))+'</small></span>'+
+        return '<div class="pslot" data-k="'+k+'" data-s="'+s[0]+'"><span class="psl">'+s[2]+' · '+tr(s[1])+'</span>'+items.map(function(m,j){var r=recById(m.id),pk=r?portionKcal(r):0,im=r&&pic(r,0,planMode==='week'?'':'xs');
+          return '<div class="pchip'+(r?toneAttr(r):'"')+' data-k="'+k+'" data-s="'+s[0]+'" data-j="'+j+'"><span class="pci">'+(im?'<img src="'+im+'" alt="">':'🍝')+'</span><span class="pct"><b>'+esc(r?rt(r).name:tr('Removed recipe'))+'</b><small>'+(pk?nf(pk*m.p)+' kcal':tr('kcal unknown'))+'</small>'+(r?miniBar(r):'')+'</span>'+
             '<span class="pcb"><button type="button" data-a="minus" aria-label="'+tr('Fewer portions')+'">−</button><span title="'+tr('Portions')+'">'+m.p+'</span><button type="button" data-a="plus" aria-label="'+tr('More portions')+'">+</button><button type="button" data-a="del" aria-label="'+tr('Remove from plan')+'">×</button></span></div>'}).join('')+'</div>'}).join('')+'</section>'}).join('')}
 
 $('plan').onclick=function(e){if(pdJust)return;
